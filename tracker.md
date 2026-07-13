@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 34 Solved · most recent: *Combination Sum* + *Permutations* (07/07/2026).
+**Progress:** 36 Solved · most recent: *Word Search* + *Letter Combinations of a Phone Number* (13/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -49,8 +49,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Heap / Priority Queue | Reorganize String | Med | Solved | 06/07/2026 | | | |
 | Backtracking | Combination Sum | Med | Solved | 07/07/2026 | | | |
 | Backtracking | Permutations | Med | Solved | 07/07/2026 | | | |
-| Backtracking | Word Search | Med | Todo | | | | |
-| Backtracking | Letter Combinations of a Phone Number | Med | Todo | | | | |
+| Backtracking | Word Search | Med | Solved | 13/07/2026 | 15 | 3 | Iterate over all cells; from each, DFS in 4 directions. Mark the current cell visited (or overwrite it) before recursing or you get an infinite loop. |
+| Backtracking | Letter Combinations of a Phone Number | Med | Solved | 13/07/2026 | 15 | 2 | Keep a vector<string> mapping digit→chars. For each digit, loop over its chars enumerating all combos; pass down a string capturing the choice so far. |
 | Backtracking | Sudoku Solver | Hard | Todo | | | | |
 | Backtracking | Permutation Sequence | Hard | Todo | | | | |
 | Backtracking | Next Permutation | Med | Todo | | | | |
