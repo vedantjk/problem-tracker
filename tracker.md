@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 36 Solved · most recent: *Word Search* + *Letter Combinations of a Phone Number* (13/07/2026).
+**Progress:** 38 Solved · most recent: *Next Permutation* + *Number of Islands* (14/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -53,8 +53,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Backtracking | Letter Combinations of a Phone Number | Med | Solved | 13/07/2026 | 15 | 2 | Keep a vector<string> mapping digit→chars. For each digit, loop over its chars enumerating all combos; pass down a string capturing the choice so far. |
 | Backtracking | Sudoku Solver | Hard | Todo | | | | |
 | Backtracking | Permutation Sequence | Hard | Todo | | | | |
-| Backtracking | Next Permutation | Med | Todo | | | | |
-| Graphs | Number of Islands | Med | Todo | | | | |
+| Backtracking | Next Permutation | Med | Solved | 14/07/2026 | 20 | 2 | Find largest k with arr[k] < arr[k+1] (suffix after k is non-increasing); if none, array is the last permutation — reverse and return. In the suffix find the greatest l with arr[l] > arr[k] (smallest suffix value still > arr[k]), swap k and l, then reverse arr[k+1..end] to make it ascending → next permutation. |
+| Graphs | Number of Islands | Med | Solved | 14/07/2026 | 10 | 4 | DFS from each unvisited land cell, flooding its component. Use a visited array, or modify the input in place — depends whether mutating input is allowed. |
 | Graphs | Course Schedule | Med | Todo | | | | |
 | Graphs | Course Schedule II | Med | Todo | | | | |
 | Graphs | Number of Provinces | Med | Todo | | | | |
