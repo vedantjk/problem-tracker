@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 38 Solved · most recent: *Next Permutation* + *Number of Islands* (14/07/2026).
+**Progress:** 40 Solved · most recent: *Course Schedule* + *Course Schedule II* (15/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -55,8 +55,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Backtracking | Permutation Sequence | Hard | Todo | | | | |
 | Backtracking | Next Permutation | Med | Solved | 14/07/2026 | 20 | 2 | Find largest k with arr[k] < arr[k+1] (suffix after k is non-increasing); if none, array is the last permutation — reverse and return. In the suffix find the greatest l with arr[l] > arr[k] (smallest suffix value still > arr[k]), swap k and l, then reverse arr[k+1..end] to make it ascending → next permutation. |
 | Graphs | Number of Islands | Med | Solved | 14/07/2026 | 10 | 4 | DFS from each unvisited land cell, flooding its component. Use a visited array, or modify the input in place — depends whether mutating input is allowed. |
-| Graphs | Course Schedule | Med | Todo | | | | |
-| Graphs | Course Schedule II | Med | Todo | | | | |
+| Graphs | Course Schedule | Med | Solved | 15/07/2026 | 15 | 3 | Topological sort. BFS (Kahn): compute in-degrees, queue all 0-in-degree nodes, pop and decrement neighbors; if every node gets processed (valid ordering) → true. DFS: cycle detection with 3 colors (white=unprocessed, gray=processing, black=done); a gray hit = cycle → false. Loop DFS over ALL nodes (graph may be disconnected); push a node once fully processed — topo order comes out reversed. |
+| Graphs | Course Schedule II | Med | Solved | 15/07/2026 | 15 | 3 | Slight modification of Course Schedule — return the actual topological ordering (empty array if a cycle exists). |
 | Graphs | Number of Provinces | Med | Todo | | | | |
 | Graphs | Word Ladder | Hard | Todo | | | | |
 | Graphs | Word Ladder II | Hard | Todo | | | | |

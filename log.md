@@ -9,3 +9,4 @@ Streak = consecutive weekday checks where the target was met.
 | 2026-07-12 | Sunday | ? | No | 0 | First real cron fire ✅ (scheduler works). Drive connector offline → degraded, no live sheet read. Last known solve 07/07; no evidence of activity since. |
 | 2026-07-13 | Monday | 2 | Yes | 1 | Word Search + Letter Combinations of a Phone Number (both Med, Backtracking), solved 13/07. Grid DFS w/ visited-marking; per-digit choice enumeration. Streak on the board. |
 | 2026-07-14 | Tuesday | 2 | Yes | 2 | Next Permutation (Med) + Number of Islands (Med), solved 14/07. NP: find pivot, swap with next-greater in suffix, reverse suffix; Islands: grid DFS + visited. Streak → 2. |
+| 2026-07-15 | Wednesday | 2 | Yes | 3 | Course Schedule + Course Schedule II (both Med, Graphs), solved 15/07. Topological sort — Kahn's BFS (in-degrees) or DFS 3-color cycle detection. Streak → 3. |
