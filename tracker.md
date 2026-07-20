@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 44 Solved · most recent: *Game of Life* + *First Completely Painted Row or Column* (17/07/2026).
+**Progress:** 46 Solved · most recent: *Climbing Stairs* + *Perfect Squares* (20/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -68,8 +68,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Graphs | Game of Life | Med | Solved | 17/07/2026 | 15 | 3 | Trivial except the in-place follow-up: use 2 transient states (2 = live→dead, 3 = dead→live) so one pass can read the original and encode the next; count both 1 and 2 as currently-live neighbors, then map 2→0, 3→1. |
 | Graphs | First Completely Painted Row or Column | Med | Solved | 17/07/2026 | 20 | 3 | Works because m*n ≤ 1e5 and values are unique: build a value→(row,col) hash for O(1) lookup, keep per-row and per-col fill counters; when a row's count == #cols (or a col's count == #rows) that line is complete — return that step. |
 | Graphs | Optimal Account Balancing | Hard | Todo | | | | |
-| 1-D DP | Climbing Stairs | Easy | Todo | | | | |
-| 1-D DP | Perfect Squares | Med | Todo | | | | |
+| 1-D DP | Climbing Stairs | Easy | Solved | 20/07/2026 | 5 | 4 | Simplest DP. Recurrence cur = pprev + prev (Fibonacci); keep only the last 2 states → O(1) space. |
+| 1-D DP | Perfect Squares | Med | Solved | 20/07/2026 | 15 | 3 | 1-D DP but not a plain loop: for each i, try every perfect square s ≤ i, dp[i] = min(dp[i-s]+1); return dp[n]. Optimal is math via Lagrange's four-square theorem (answer ∈ 1..4): ans=1 if N is a perfect square; ans=4 if N = 4^a(8b+7); ans=2 if some i has N−i² a perfect square; else 3 — O(√N) time, O(1) space. |
 | 1-D DP | Maximum Subarray | Med | Todo | | | | |
 | 1-D DP | Maximum Sum Circular Subarray | Med | Todo | | | | |
 | 1-D DP | Maximum Subarray Sum with One Deletion | Med | Todo | | | | |
