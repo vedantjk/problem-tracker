@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 40 Solved · most recent: *Course Schedule* + *Course Schedule II* (15/07/2026).
+**Progress:** 44 Solved · most recent: *Game of Life* + *First Completely Painted Row or Column* (17/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -57,16 +57,16 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Graphs | Number of Islands | Med | Solved | 14/07/2026 | 10 | 4 | DFS from each unvisited land cell, flooding its component. Use a visited array, or modify the input in place — depends whether mutating input is allowed. |
 | Graphs | Course Schedule | Med | Solved | 15/07/2026 | 15 | 3 | Topological sort. BFS (Kahn): compute in-degrees, queue all 0-in-degree nodes, pop and decrement neighbors; if every node gets processed (valid ordering) → true. DFS: cycle detection with 3 colors (white=unprocessed, gray=processing, black=done); a gray hit = cycle → false. Loop DFS over ALL nodes (graph may be disconnected); push a node once fully processed — topo order comes out reversed. |
 | Graphs | Course Schedule II | Med | Solved | 15/07/2026 | 15 | 3 | Slight modification of Course Schedule — return the actual topological ordering (empty array if a cycle exists). |
-| Graphs | Number of Provinces | Med | Todo | | | | |
+| Graphs | Number of Provinces | Med | Solved | 16/07/2026 | 15 | 3 | DFS with a visited array to avoid infinite loops; start from every unvisited node since the graph may be disconnected — each DFS launch = one province. |
 | Graphs | Word Ladder | Hard | Todo | | | | |
 | Graphs | Word Ladder II | Hard | Todo | | | | |
 | Graphs | Reconstruct Itinerary | Hard | Todo | | | | |
-| Graphs | Evaluate Division | Med | Todo | | | | |
+| Graphs | Evaluate Division | Med | Solved | 16/07/2026 | 30 | 2 | Brute force: build a weighted graph and BFS each query. Optimal: weighted Union-Find storing the ratio to each node's parent — needs path compression to be near-O(1); without it, it degrades to plain graph traversal. |
 | Graphs | Couples Holding Hands | Hard | Todo | | | | |
 | Graphs | Sort Items by Groups Respecting Dependencies | Hard | Todo | | | | |
 | Graphs | Parallel Courses III | Hard | Todo | | | | |
-| Graphs | Game of Life | Med | Todo | | | | |
-| Graphs | First Completely Painted Row or Column | Med | Todo | | | | |
+| Graphs | Game of Life | Med | Solved | 17/07/2026 | 15 | 3 | Trivial except the in-place follow-up: use 2 transient states (2 = live→dead, 3 = dead→live) so one pass can read the original and encode the next; count both 1 and 2 as currently-live neighbors, then map 2→0, 3→1. |
+| Graphs | First Completely Painted Row or Column | Med | Solved | 17/07/2026 | 20 | 3 | Works because m*n ≤ 1e5 and values are unique: build a value→(row,col) hash for O(1) lookup, keep per-row and per-col fill counters; when a row's count == #cols (or a col's count == #rows) that line is complete — return that step. |
 | Graphs | Optimal Account Balancing | Hard | Todo | | | | |
 | 1-D DP | Climbing Stairs | Easy | Todo | | | | |
 | 1-D DP | Perfect Squares | Med | Todo | | | | |
