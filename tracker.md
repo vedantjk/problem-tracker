@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 46 Solved · most recent: *Climbing Stairs* + *Perfect Squares* (20/07/2026).
+**Progress:** 48 Solved · most recent: *Maximum Subarray* + *Maximum Sum Circular Subarray* (21/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -70,8 +70,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Graphs | Optimal Account Balancing | Hard | Todo | | | | |
 | 1-D DP | Climbing Stairs | Easy | Solved | 20/07/2026 | 5 | 4 | Simplest DP. Recurrence cur = pprev + prev (Fibonacci); keep only the last 2 states → O(1) space. |
 | 1-D DP | Perfect Squares | Med | Solved | 20/07/2026 | 15 | 3 | 1-D DP but not a plain loop: for each i, try every perfect square s ≤ i, dp[i] = min(dp[i-s]+1); return dp[n]. Optimal is math via Lagrange's four-square theorem (answer ∈ 1..4): ans=1 if N is a perfect square; ans=4 if N = 4^a(8b+7); ans=2 if some i has N−i² a perfect square; else 3 — O(√N) time, O(1) space. |
-| 1-D DP | Maximum Subarray | Med | Todo | | | | |
-| 1-D DP | Maximum Sum Circular Subarray | Med | Todo | | | | |
+| 1-D DP | Maximum Subarray | Med | Solved | 21/07/2026 | 5 | 3 | Kadane's algorithm. Two vars: rolling cur = max(nums[i], cur + nums[i]); ans = max(ans, cur). O(n) time, O(1) space. |
+| 1-D DP | Maximum Sum Circular Subarray | Med | Solved | 21/07/2026 | 15 | 2 | Two cases: non-wrapping = normal Kadane; wrapping = totalSum − minSubarraySum. Answer = max(maxKadane, total − minKadane). Guard the all-negative case: if maxKadane < 0, return maxKadane (the wrap formula would give an empty subarray). |
 | 1-D DP | Maximum Subarray Sum with One Deletion | Med | Todo | | | | |
 | 1-D DP | Paint House | Med | Todo | | | | |
 | 1-D DP | Longest String Chain | Med | Todo | | | | |
