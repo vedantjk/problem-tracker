@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 48 Solved · most recent: *Maximum Subarray* + *Maximum Sum Circular Subarray* (21/07/2026).
+**Progress:** 50 Solved · most recent: *Maximum Subarray Sum with One Deletion* + *Paint House* (22/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -72,8 +72,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | 1-D DP | Perfect Squares | Med | Solved | 20/07/2026 | 15 | 3 | 1-D DP but not a plain loop: for each i, try every perfect square s ≤ i, dp[i] = min(dp[i-s]+1); return dp[n]. Optimal is math via Lagrange's four-square theorem (answer ∈ 1..4): ans=1 if N is a perfect square; ans=4 if N = 4^a(8b+7); ans=2 if some i has N−i² a perfect square; else 3 — O(√N) time, O(1) space. |
 | 1-D DP | Maximum Subarray | Med | Solved | 21/07/2026 | 5 | 3 | Kadane's algorithm. Two vars: rolling cur = max(nums[i], cur + nums[i]); ans = max(ans, cur). O(n) time, O(1) space. |
 | 1-D DP | Maximum Sum Circular Subarray | Med | Solved | 21/07/2026 | 15 | 2 | Two cases: non-wrapping = normal Kadane; wrapping = totalSum − minSubarraySum. Answer = max(maxKadane, total − minKadane). Guard the all-negative case: if maxKadane < 0, return maxKadane (the wrap formula would give an empty subarray). |
-| 1-D DP | Maximum Subarray Sum with One Deletion | Med | Todo | | | | |
-| 1-D DP | Paint House | Med | Todo | | | | |
+| 1-D DP | Maximum Subarray Sum with One Deletion | Med | Solved | 22/07/2026 | 10 | 3 | Extend Kadane to two rolling states: curNoDel = max(nums[i], curNoDel + nums[i]) (standard); curWithDel = max(curNoDel [delete current], curWithDel + nums[i] [keep current]). ans = max over both. Init both to arr[0], loop from index 1. |
+| 1-D DP | Paint House | Med | Solved | 22/07/2026 | 5 | 3 | 3 rolling vars, one per colour: cur[c] = costs[i][c] + min(prev two other colours). Each var = min cost if house i is painted colour c; answer = min of the three at the end. |
 | 1-D DP | Longest String Chain | Med | Todo | | | | |
 | 1-D DP | Maximum Total Damage With Spell Casting | Med | Todo | | | | |
 | 1-D DP | Minimum Costs Using the Train Line | Hard | Todo | | | | |
