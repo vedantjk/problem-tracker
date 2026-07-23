@@ -1,6 +1,6 @@
 # Daily LeetCode Log
 
-The routine appends one row per weekday check. **Target = 2 problems** solved on the prior weekday.
+The routine appends one row per check. **Target = 3 problems** on weekdays, **5/day** on weekends (raised from 2 on 2026-07-23 for the 8-week plan).
 Streak = consecutive weekday checks where the target was met.
 
 | Check date (PT) | Weekday checked | Solved that day | Hit target? | Streak | Notes |
@@ -15,3 +15,4 @@ Streak = consecutive weekday checks where the target was met.
 | 2026-07-20 | Monday | 2 | Yes | 6 | Climbing Stairs (Easy) + Perfect Squares (Med), solved 20/07 — first 1-D DP. Stairs: Fibonacci recurrence, 2 rolling states; Perfect Squares: min-coins DP, or Lagrange 4-square math for O(√N). No weekend work (no penalty). Streak → 6. |
 | 2026-07-21 | Tuesday | 2 | Yes | 7 | Maximum Subarray + Maximum Sum Circular Subarray (both Med, 1-D DP), solved 21/07. Kadane's rolling max; circular = max(Kadane, total − minKadane), guarding the all-negative case. Streak → 7. |
 | 2026-07-22 | Wednesday | 2 | Yes | 8 | Maximum Subarray Sum with One Deletion + Paint House (both Med, 1-D DP), solved 22/07 — 50th solved overall 🎉. One-deletion: two rolling states (with/without a deletion); Paint House: 3 rolling colour costs. Streak → 8. |
+| 2026-07-23 | Thursday | 6 | Yes | 9 | 🔥 SIX (target 3, first day at new bar). Finished 1-D DP: Longest String Chain, Maximum Total Damage With Spell Casting. Opened 2-D DP/Stock: Best Time to Buy/Sell Stock, w/ Transaction Fee, Maximal Square, Max Length of Repeated Subarray. Streak → 9. |

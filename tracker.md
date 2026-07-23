@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 50 Solved · most recent: *Maximum Subarray Sum with One Deletion* + *Paint House* (22/07/2026).
+**Progress:** 56 Solved · most recent: *Maximum Length of Repeated Subarray* (+5 more — a 6-problem day, 23/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -74,15 +74,15 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | 1-D DP | Maximum Sum Circular Subarray | Med | Solved | 21/07/2026 | 15 | 2 | Two cases: non-wrapping = normal Kadane; wrapping = totalSum − minSubarraySum. Answer = max(maxKadane, total − minKadane). Guard the all-negative case: if maxKadane < 0, return maxKadane (the wrap formula would give an empty subarray). |
 | 1-D DP | Maximum Subarray Sum with One Deletion | Med | Solved | 22/07/2026 | 10 | 3 | Extend Kadane to two rolling states: curNoDel = max(nums[i], curNoDel + nums[i]) (standard); curWithDel = max(curNoDel [delete current], curWithDel + nums[i] [keep current]). ans = max over both. Init both to arr[0], loop from index 1. |
 | 1-D DP | Paint House | Med | Solved | 22/07/2026 | 5 | 3 | 3 rolling vars, one per colour: cur[c] = costs[i][c] + min(prev two other colours). Each var = min cost if house i is painted colour c; answer = min of the three at the end. |
-| 1-D DP | Longest String Chain | Med | Todo | | | | |
-| 1-D DP | Maximum Total Damage With Spell Casting | Med | Todo | | | | |
+| 1-D DP | Longest String Chain | Med | Solved | 23/07/2026 | 15 | 3 | Sort words by length; for each word, delete each letter and check if that predecessor exists, dp[word] = max(dp[pred] + 1). Use a hash-map dp table (word→best) so the "does predecessor exist" lookup is O(1). |
+| 1-D DP | Maximum Total Damage With Spell Casting | Med | Solved | 23/07/2026 | 25 | 2 | Trick: reshape so the DP only looks backward. Freq-count + extract unique powers, sort. Take/skip DP over unique values: take = val*freq[val] + dp[j] where j is the last index with unique[j] ≤ val−3 (find via upper_bound(val−3)−1, or a monotone two-pointer since sorted); skip = dp[i−1]. dp[i] = max(take, skip); watch out-of-bounds. |
 | 1-D DP | Minimum Costs Using the Train Line | Hard | Todo | | | | |
-| 2-D DP / Stock | Best Time to Buy and Sell Stock | Easy | Todo | | | | |
+| 2-D DP / Stock | Best Time to Buy and Sell Stock | Easy | Solved | 23/07/2026 | 5 | 4 | Two vars: minBuy = min(minBuy, prices[i]); profit = max(profit, prices[i] − minBuy). |
 | 2-D DP / Stock | Best Time to Buy and Sell Stock III | Hard | Todo | | | | |
 | 2-D DP / Stock | Best Time to Buy and Sell Stock IV | Hard | Todo | | | | |
-| 2-D DP / Stock | Best Time to Buy and Sell Stock with Transaction Fee | Med | Todo | | | | |
-| 2-D DP / Stock | Maximal Square | Med | Todo | | | | |
-| 2-D DP / Stock | Maximum Length of Repeated Subarray | Med | Todo | | | | |
+| 2-D DP / Stock | Best Time to Buy and Sell Stock with Transaction Fee | Med | Solved | 23/07/2026 | 10 | 3 | State machine, bottom-up: hold = max(hold, free − prices[i]); free = max(free, hold + prices[i] − fee); init hold = −prices[0], free = 0, loop from 1, return free. (Fun fact: top-down with a max({...}) initializer-list TLE'd — LeetCode's AddressSanitizer redzones/poisons the materialized stack array every call; bottom-up sidesteps it.) |
+| 2-D DP / Stock | Maximal Square | Med | Solved | 23/07/2026 | 10 | 3 | dp[i][j] = side of the largest all-1 square with (i,j) as bottom-right. If grid[i][j]==1, dp[i][j] = min(dp[i−1][j], dp[i][j−1], dp[i−1][j−1]) + 1. Track the max side; answer = side². |
+| 2-D DP / Stock | Maximum Length of Repeated Subarray | Med | Solved | 23/07/2026 | 15 | 3 | Longest common sub-ARRAY (contiguous). dp[i][j] = length of common run ending exactly at nums1[i], nums2[j]; if equal dp[i][j] = dp[i−1][j−1] + 1, else 0. Track the global max. A padded matrix removes any special init beyond 0. |
 | 2-D DP / Stock | Number of Dice Rolls With Target Sum | Med | Todo | | | | |
 | 2-D DP / Stock | Palindromic Substrings | Med | Todo | | | | |
 | 2-D DP / Stock | Longest Palindromic Substring | Med | Todo | | | | |
