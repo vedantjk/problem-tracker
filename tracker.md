@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 59 Solved · most recent: *Number of Dice Rolls With Target Sum* + both Palindrome problems (24/07/2026).
+**Progress:** 64 Solved · most recent: *Knight Probability* + Intervals sweep (25/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -88,12 +88,12 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | 2-D DP / Stock | Longest Palindromic Substring | Med | Solved | 24/07/2026 | 5 | 3 | Same expand-around-center as Palindromic Substrings; instead of counting, track start + len of the longest palindrome seen so you can slice it out at the end. |
 | 2-D DP / Stock | Count Palindromic Subsequences | Hard | Todo | | | | |
 | 2-D DP / Stock | Wildcard Matching | Hard | Todo | | | | |
-| 2-D DP / Stock | Knight Probability in Chessboard | Med | Todo | | | | |
-| Intervals | Merge Intervals | Med | Todo | | | | |
-| Intervals | Meeting Rooms II | Med | Todo | | | | |
+| 2-D DP / Stock | Knight Probability in Chessboard | Med | Solved | 25/07/2026 | 15 | 3 | dp[cell] = probability of being on that cell after m moves. Two rolling n×n arrays; start cell init 1, rest 0. Each move: new[cell] = Σ over the 8 knight-source cells of prev[source]/8 (in-bounds only). Answer = sum of all probabilities after k moves (prob still on board). |
+| Intervals | Merge Intervals | Med | Solved | 25/07/2026 | 10 | 3 | Sort by start. Track current [a,b]; for each interval, if its start ≤ b merge (b = max(b, end)), else push [a,b] and start a new one. Push the final [a,b] after the loop. |
+| Intervals | Meeting Rooms II | Med | Solved | 25/07/2026 | 15 | 3 | Sort by start. Min-heap of end times (C++ default is max-heap → use greater). For each meeting, pop tops whose end ≤ its start (rooms freed), then push its end. Answer = max heap size ever reached = rooms needed. |
 | Intervals | Employee Free Time | Hard | Todo | | | | |
-| Intervals | Meeting Scheduler | Med | Todo | | | | |
-| Intervals | Teemo Attacking | Easy | Todo | | | | |
+| Intervals | Meeting Scheduler | Med | Solved | 25/07/2026 | 15 | 3 | Sort both lists; two pointers. start = max(the two starts), end = min(the two ends); if end − start ≥ duration return [start, start+duration]. Advance whichever interval has the smaller end (it can't overlap anything further). |
+| Intervals | Teemo Attacking | Easy | Solved | 25/07/2026 | 5 | 3 | Sum over i ≥ 1 of min(duration, t[i] − t[i−1]), then add one full duration for the last attack. |
 | Math & Geometry | Pow(x, n) | Med | Todo | | | | |
 | Math & Geometry | Count Primes | Med | Todo | | | | |
 | Math & Geometry | Max Points on a Line | Hard | Todo | | | | |
