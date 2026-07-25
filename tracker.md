@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 56 Solved · most recent: *Maximum Length of Repeated Subarray* (+5 more — a 6-problem day, 23/07/2026).
+**Progress:** 59 Solved · most recent: *Number of Dice Rolls With Target Sum* + both Palindrome problems (24/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -83,9 +83,9 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | 2-D DP / Stock | Best Time to Buy and Sell Stock with Transaction Fee | Med | Solved | 23/07/2026 | 10 | 3 | State machine, bottom-up: hold = max(hold, free − prices[i]); free = max(free, hold + prices[i] − fee); init hold = −prices[0], free = 0, loop from 1, return free. (Fun fact: top-down with a max({...}) initializer-list TLE'd — LeetCode's AddressSanitizer redzones/poisons the materialized stack array every call; bottom-up sidesteps it.) |
 | 2-D DP / Stock | Maximal Square | Med | Solved | 23/07/2026 | 10 | 3 | dp[i][j] = side of the largest all-1 square with (i,j) as bottom-right. If grid[i][j]==1, dp[i][j] = min(dp[i−1][j], dp[i][j−1], dp[i−1][j−1]) + 1. Track the max side; answer = side². |
 | 2-D DP / Stock | Maximum Length of Repeated Subarray | Med | Solved | 23/07/2026 | 15 | 3 | Longest common sub-ARRAY (contiguous). dp[i][j] = length of common run ending exactly at nums1[i], nums2[j]; if equal dp[i][j] = dp[i−1][j−1] + 1, else 0. Track the global max. A padded matrix removes any special init beyond 0. |
-| 2-D DP / Stock | Number of Dice Rolls With Target Sum | Med | Todo | | | | |
-| 2-D DP / Stock | Palindromic Substrings | Med | Todo | | | | |
-| 2-D DP / Stock | Longest Palindromic Substring | Med | Todo | | | | |
+| 2-D DP / Stock | Number of Dice Rolls With Target Sum | Med | Solved | 24/07/2026 | 20 | 3 | Count ways for n dice to sum to target. DP over (die index, sum): dp[i][j] = Σ_{m=1..k} dp[i−1][j−m] (guard j−m ≥ 0), mod. Choices are (die, target) not k → O(n·k·target). Optimization: cur[j] = prev[j−1]+…+prev[j−k] is a sliding-window sum over prev, so keep a running window (add prev[j−1], drop prev[j−k−1]) → O(n·target). |
+| 2-D DP / Stock | Palindromic Substrings | Med | Solved | 24/07/2026 | 20 | 3 | Expand-around-center: for each index expand outward while chars match, counting palindromes. Run two centers per index — odd (i, i) and even (i, i+1). O(n²). |
+| 2-D DP / Stock | Longest Palindromic Substring | Med | Solved | 24/07/2026 | 5 | 3 | Same expand-around-center as Palindromic Substrings; instead of counting, track start + len of the longest palindrome seen so you can slice it out at the end. |
 | 2-D DP / Stock | Count Palindromic Subsequences | Hard | Todo | | | | |
 | 2-D DP / Stock | Wildcard Matching | Hard | Todo | | | | |
 | 2-D DP / Stock | Knight Probability in Chessboard | Med | Todo | | | | |
