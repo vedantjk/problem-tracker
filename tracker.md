@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 64 Solved · most recent: *Knight Probability* + Intervals sweep (25/07/2026).
+**Progress:** 66 Solved · most recent: *Find Median from Data Stream* + *Find Servers That Handled Most Number of Requests* (both Hard, 26/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -44,8 +44,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Tries | Word Search II | Hard | Todo | | | | |
 | Tries | Stream of Characters | Hard | Todo | | | | |
 | Tries | Longest Common Prefix | Easy | Todo | | | | |
-| Heap / Priority Queue | Find Median from Data Stream | Hard | Todo | | | | |
-| Heap / Priority Queue | Find Servers That Handled Most Number of Requests | Hard | Todo | | | | |
+| Heap / Priority Queue | Find Median from Data Stream | Hard | Solved | 26/07/2026 | 15 | 4 | Two heaps: max-heap for the lower half, min-heap for the upper half. Rebalance so their sizes differ by ≤1. Median = top of the larger heap, or the average of both tops when equal. Handle empty/edge cases in the balance step. |
+| Heap / Priority Queue | Find Servers That Handled Most Number of Requests | Hard | Solved | 26/07/2026 | 25 | 3 | Min-heap of (freeTime, serverId) for busy servers + an ordered set of free server ids. Per request: pop the heap to free servers with end ≤ arrival (move them into the set). Wrap-around assignment: lower_bound(i%k) in the free set, else begin(); if the set is empty, drop the request. Track per-server counts, return the max. |
 | Heap / Priority Queue | Reorganize String | Med | Solved | 06/07/2026 | | | |
 | Backtracking | Combination Sum | Med | Solved | 07/07/2026 | | | |
 | Backtracking | Permutations | Med | Solved | 07/07/2026 | | | |
