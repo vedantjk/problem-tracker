@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 66 Solved · most recent: *Find Median from Data Stream* + *Find Servers That Handled Most Number of Requests* (both Hard, 26/07/2026).
+**Progress:** 69 Solved · most recent: Tries — *Implement Trie*, *Search Suggestions System*, *Word Search II* (26/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -39,9 +39,9 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Trees | Binary Tree Zigzag Level Order Traversal | Med | Solved | 04/07/2026 | 10 | 4 | Standard BFS with a flag you flip each level. |
 | Trees | Subtree of Another Tree | Easy | Solved | 04/07/2026 | 15 | 4 | Check if a node equals the sub-root, then match trees. Better: serialize + KMP/Rabin-Karp string matching. |
 | Trees | House Robber III | Med | Solved | 04/07/2026 | 30 | 3 | Linear recurrence / BFS don't work. At each node return max(rob, skip). robThis = node->val + rSkip + lSkip; skip = sum of max(skip, rob) of each child. |
-| Tries | Implement Trie (Prefix Tree) | Med | Todo | | | | |
-| Tries | Search Suggestions System | Med | Todo | | | | |
-| Tries | Word Search II | Hard | Todo | | | | |
+| Tries | Implement Trie (Prefix Tree) | Med | Solved | 26/07/2026 | 10 | 3 | TrieNode = children pointers + isEnd flag. insert walks/creates nodes down the word, sets isEnd at the end. walk() returns the node where a string ends or null. search = walk && isEnd; startsWith = walk != null. |
+| Tries | Search Suggestions System | Med | Solved | 26/07/2026 | 30 | 2 | Trie way: build, walk to the prefix node, DFS to collect ≤3 lexicographically smallest completions. Binary-search way: sort, lower_bound the prefix, take ≤3 if they match. Optimal no-compare: two pointers lo/hi into the sorted array — for the i-th prefix char, advance lo while lo[i]≠char and retract hi similarly; the window shrinks as the prefix grows, no repeated string comparisons. |
+| Tries | Word Search II | Hard | Solved | 26/07/2026 | 30 | 2 | Put all words in a trie, then a single grid DFS walking the trie in lockstep — if the current node has no child for the cell's letter, prune and return. Clear a word from its node once found (avoid duplicates). Optimization: after exploring a cell, delete now-empty trie leaves so future branches prune even faster. |
 | Tries | Stream of Characters | Hard | Todo | | | | |
 | Tries | Longest Common Prefix | Easy | Todo | | | | |
 | Heap / Priority Queue | Find Median from Data Stream | Hard | Solved | 26/07/2026 | 15 | 4 | Two heaps: max-heap for the lower half, min-heap for the upper half. Rebalance so their sizes differ by ≤1. Median = top of the larger heap, or the average of both tops when equal. Handle empty/edge cases in the balance step. |
