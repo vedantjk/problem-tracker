@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 69 Solved · most recent: Tries — *Implement Trie*, *Search Suggestions System*, *Word Search II* (26/07/2026).
+**Progress:** 72 Solved · most recent: *Pow(x, n)*, *Count Primes*, *Happy Number* (27/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -94,11 +94,11 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Intervals | Employee Free Time | Hard | Todo | | | | |
 | Intervals | Meeting Scheduler | Med | Solved | 25/07/2026 | 15 | 3 | Sort both lists; two pointers. start = max(the two starts), end = min(the two ends); if end − start ≥ duration return [start, start+duration]. Advance whichever interval has the smaller end (it can't overlap anything further). |
 | Intervals | Teemo Attacking | Easy | Solved | 25/07/2026 | 5 | 3 | Sum over i ≥ 1 of min(duration, t[i] − t[i−1]), then add one full duration for the last attack. |
-| Math & Geometry | Pow(x, n) | Med | Todo | | | | |
-| Math & Geometry | Count Primes | Med | Todo | | | | |
+| Math & Geometry | Pow(x, n) | Med | Solved | 27/07/2026 | 15 | 3 | Binary exponentiation (fast pow). While n > 0: if n even → x *= x, n /= 2; if odd → ans *= x, n -= 1. Handle negative n (invert x to 1/x; cast n to long long first to avoid INT_MIN overflow on negation). |
+| Math & Geometry | Count Primes | Med | Solved | 27/07/2026 | 20 | 3 | Sieve of Eratosthenes. bool array all-true; mark 0 and 1 false; for each prime p from 2, mark p², p²+p, p²+2p, … up to n as non-prime. O(n log log n). |
 | Math & Geometry | Max Points on a Line | Hard | Todo | | | | |
 | Math & Geometry | Best Position for a Service Centre | Hard | Todo | | | | |
-| Math & Geometry | Happy Number | Easy | Todo | | | | |
+| Math & Geometry | Happy Number | Easy | Solved | 27/07/2026 | 20 | 3 | Simulate sum-of-squares-of-digits repeatedly; detect a cycle (hash set of seen values, or Floyd's tortoise/hare). Reaching 1 = happy, a cycle = not. |
 | Math & Geometry | Multiply Strings | Med | Todo | | | | |
 | Math & Geometry | Add Strings | Easy | Todo | | | | |
 | Math & Geometry | Add Two Integers | Easy | Todo | | | | |
