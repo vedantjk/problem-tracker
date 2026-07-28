@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 72 Solved · most recent: *Pow(x, n)*, *Count Primes*, *Happy Number* (27/07/2026).
+**Progress:** 75 Solved · most recent: *Multiply Strings*, *Add Strings*, *Add Two Integers* (28/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -99,9 +99,9 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Math & Geometry | Max Points on a Line | Hard | Todo | | | | |
 | Math & Geometry | Best Position for a Service Centre | Hard | Todo | | | | |
 | Math & Geometry | Happy Number | Easy | Solved | 27/07/2026 | 20 | 3 | Simulate sum-of-squares-of-digits repeatedly; detect a cycle (hash set of seen values, or Floyd's tortoise/hare). Reaching 1 = happy, a cycle = not. |
-| Math & Geometry | Multiply Strings | Med | Todo | | | | |
-| Math & Geometry | Add Strings | Easy | Todo | | | | |
-| Math & Geometry | Add Two Integers | Easy | Todo | | | | |
+| Math & Geometry | Multiply Strings | Med | Solved | 28/07/2026 | 20 | 3 | Grade-school multiplication: each digit pair prod of a[i]*b[j] lands at result index i+j (carry to i+j−1... i.e. propagate). Helper for string addition. Karatsuba is the faster divide-and-conquer alternative (not done yet). |
+| Math & Geometry | Add Strings | Easy | Solved | 28/07/2026 | 1 | 3 | Two pointers from the back, add digit by digit with carry; don't forget the final carry. |
+| Math & Geometry | Add Two Integers | Easy | Solved | 28/07/2026 | 0 | 4 | Return a + b. No bignum, no trick — just the sum. |
 | Math & Geometry | Reverse Words in a String | Med | Todo | | | | |
 | Math & Geometry | Walking Robot Simulation | Med | Todo | | | | |
 | Math & Geometry | Rank Transform of a Matrix | Hard | Todo | | | | |
