@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 77 Solved · most recent: *Reverse Words in a String*, *Walking Robot Simulation* (29/07/2026).
+**Progress:** 78 Solved · most recent: *Reverse Words in a String*, *Walking Robot Simulation*, *Missing Number* (29/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -115,7 +115,7 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Bit Manipulation | Number of 1 Bits | Easy | Todo | | | | |
 | Bit Manipulation | Counting Bits | Easy | Todo | | | | |
 | Bit Manipulation | Reverse Bits | Easy | Todo | | | | |
-| Bit Manipulation | Missing Number | Easy | Todo | | | | |
+| Bit Manipulation | Missing Number | Easy | Solved | 29/07/2026 | 5 | 3 | XOR all indices 0..n with all elements — equal values cancel (a^a=0), leaving the missing number. Alt: Gauss sum n(n+1)/2 minus the array sum. |
 | Bit Manipulation | Bitwise AND of Numbers Range | Med | Todo | | | | |
 | Bit Manipulation | Sum of Two Integers | Med | Todo | | | | |
 | Design | LRU Cache | Med | Todo | | | | |
