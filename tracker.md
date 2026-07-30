@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 75 Solved · most recent: *Multiply Strings*, *Add Strings*, *Add Two Integers* (28/07/2026).
+**Progress:** 77 Solved · most recent: *Reverse Words in a String*, *Walking Robot Simulation* (29/07/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -102,8 +102,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Math & Geometry | Multiply Strings | Med | Solved | 28/07/2026 | 20 | 3 | Grade-school multiplication: each digit pair prod of a[i]*b[j] lands at result index i+j (carry to i+j−1... i.e. propagate). Helper for string addition. Karatsuba is the faster divide-and-conquer alternative (not done yet). |
 | Math & Geometry | Add Strings | Easy | Solved | 28/07/2026 | 1 | 3 | Two pointers from the back, add digit by digit with carry; don't forget the final carry. |
 | Math & Geometry | Add Two Integers | Easy | Solved | 28/07/2026 | 0 | 4 | Return a + b. No bignum, no trick — just the sum. |
-| Math & Geometry | Reverse Words in a String | Med | Todo | | | | |
-| Math & Geometry | Walking Robot Simulation | Med | Todo | | | | |
+| Math & Geometry | Reverse Words in a String | Med | Solved | 29/07/2026 | 10 | 3 | Split on spaces into a vector of words, reverse the order, join with single spaces (handle multiple/leading/trailing spaces). In-place O(1)-space alt: reverse the whole string, then reverse each word. |
+| Math & Geometry | Walking Robot Simulation | Med | Solved | 29/07/2026 | 10 | 3 | Direction index into a [N,E,S,W] delta vector; turn right = (d+1)&3, left = (d+3)&3 (or ((d±1)%4+4)%4). Step while the next cell isn't an obstacle (store obstacles in a hash set of coords), track max distance². For unordered_set of coordinate pairs you need a custom hash. |
 | Math & Geometry | Rank Transform of a Matrix | Hard | Todo | | | | |
 | Math & Geometry | Transform to Chessboard | Hard | Todo | | | | |
 | Bit Manipulation | Count Number of Maximum Bitwise-OR Subsets | Med | Todo | | | | |
