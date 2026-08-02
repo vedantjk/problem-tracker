@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 81 Solved · most recent: *Stream of Characters* + *Minimum Time to Make Array Sum At Most x* (both Hard) + *Longest Common Prefix* (01/08/2026).
+**Progress:** 83 Solved · most recent: Bit Manip — *Number of 1 Bits*, *Single Number* (01/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -109,10 +109,10 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Bit Manipulation | Count Number of Maximum Bitwise-OR Subsets | Med | Todo | | | | |
 | Bit Manipulation | Largest Combination With Bitwise AND Greater Than Zero | Med | Todo | | | | |
 | Bit Manipulation | Power of Four | Easy | Todo | | | | |
-| Bit Manipulation | Single Number | Easy | Todo | | | | |
+| Bit Manipulation | Single Number | Easy | Solved | 01/08/2026 | 5 | 4 | XOR all elements — equal values cancel (a^a=0), leaving the unique number. |
 | Bit Manipulation | Single Number II | Med | Todo | | | | |
 | Bit Manipulation | Single Number III | Med | Todo | | | | |
-| Bit Manipulation | Number of 1 Bits | Easy | Todo | | | | |
+| Bit Manipulation | Number of 1 Bits | Easy | Solved | 01/08/2026 | 5 | 4 | __builtin_popcount, or loop: while n, count++ and n &= (n−1) — clears the lowest set bit each step (runs once per set bit). |
 | Bit Manipulation | Counting Bits | Easy | Todo | | | | |
 | Bit Manipulation | Reverse Bits | Easy | Todo | | | | |
 | Bit Manipulation | Missing Number | Easy | Solved | 29/07/2026 | 5 | 3 | XOR all indices 0..n with all elements — equal values cancel (a^a=0), leaving the missing number. Alt: Gauss sum n(n+1)/2 minus the array sum. |

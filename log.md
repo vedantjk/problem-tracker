@@ -24,4 +24,4 @@ Streak = consecutive weekday checks where the target was met.
 | 2026-07-29 | Wednesday | 3 | Yes | 13 | 💪 CLUTCH — pushed out a 3rd while tired to save the chain. Reverse Words in a String, Walking Robot Simulation (Math & Geo) + Missing Number (Bit Manip — XOR cancel / Gauss-sum). Chain held. Streak → 13. |
 | 2026-07-30 | Thursday | — | — | — | Not reported (low-capacity day). |
 | 2026-07-31 | Friday | — | — | — | Not reported. |
-| 2026-08-01 | Saturday | 3 (in progress) | — | 13 | WEEKEND (bonus): 2 HARDs — Stream of Characters (reversed-word trie) + Minimum Time to Make Array Sum At Most x (exchange-argument knapsack) — plus Longest Common Prefix, closing the Tries section. Still solving; Sunday = pure revision day. |
+| 2026-08-01 | Saturday | 5 | Yes | 13 | WEEKEND (bonus): hit 5 ✅. 2 HARDs — Stream of Characters (reversed-word trie) + Minimum Time to Make Array Sum At Most x (exchange-argument knapsack); Longest Common Prefix (Tries section done); + Bit Manip easies Number of 1 Bits, Single Number. Sunday = pure revision day. |
