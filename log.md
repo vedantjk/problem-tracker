@@ -22,3 +22,6 @@ Streak = consecutive weekday checks where the target was met.
 | 2026-07-27 | Monday | 3 | Yes | 11 | Math & Geometry opened: Pow(x, n) (binary exponentiation), Count Primes (Sieve of Eratosthenes), Happy Number (cycle detection). Revision planned later this week. Streak → 11. |
 | 2026-07-28 | Tuesday | 3 | Yes | 12 | Math & Geometry string-arithmetic: Multiply Strings (grade-school mult, digits i+j), Add Strings (two-pointer + carry), Add Two Integers (trivial). Streak → 12. |
 | 2026-07-29 | Wednesday | 3 | Yes | 13 | 💪 CLUTCH — pushed out a 3rd while tired to save the chain. Reverse Words in a String, Walking Robot Simulation (Math & Geo) + Missing Number (Bit Manip — XOR cancel / Gauss-sum). Chain held. Streak → 13. |
+| 2026-07-30 | Thursday | — | — | — | Not reported (low-capacity day). |
+| 2026-07-31 | Friday | — | — | — | Not reported. |
+| 2026-08-01 | Saturday | 3 (in progress) | — | 13 | WEEKEND (bonus): 2 HARDs — Stream of Characters (reversed-word trie) + Minimum Time to Make Array Sum At Most x (exchange-argument knapsack) — plus Longest Common Prefix, closing the Tries section. Still solving; Sunday = pure revision day. |

@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 78 Solved · most recent: *Reverse Words in a String*, *Walking Robot Simulation*, *Missing Number* (29/07/2026).
+**Progress:** 81 Solved · most recent: *Stream of Characters* + *Minimum Time to Make Array Sum At Most x* (both Hard) + *Longest Common Prefix* (01/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -28,7 +28,7 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Binary Search | Find First and Last Position of Element in Sorted Array | Med | Solved | 23/06/2026 | 10 | 3 | lower_bound = first ≥ target, upper_bound = first > target. Check lower_bound; if end or ≠ target return {−1,−1}, else upper_bound−1. equal_range returns both at once. Manual: standard binary search with a first/last flag (first ⇒ right=mid−1, else left=mid+1). |
 | Binary Search | Sqrt(x) | Easy | Solved | 23/06/2026 | 10 | 3 | Standard binary search low ≤ high, high=mid−1, low=mid+1. Return high (smallest number whose square ≤ x). At loop end high = low − 1. |
 | Binary Search | Koko Eating Bananas | Med | Solved | 23/06/2026 | 5 | 4 | Binary search on a predicate: does this eating rate meet the target? |
-| Binary Search | Minimum Time to Make Array Sum At Most x | Hard | Todo | | | | |
+| Binary Search | Minimum Time to Make Array Sum At Most x | Hard | Solved | 01/08/2026 | 60 | 2 | Each index is worth zeroing at most once → answer ≤ n or −1. Savings from zeroing i as the j-th op = a_i + j·b_i (the t term cancels, so ONE DP serves all t). Exchange argument: sort by nums2 (b) ascending so larger-b elements get later slots (less regrowth). Knapsack: dp[i][j] = max(dp[i−1][j], dp[i−1][j−1] + a_i + j·b_i). Answer = first t in 0..n with Σa + t·Σb − dp[n][t] ≤ x, else −1 (FIRST hit, not argmin — the sum isn't monotonic in t). O(n²) time, O(n) space iterating j downward. |
 | Binary Search | Minimum Operations to Make Numbers Non-positive | Hard | Solved | 23/06/2026 | 30 | 2 | Check if `mid` operations make all ≤ 0. mid ops = mid y-ops + mid x-ops; since y<x, subtract mid*y from every element, remainders must sum to ≤ mid x-ops. Ceil division trick: (r+d−1)/d instead of r/d + (r%d?1:0). |
 | Binary Search | Random Pick with Weight | Med | Solved | 23/06/2026 | 15 | 3 | Prefix sums + rand(). Random float = (float)rand()/RAND_MAX; target = rand*total_weight; lower_bound for the answer. |
 | Linked List | Add Two Numbers | Med | Solved | 24/06/2026 | 5 | 4 | Linked list with a while loop. |
@@ -42,8 +42,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Tries | Implement Trie (Prefix Tree) | Med | Solved | 26/07/2026 | 10 | 3 | TrieNode = children pointers + isEnd flag. insert walks/creates nodes down the word, sets isEnd at the end. walk() returns the node where a string ends or null. search = walk && isEnd; startsWith = walk != null. |
 | Tries | Search Suggestions System | Med | Solved | 26/07/2026 | 30 | 2 | Trie way: build, walk to the prefix node, DFS to collect ≤3 lexicographically smallest completions. Binary-search way: sort, lower_bound the prefix, take ≤3 if they match. Optimal no-compare: two pointers lo/hi into the sorted array — for the i-th prefix char, advance lo while lo[i]≠char and retract hi similarly; the window shrinks as the prefix grows, no repeated string comparisons. |
 | Tries | Word Search II | Hard | Solved | 26/07/2026 | 30 | 2 | Put all words in a trie, then a single grid DFS walking the trie in lockstep — if the current node has no child for the cell's letter, prune and return. Clear a word from its node once found (avoid duplicates). Optimization: after exploring a cell, delete now-empty trie leaves so future branches prune even faster. |
-| Tries | Stream of Characters | Hard | Todo | | | | |
-| Tries | Longest Common Prefix | Easy | Todo | | | | |
+| Tries | Stream of Characters | Hard | Solved | 01/08/2026 | 60 | 2 | Forward matching fails; store the dictionary words REVERSED in the trie and match the stream backward. Keep a history deque of the last L chars (L = longest word); on each query, walk the reversed trie over recent chars — an isEnd hit = a word matched. (Flat-map trie: vector of arrays, node index stored in the cell, parallel isEnd bool vector.) |
+| Tries | Longest Common Prefix | Easy | Solved | 01/08/2026 | 20 | 4 | Vertical scan: check each char position across all words, stop when a word ends or chars differ. Trie version: insert all, count how many times each next letter is added; while that count == n, extend the common prefix by one. |
 | Heap / Priority Queue | Find Median from Data Stream | Hard | Solved | 26/07/2026 | 15 | 4 | Two heaps: max-heap for the lower half, min-heap for the upper half. Rebalance so their sizes differ by ≤1. Median = top of the larger heap, or the average of both tops when equal. Handle empty/edge cases in the balance step. |
 | Heap / Priority Queue | Find Servers That Handled Most Number of Requests | Hard | Solved | 26/07/2026 | 25 | 3 | Min-heap of (freeTime, serverId) for busy servers + an ordered set of free server ids. Per request: pop the heap to free servers with end ≤ arrival (move them into the set). Wrap-around assignment: lower_bound(i%k) in the free set, else begin(); if the set is empty, drop the request. Track per-server counts, return the max. |
 | Heap / Priority Queue | Reorganize String | Med | Solved | 06/07/2026 | | | |
