@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 83 Solved · most recent: Bit Manip — *Number of 1 Bits*, *Single Number* (01/08/2026).
+**Progress:** 85 Solved · most recent: Design — *LRU Cache*, *Insert Delete GetRandom O(1)* (03/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -118,9 +118,9 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Bit Manipulation | Missing Number | Easy | Solved | 29/07/2026 | 5 | 3 | XOR all indices 0..n with all elements — equal values cancel (a^a=0), leaving the missing number. Alt: Gauss sum n(n+1)/2 minus the array sum. |
 | Bit Manipulation | Bitwise AND of Numbers Range | Med | Todo | | | | |
 | Bit Manipulation | Sum of Two Integers | Med | Todo | | | | |
-| Design | LRU Cache | Med | Todo | | | | |
+| Design | LRU Cache | Med | Solved | 03/08/2026 | 10 | 4 | std::list<pair<key,val>> + unordered_map<key, list-iterator>. get: move that node to the front (splice), return val. put: update+move to front, or insert at front; if over capacity, evict the back node and erase its map entry. |
 | Design | LFU Cache | Hard | Todo | | | | |
-| Design | Insert Delete GetRandom O(1) | Med | Todo | | | | |
+| Design | Insert Delete GetRandom O(1) | Med | Solved | 03/08/2026 | 15 | 3 | vector for O(1) random access (rand() % size) + unordered_map value→index for O(1) exists/lookup. O(1) delete: overwrite the target index with the last element, fix that element's index in the map, pop_back the vector, erase the key from the map. |
 | Design | Design Circular Queue | Med | Todo | | | | |
 | Design | Design Front Middle Back Queue | Med | Todo | | | | |
 | Design | Moving Average from Data Stream | Easy | Todo | | | | |
