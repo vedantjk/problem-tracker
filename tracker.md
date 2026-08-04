@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 86 Solved · most recent: Design — *LRU Cache*, *Insert Delete GetRandom O(1)*, *Design Circular Queue* (03/08/2026).
+**Progress:** 87 Solved · most recent: Design — *LRU Cache*, *Insert Delete GetRandom O(1)*, *Design Circular Queue*, *Design Front Middle Back Queue* (03/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -122,7 +122,7 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Design | LFU Cache | Hard | Todo | | | | |
 | Design | Insert Delete GetRandom O(1) | Med | Solved | 03/08/2026 | 15 | 3 | vector for O(1) random access (rand() % size) + unordered_map value→index for O(1) exists/lookup. O(1) delete: overwrite the target index with the last element, fix that element's index in the map, pop_back the vector, erase the key from the map. |
 | Design | Design Circular Queue | Med | Solved | 03/08/2026 | 20 | 3 | Array ring-buffer: keep head index + size; enqueue writes at (head+size)%cap, dequeue does head=(head+1)%cap, front=buf[head], rear=buf[(head+size−1)%cap], full when size==cap. (Alt: linked list with head/tail pointers.) The array/modulo version is what interviewers want. |
-| Design | Design Front Middle Back Queue | Med | Todo | | | | |
+| Design | Design Front Middle Back Queue | Med | Solved | 03/08/2026 | 20 | 3 | Split into two deques (front half a, back half b). Maintain the invariant via a resize()/rebalance — b.size() at most 1 more than a, a never exceeds b — called after every op. Then push/pop at front/middle/back just read/write the ends and rebalance. |
 | Design | Moving Average from Data Stream | Easy | Todo | | | | |
 | Design | Time Based Key-Value Store | Med | Todo | | | | |
 | Design | Design A Leaderboard | Med | Todo | | | | |
