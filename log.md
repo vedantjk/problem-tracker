@@ -26,3 +26,4 @@ Streak = consecutive weekday checks where the target was met.
 | 2026-07-31 | Friday | — | — | — | Not reported. |
 | 2026-08-01 | Saturday | 5 | Yes | 13 | WEEKEND (bonus): hit 5 ✅. 2 HARDs — Stream of Characters (reversed-word trie) + Minimum Time to Make Array Sum At Most x (exchange-argument knapsack); Longest Common Prefix (Tries section done); + Bit Manip easies Number of 1 Bits, Single Number. Sunday = pure revision day. |
 | 2026-08-03 | Monday | 4 | Yes | — | Design (4): LRU Cache, Insert Delete GetRandom O(1), Design Circular Queue, Design Front Middle Back Queue (two-deque split + rebalance invariant). LeetCode recovered — got the 4th. Hit the 4/day target. Sunday revision still pending. |
+| 2026-08-04 | Tuesday | 4 | Yes | — | Design (4): Moving Average from Data Stream, Time Based Key-Value Store (upper_bound+prev for ≤-lookup), Design HashSet, Design HashMap (bucket array + chaining). 4/day again. Revision still pending. |
