@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 91 Solved · most recent: Design — *Moving Average*, *Time Based Key-Value Store*, *Design HashSet*, *Design HashMap* (04/08/2026).
+**Progress:** 93 Solved · most recent: Design — *Design A Leaderboard*, *Design Tic-Tac-Toe* (10/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -125,8 +125,8 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Design | Design Front Middle Back Queue | Med | Solved | 03/08/2026 | 20 | 3 | Split into two deques (front half a, back half b). Maintain the invariant via a resize()/rebalance — b.size() at most 1 more than a, a never exceeds b — called after every op. Then push/pop at front/middle/back just read/write the ends and rebalance. |
 | Design | Moving Average from Data Stream | Easy | Solved | 04/08/2026 | 5 | 4 | Fixed-size sliding window with a deque: push the new value, pop the front when over size, keep a running sum, return sum/size. |
 | Design | Time Based Key-Value Store | Med | Solved | 04/08/2026 | 10 | 3 | unordered_map<string, map<int,string>> (key → timestamp → value). get: if key absent return ""; else upper_bound(timestamp) — if it's begin() return "", else prev(it)->second. Note: upper_bound then prev = "largest key ≤ target" (lower_bound is ≥, upper_bound is >). |
-| Design | Design A Leaderboard | Med | Todo | | | | |
-| Design | Design Tic-Tac-Toe | Med | Todo | | | | |
+| Design | Design A Leaderboard | Med | Solved | 10/08/2026 | 20 | 3 | unordered_map<id,score> + multiset<int> of scores. multiset defaults to ascending — use greater<int> for descending (top-K). Gotcha: multiset.erase(value) removes ALL instances; erase an iterator (from find) to drop a single score. |
+| Design | Design Tic-Tac-Toe | Med | Solved | 10/08/2026 | 20 | 3 | Brute force: O(n²) space, O(n) check (watch the diag flag reset). Optimal: rows[] + cols[] arrays + two ints diag/antiDiag; each move adds +1 (or −1 per player) to its row, col, and diag/antiDiag if on them — magnitude n = win. antiDiag when col == n−1−row. O(1) check, O(n) space. |
 | Design | Design Memory Allocator | Med | Todo | | | | |
 | Design | Design Excel Sum Formula | Hard | Todo | | | | |
 | Design | Design Spreadsheet | Med | Todo | | | | |
