@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 93 Solved · most recent: Design — *Design A Leaderboard*, *Design Tic-Tac-Toe* (10/08/2026).
+**Progress:** 95 Solved · most recent: Design — *Design Memory Allocator*, *Design Spreadsheet* (17/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -127,9 +127,9 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Design | Time Based Key-Value Store | Med | Solved | 04/08/2026 | 10 | 3 | unordered_map<string, map<int,string>> (key → timestamp → value). get: if key absent return ""; else upper_bound(timestamp) — if it's begin() return "", else prev(it)->second. Note: upper_bound then prev = "largest key ≤ target" (lower_bound is ≥, upper_bound is >). |
 | Design | Design A Leaderboard | Med | Solved | 10/08/2026 | 20 | 3 | unordered_map<id,score> + multiset<int> of scores. multiset defaults to ascending — use greater<int> for descending (top-K). Gotcha: multiset.erase(value) removes ALL instances; erase an iterator (from find) to drop a single score. |
 | Design | Design Tic-Tac-Toe | Med | Solved | 10/08/2026 | 20 | 3 | Brute force: O(n²) space, O(n) check (watch the diag flag reset). Optimal: rows[] + cols[] arrays + two ints diag/antiDiag; each move adds +1 (or −1 per player) to its row, col, and diag/antiDiag if on them — magnitude n = win. antiDiag when col == n−1−row. O(1) check, O(n) space. |
-| Design | Design Memory Allocator | Med | Todo | | | | |
+| Design | Design Memory Allocator | Med | Solved | 17/08/2026 | 30 | 3 | Simple (fits constraints): vector<int> size n; allocate = scan for a free run ≥ size, fill with mID; free = zero all cells of mID. Better: map<start,len> of free blocks + unordered_map<mID, vector<(start,len)>> of allocations. Allocate: scan free map for first block ≥ size, carve + update both. Free: for each of mID's intervals, coalesce with neighbors — lower_bound to find insert spot, merge prev (prev.start+len==s) and next (s+size==it->first). lower_bound because the freed interval isn't in the map yet ("where this key would go"). |
 | Design | Design Excel Sum Formula | Hard | Todo | | | | |
-| Design | Design Spreadsheet | Med | Todo | | | | |
+| Design | Design Spreadsheet | Med | Solved | 17/08/2026 | 20 | 3 | unordered_map<string,int> of cells. Watch the operator[] trap — it auto-creates a cell on read; use insert_or_assign() to set and find()+end() check to read, so you don't accidentally spawn empty cells. |
 | Design | Design In-Memory File System | Hard | Todo | | | | |
 | Design | Design a Text Editor | Hard | Todo | | | | |
 | Design | Design Search Autocomplete System | Hard | Todo | | | | |
