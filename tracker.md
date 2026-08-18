@@ -2,7 +2,7 @@
 
 Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the Google Sheet; this file is a committed mirror.
 
-**Progress:** 95 Solved · most recent: Design — *Design Memory Allocator*, *Design Spreadsheet* (17/08/2026).
+**Progress:** 96 Solved · most recent: *Sudoku Solver* (18/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -51,7 +51,7 @@ Snapshot of my practice sheet as of **2026-07-12**. Source of truth remains the 
 | Backtracking | Permutations | Med | Solved | 07/07/2026 | | | |
 | Backtracking | Word Search | Med | Solved | 13/07/2026 | 15 | 3 | Iterate over all cells; from each, DFS in 4 directions. Mark the current cell visited (or overwrite it) before recursing or you get an infinite loop. |
 | Backtracking | Letter Combinations of a Phone Number | Med | Solved | 13/07/2026 | 15 | 2 | Keep a vector<string> mapping digit→chars. For each digit, loop over its chars enumerating all combos; pass down a string capturing the choice so far. |
-| Backtracking | Sudoku Solver | Hard | Todo | | | | |
+| Backtracking | Sudoku Solver | Hard | Solved | 18/08/2026 | 30 | 3 | Linear pos 0..80 → i=pos/9, j=pos%9; return true at pos==81. Three [9][10] bool arrays: row, col, box (box=(i/3)*3 + j/3). Preprocess existing digits once. Recurse: if cell filled → backtrack(pos+1); else try 1-9, if unused in row/col/box, mark + place, recurse and RETURN TRUE if it succeeds (propagate up, else you undo a valid solution); on failure unmark and reset to '.'. |
 | Backtracking | Permutation Sequence | Hard | Todo | | | | |
 | Backtracking | Next Permutation | Med | Solved | 14/07/2026 | 20 | 2 | Find largest k with arr[k] < arr[k+1] (suffix after k is non-increasing); if none, array is the last permutation — reverse and return. In the suffix find the greatest l with arr[l] > arr[k] (smallest suffix value still > arr[k]), swap k and l, then reverse arr[k+1..end] to make it ascending → next permutation. |
 | Graphs | Number of Islands | Med | Solved | 14/07/2026 | 10 | 4 | DFS from each unvisited land cell, flooding its component. Use a visited array, or modify the input in place — depends whether mutating input is allowed. |

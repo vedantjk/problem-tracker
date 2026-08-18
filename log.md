@@ -29,3 +29,4 @@ Streak = consecutive weekday checks where the target was met.
 | 2026-08-04 | Tuesday | 4 | Yes | — | Design (4): Moving Average from Data Stream, Time Based Key-Value Store (upper_bound+prev for ≤-lookup), Design HashSet, Design HashMap (bucket array + chaining). 4/day again. Revision still pending. |
 | 2026-08-10 | Monday | 2 | Design | — | New method day 1. Design: Design A Leaderboard (hashmap + multiset<greater>), Design Tic-Tac-Toe (rows/cols arrays + diag/antiDiag counters, O(1) check). (Wed 08-06 → Sun 08-09 were plan-reshaping + theory revision.) |
 | 2026-08-17 | Monday | 2 | Design | — | Design Memory Allocator (free-list: map<start,len> + mID→intervals, coalesce on free via lower_bound) + Design Spreadsheet (unordered_map; avoid operator[] auto-insert — use insert_or_assign/find). |
+| 2026-08-18 | Tuesday | 1 | Backtracking | — | Sudoku Solver (Hard) — linear pos 0..80, row/col/box bool arrays, backtrack and propagate the success return. |
