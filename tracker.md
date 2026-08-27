@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 97 Solved · most recent: *Contains Duplicate* (26/08/2026).
+**Progress:** 98 Solved · most recent: *Valid Anagram* (26/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -15,7 +15,7 @@
 | Arrays & Hashing | Fizz Buzz | Easy | Solved | 22/06/2026 | 5 | 4 | It's Fizz Buzz. Besides if/else chains, can use a hashmap of mappings + string concatenation. |
 | Arrays & Hashing | Concatenation of Array | Easy | Todo | | | | NC250 |
 | Arrays & Hashing | Contains Duplicate | Easy | Solved | 26/08/2026 | 3 | 5 | NC250. Hash set: O(n) time/space, early return on first hit. Alt: sort + adjacent compare, O(n log n) time, O(1) extra. |
-| Arrays & Hashing | Valid Anagram | Easy | Todo | | | | NC250 |
+| Arrays & Hashing | Valid Anagram | Easy | Solved | 26/08/2026 | 3 | 5 | NC250. 26-count array compare. Better: length check, single std::array<int,26>, ++ for s / -- for t with early exit on negative; take const string&. Alt: sort both. Unicode follow-up → unordered_map. |
 | Arrays & Hashing | Remove Element | Easy | Todo | | | | NC250 |
 | Arrays & Hashing | Majority Element | Easy | Todo | | | | NC250 |
 | Arrays & Hashing | Sort an Array | Med | Todo | | | | NC250 |
