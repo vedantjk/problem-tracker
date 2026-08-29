@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 98 Solved · most recent: *Valid Anagram* (27/08/2026).
+**Progress:** 106 Solved · most recent: *Kth Largest Element In An Array* (28/08/2026).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -20,12 +20,12 @@
 | Arrays & Hashing | Majority Element | Easy | Todo | | | | NC250 |
 | Arrays & Hashing | Sort an Array | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Sort Colors | Med | Todo | | | | NC250 |
-| Arrays & Hashing | Top K Frequent Elements | Med | Todo | | | | NC250 |
+| Arrays & Hashing | Top K Frequent Elements | Med | Solved | 28/08/2026 | 15 | 4 | NC250. Heap of all m distinct: O(m log m). Min-heap size k: O(m log k). Bucket sort by count (size n+1), walk from n down: O(n), the intended one. nth_element also O(m) avg. |
 | Arrays & Hashing | Encode and Decode Strings | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Range Sum Query 2D Immutable | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Product of Array Except Self | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Valid Sudoku | Med | Todo | | | | NC250 |
-| Arrays & Hashing | Longest Consecutive Sequence | Med | Todo | | | | NC250 |
+| Arrays & Hashing | Longest Consecutive Sequence | Med | Solved | 28/08/2026 | 10 | 4 | NC250. Set; only start a run when x-1 absent. MUST iterate the set not nums, else duplicates re-walk runs → O(n²). Guard INT_MAX+1 overflow. Alt sort+scan O(n log n). |
 | Arrays & Hashing | Best Time to Buy And Sell Stock II | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Majority Element II | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Subarray Sum Equals K | Med | Todo | | | | NC250 |
@@ -35,20 +35,20 @@
 | Two Pointers & Sliding Window | Sliding Window Maximum | Hard | Solved | 22/06/2026 | 20 | 3 | Use a deque whose front is the window max: pop front when it leaves the window, pop back to drop smaller elements. Linear alt: left/right block maxima in chunks of k; any window [i, i+k−1] straddles ≤1 boundary so answer = max(right[i], left[i+k−1]). |
 | Two Pointers & Sliding Window | Pairs of Songs With Total Durations Divisible by 60 | Med | Solved | 22/06/2026 | 10 | 4 | Standard O(n²) that becomes O(n) with a map of frequencies as you walk the array. |
 | Two Pointers & Sliding Window | Reverse String | Easy | Todo | | | | NC250 |
-| Two Pointers & Sliding Window | Valid Palindrome | Easy | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | Valid Palindrome | Easy | Solved | 28/08/2026 | 5 | 5 | NC250. Cleaned string + two pointers. Follow-up O(1) space: two pointers skipping non-alnum inline. Cast to unsigned char before isalnum/tolower (signed char UB). |
 | Two Pointers & Sliding Window | Valid Palindrome II | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Merge Strings Alternately | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Merge Sorted Array | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Remove Duplicates From Sorted Array | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Two Sum II Input Array Is Sorted | Med | Todo | | | | NC250 |
-| Two Pointers & Sliding Window | 3Sum | Med | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | 3Sum | Med | Solved | 28/08/2026 | 15 | 4 | NC250. Sort, fix i, two-pointer inside; skip dup i. Only ONE of the x/y dup-skip loops is required for correctness (the other is an optimization), but zero is wrong. Use i+2<n not i<size()-2 (unsigned underflow). O(n²). |
 | Two Pointers & Sliding Window | 4Sum | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Rotate Array | Med | Todo | | | | NC250 |
-| Two Pointers & Sliding Window | Container With Most Water | Med | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | Container With Most Water | Med | Solved | 28/08/2026 | 5 | 4 | NC250. Two pointers, move the shorter side. Proof: moving the taller side shrinks width and can't raise the min, so no candidate is lost. Max area 1e9 fits int. |
 | Two Pointers & Sliding Window | Boats to Save People | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Trapping Rain Water | Hard | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Contains Duplicate II | Easy | Todo | | | | NC250 |
-| Two Pointers & Sliding Window | Longest Substring Without Repeating Characters | Med | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | Longest Substring Without Repeating Characters | Med | Solved | 28/08/2026 | 10 | 4 | NC250. Sliding window with set (shrink left until no dup). Better: array<int,256> last-seen index, left = max(left, last[c]+1); the >= left guard stops stale occurrences moving left backwards. |
 | Two Pointers & Sliding Window | Longest Repeating Character Replacement | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Permutation In String | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Minimum Size Subarray Sum | Med | Todo | | | | NC250 |
@@ -94,7 +94,7 @@
 | Linked List | Merge k Sorted Lists | Hard | Solved | 25/06/2026 | 10 | 3 | Have a queue and merge 2 at a time; check for empty lists. |
 | Linked List | Reverse Linked List | Easy | Todo | | | | NC250 |
 | Linked List | Merge Two Sorted Lists | Easy | Todo | | | | NC250 |
-| Linked List | Linked List Cycle | Easy | Todo | | | | NC250 |
+| Linked List | Linked List Cycle | Easy | Solved | 28/08/2026 | 3 | 5 | NC250. Floyd slow/fast. Fast gains 1 per step inside the cycle so it can't skip slow. Cycle-start proof already in Find the Duplicate Number. |
 | Linked List | Reorder List | Med | Todo | | | | NC250 |
 | Linked List | Remove Nth Node From End of List | Med | Todo | | | | NC250 |
 | Linked List | Copy List With Random Pointer | Med | Todo | | | | NC250 |
@@ -137,7 +137,7 @@
 | Heap / Priority Queue | Kth Largest Element In a Stream | Easy | Todo | | | | NC250 |
 | Heap / Priority Queue | Last Stone Weight | Easy | Todo | | | | NC250 |
 | Heap / Priority Queue | K Closest Points to Origin | Med | Todo | | | | NC250 |
-| Heap / Priority Queue | Kth Largest Element In An Array | Med | Todo | | | | NC250 |
+| Heap / Priority Queue | Kth Largest Element In An Array | Med | Solved | 28/08/2026 | 15 | 3 | NC250. Min-heap size k O(n log k) (use greater<int>, not negation: -INT_MIN UB). Real answer: quickselect / nth_element O(n) avg; random pivot + 3-way partition to avoid O(n²) on sorted/duplicate input. nth_element = introselect. Write quickselect by hand. |
 | Heap / Priority Queue | Task Scheduler | Med | Todo | | | | NC250 |
 | Heap / Priority Queue | Single Threaded CPU | Med | Todo | | | | NC250 |
 | Heap / Priority Queue | Longest Happy String | Med | Todo | | | | NC250 |
