@@ -16,6 +16,12 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Lambdas | [lambdas.md](lambdas.md) | 3/3 | 0 | yes | no |
 | Keywords and Identifiers | [keywords_identifiers.md](keywords_identifiers.md) | 0/0 | - | yes | no |
 
+## Quizzes
+
+| Date | Quiz | Score | Time | Percentile | Notes |
+|---|---|---|---|---|---|
+| 29/08/2026 | Beginner C++ (getcracked) | 11/20 | 18:11 | top 9.7% of 248 ("Cracked") | Baseline, cold. 2 coding questions skipped. Retake after tree is done. |
+
 ## Template
 
 ```
