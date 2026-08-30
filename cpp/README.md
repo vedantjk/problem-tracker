@@ -14,6 +14,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Scope | [scope.md](scope.md) | 1/1 | 0 | yes | no |
 | Namespaces | [namespaces.md](namespaces.md) | 0/0 | - | yes | no |
 | Lambdas | [lambdas.md](lambdas.md) | 3/3 | 0 | yes | no |
+| Object Sizes | [object_sizes.md](object_sizes.md) | 0/? | ? | yes | no |
+| Signed vs Unsigned | [signed_unsigned.md](signed_unsigned.md) | 0/? | ? | yes | no |
 | Keywords and Identifiers | [keywords_identifiers.md](keywords_identifiers.md) | 0/0 | - | yes | no |
 
 ## Quizzes

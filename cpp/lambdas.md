@@ -15,8 +15,12 @@
 - [x] Am I missing something? — 29/08 — ok
 - [x] Between two parts. — 29/08 — ok
 
+## Quiz misses
+- 30/08 (tree Q): sizeof of captureless lambda — said 8 ("functor ≈ pointer"); it's an empty struct → 1. Captures are the members; no captures, no data.
+
 ## Traps / interview one-liners
 - "A lambda is a struct with `operator()`; captures are its members. Everything else follows from that."
+- "Closure sizes (verified): `[]` → 1 (empty struct), `[x]` int → 4 (copy), `[&x]` → 8 (reference stored as pointer). `sizeof(int&)` still reports 4: the language gives references no size of their own, but a reference member/capture costs pointer storage — `sizeof(struct{int&})` == 8."
 - "`std::function` in a hot loop is an indirect call the optimizer can't see through; take a template parameter instead."
 - "`mutable` exists because `operator()` is const by default."
 - "Capturing a local by reference and returning the lambda is the classic dangling-reference bug."
