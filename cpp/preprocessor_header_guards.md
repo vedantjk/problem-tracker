@@ -15,4 +15,5 @@
 - "Guards solve within-TU duplication; `inline`/`extern` solve across-TU duplication. Different problems."
 - "Standard headers never break because they're guarded and contain only declarations, types, templates, inline."
 - "Macros have no scope, so SCREAMING_CASE to avoid colliding with real identifiers."
+- "Function-like macros paste args textually: `foo(a++, b++)` evaluates `b++` twice → `121`. Use `inline`/`constexpr` functions." (missed on quiz 29/08)
 - "`#include` is a textual paste; that's why include order can matter and why headers must be self-contained."
