@@ -18,6 +18,18 @@
 ## Quiz misses
 - 30/08 (tree Q): sizeof of captureless lambda — said 8 ("functor ≈ pointer"); it's an empty struct → 1. Captures are the members; no captures, no data.
 
+## Compile errors vs UB
+Compile errors:
+- `[x](){ x++; }` without `mutable` — assigning to a const member (the classic).
+- Duplicate capture `[x, &x]`, default capture not first `[x, =]`, capturing at namespace scope (nothing to capture).
+- `std::function<void(int)> f = [](auto,auto){};` — signature mismatch.
+- `[] -> int { return 1; }` before C++23 (needs `()` with a trailing return type).
+
+UB:
+- By-ref capture outliving the variable: `auto f(){ int x=1; return [&x]{ return x; }; }` — dangles.
+- Non-void lambda flowing off the end (same as any function).
+- Calling a moved-from std::function: not UB but throws bad_function_call — know the difference.
+
 ## Traps / interview one-liners
 - "A lambda is a struct with `operator()`; captures are its members. Everything else follows from that."
 - "Closure sizes (verified): `[]` → 1 (empty struct), `[x]` int → 4 (copy), `[&x]` → 8 (reference stored as pointer). `sizeof(int&)` still reports 4: the language gives references no size of their own, but a reference member/capture costs pointer storage — `sizeof(struct{int&})` == 8."

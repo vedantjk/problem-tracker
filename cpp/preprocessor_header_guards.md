@@ -11,6 +11,15 @@
 ## Questions (getcracked)
 - [x] Bodyguard — 29/08 — ok
 
+## Failure modes (mostly silent, not UB)
+Compile error (indirect):
+- Unguarded header with a class definition included twice in one TU → redefinition CE. The guard prevents the CE; it doesn't fix cross-TU ODR.
+
+Silent wrongness:
+- Macro arg double-eval: `#define MAX(a,b) ((a)>(b)?(a):(b))` then `MAX(x++, y++)` increments one side twice.
+- `#pragma once` with the same header duplicated at two paths → both copies included → redefinition CE far from the cause.
+- A `#define` before an `#include` renaming something inside the header (macros have no scope).
+
 ## Traps / interview one-liners
 - "Guards solve within-TU duplication; `inline`/`extern` solve across-TU duplication. Different problems."
 - "Standard headers never break because they're guarded and contain only declarations, types, templates, inline."

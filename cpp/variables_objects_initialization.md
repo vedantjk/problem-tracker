@@ -15,6 +15,15 @@
 - [x] The designated representative. — 29/08 — ok
 - [x] Forgot one? — 29/08 — ok
 
+## Compile errors vs UB
+Compile errors:
+- Narrowing in list-init: `int x{4.5};` `unsigned u{-1};` `char c{300};` — all CE (with `=` they'd be legal conversions).
+- Designated init: `Date d{.day=1, .year=2020};` (out of order), `Date d{2050, .month=12};` (mixed), `Date d{.mh.min=5};` (nested), `Date d{.mode=1};` (static member) — all CE.
+- Most vexing parse isn't an error — worse, it compiles as a function declaration: `Widget w();` then `w.foo()` is the CE.
+
+UB:
+- `int x; std::cout << x;` — reading a default-initialized automatic scalar. (Static-storage `int x;` is 0 — fine.)
+
 ## Traps / interview one-liners
 - "Prefer `{}`: no narrowing, no vexing parse, and `{}` alone means value-init (zero) instead of garbage."
 - "Uninitialized local read is UB, not 'random value': the compiler may assume it never happens."

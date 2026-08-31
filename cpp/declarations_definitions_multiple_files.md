@@ -13,6 +13,18 @@
 ## Questions (getcracked)
 - (node has no questions)
 
+## Compile errors vs link errors vs NDR
+Compile error:
+- Same TU, two definitions: `int f(){return 1;} int f(){return 2;}` (ODR rule 1).
+- Overload on return type only: `int f(int); double f(int);` — redeclaration conflict.
+
+Link error:
+- Declared + used, never defined: `undefined reference` (ODR rule 2a).
+- Non-inline defined in a header included by two .cpp: `multiple definition` (ODR rule 2b).
+
+Ill-formed NDR:
+- `inline int f(){return 1;}` in a.cpp and `inline int f(){return 2;}` in b.cpp — linker silently picks one (ODR rule 3). Worst failure mode of the three.
+
 ## Traps / interview one-liners
 - "Header contains declarations, .cpp contains definitions: that's ODR rule 2 in practice. `inline` is what lets a definition live in a header."
 - "Undefined reference vs multiple definition: both linker, opposite ODR failures."

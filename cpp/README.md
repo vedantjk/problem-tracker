@@ -16,6 +16,12 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Lambdas | [lambdas.md](lambdas.md) | 3/3 | 0 | yes | no |
 | Object Sizes | [object_sizes.md](object_sizes.md) | 0/? | ? | yes | no |
 | Signed vs Unsigned | [signed_unsigned.md](signed_unsigned.md) | 0/? | ? | yes | no |
+| Fixed Width Integers | [fixed_width_integers.md](fixed_width_integers.md) | 0/? | ? | yes | no |
+| Floating Point | [floating_point.md](floating_point.md) | 0/? | ? | yes | no |
+| Bools | [bools.md](bools.md) | 0/? | ? | yes | no |
+| Enumerations | [enumerations.md](enumerations.md) | 1/? | 0 | yes | no |
+| Tuple | [tuple.md](tuple.md) | 0/? | ? | yes | no |
+| auto / deduction | [auto_deduction.md](auto_deduction.md) | 0/? | ? | yes | no |
 | Keywords and Identifiers | [keywords_identifiers.md](keywords_identifiers.md) | 0/0 | - | yes | no |
 
 ## Quizzes

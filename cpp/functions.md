@@ -11,6 +11,17 @@
 ## Questions (getcracked)
 - [x] Once or twice? — 29/08 — ok
 
+## Compile errors vs UB
+Compile error:
+- Two definitions of an inline function in ONE TU; calling an undeclared function.
+
+UB:
+- Flowing off the end of a non-void function: `int f() { }` then using the result. (main is the one exception — implicit return 0.)
+- `inline` function with external linkage defined differently across TUs (NDR flavor).
+
+Unspecified (not UB, still bites):
+- Cross-TU order of global constructors — the static initialization order fiasco: `extern Logger log; Config c{log};` in another TU may run before log is built.
+
 ## Traps / interview one-liners
 - "`inline` today is about linkage/ODR, not performance. The optimizer decides inlining on its own."
 - "The real cost of a call isn't `call`/`ret`, it's that the optimizer can't see through it."

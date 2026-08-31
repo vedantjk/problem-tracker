@@ -22,6 +22,15 @@
 ## Questions (getcracked)
 - Steps to C++ Development, Installing your IDE, Comments/Whitespace/Formatting/Printing: no questions.
 
+## Compile vs link errors
+Compile errors (one TU breaks a rule):
+- `x = 5;` with no `int x;` in sight; missing semicolon; `void main()` (gcc/clang reject or warn — main must return int).
+- Calling `main()` from code is ill-formed.
+
+Link errors (compiler happy, program incomplete):
+- `int foo();` declared, called, never defined → `undefined reference to foo`.
+- `int x = 1;` in two .cpp files → `multiple definition of x`.
+
 ## Traps / interview one-liners
 - "Undefined reference is a linker error: the compiler saw a declaration and trusted you."
 - "Initialization constructs the object; assignment modifies an existing one. For class types that's ctor vs `operator=`."

@@ -11,6 +11,15 @@
 ## Questions (getcracked)
 - [x] I am the shadows. — 29/08 — ok
 
+## Compile errors vs UB
+Compile error:
+- Using a name before/outside its scope: `{ int x; } x = 5;`.
+- Accessing a shadowed local (there's no `::` for locals — the outer one is simply unreachable; not an error to shadow, error to try to reach it).
+
+UB:
+- Returning a reference/pointer to a local: `int& f(){ int x=10; return x; }` — dangling on first use.
+- Any use-after-scope through a saved pointer: `int* p; { int y=1; p=&y; } *p;`.
+
 ## Traps / interview one-liners
 - "Scope is about names, duration is about objects, linkage is about identity across scopes/TUs."
 - "`-Wshadow` catches shadowing; it's a real bug source in constructors (`x = x;`)."

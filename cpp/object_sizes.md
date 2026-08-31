@@ -12,6 +12,14 @@
 - (tbd)
 - Claude quiz 30/08: sizeof {char,double,char} — MISSED: forgot tail padding (17 vs 24); struct rounds to multiple of max alignment
 
+## Compile errors vs unspecified
+Compile error:
+- `sizeof` on an incomplete type: `struct S; sizeof(S);` (this is why forward declarations can't be members by value).
+
+Unspecified / trap (not UB by itself):
+- Padding byte contents are unspecified — memcmp on structs compares garbage: two equal-valued structs can memcmp unequal.
+- Layout between access-specifier groups was implementation-defined pre-C++23; don't hardcode offsets — use offsetof (itself conditionally-supported on non-standard-layout types).
+
 ## Traps / interview one-liners
 - "sizeof includes padding; the struct is rounded to its alignment so it can be arrayed."
 - "Reorder members by decreasing alignment to kill holes; `pahole` shows them."
