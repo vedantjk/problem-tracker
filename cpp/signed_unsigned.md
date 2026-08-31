@@ -4,16 +4,16 @@
 - Signed overflow: UB, full stop ("result not representable → behavior undefined"). Optimizer assumes it can't happen.
 - Unsigned overflow: well-defined modular arithmetic, value mod 2^N ("divide by one-past-max, keep remainder"). 280 in a u8 → 24; `0u - 1` wraps to max.
 - Mixed signed/unsigned arithmetic, two-step rule:
-  1. Integral promotion first: anything narrower than `int` (char, short, unsigned short) becomes `int`.
+  1. Integral promotion first: anything narrower than `int` (bool, char, short — signed AND unsigned variants) becomes **signed int** (unsigned int only if int couldn't hold the range — never on normal platforms). float → double is the floating promotion (matters for varargs/printf).
   2. Then usual arithmetic conversions: if one side is unsigned with rank >= int, the signed side converts to unsigned.
 - Consequence: `unsigned short a=0,b=1; a-b > 0` is **false** (promoted to int, -1). Same code with `unsigned int` is **true** (0u-1u = 4294967295). Width relative to int flips the answer.
 
 ## Overload-resolution corollary
 - `foo(int)` vs `foo(unsigned)` called with `foo(-1.5)`: compile error, ambiguous. double→int and double→unsigned are both "floating-integral conversions" with identical rank; resolution never prefers signed over unsigned (or vice versa) within the same rank. Fix: cast at the call site or add a `foo(double)` overload.
-- Same-rank ambiguity is the general rule: overload resolution compares conversion *ranks* (exact > promotion > conversion), and ties across candidates are ill-formed.
+- Same-rank ambiguity is the general rule: overload resolution compares conversion *ranks* (exact > promotion > conversion), and ties across candidates are ill-formed. Promotion beats conversion: `f(int)` vs `f(long)` with a short argument picks int unambiguously; `f(double)` beats `f(long)` for a float.
 
 ## Questions (getcracked)
-- (tbd)
+- [ ] Down shift — 30/08 — MISSED: said UINT32_MAX, assumed 1u<<32 yields 0. Shift >= width of promoted left operand is UB (1u is unsigned int → UB at i=32). x86 shl masks count to 5 bits so it often yields 1, not 0 — the polite-zero model is wrong twice. Fix: 1ull << i.
 
 ## Compile errors vs UB vs defined-but-treacherous
 Compile error:

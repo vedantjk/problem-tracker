@@ -22,6 +22,12 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Enumerations | [enumerations.md](enumerations.md) | 1/? | 0 | yes | no |
 | Tuple | [tuple.md](tuple.md) | 0/? | ? | yes | no |
 | auto / deduction | [auto_deduction.md](auto_deduction.md) | 0/? | ? | yes | no |
+| Bitset / bitflags | [bitset_bitflags.md](bitset_bitflags.md) | 0/? | ? | yes | no |
+| reinterpret_cast / memcpy | [reinterpret_cast_memcpy.md](reinterpret_cast_memcpy.md) | 0/? | ? | yes | no |
+| std::bit_cast | [bit_cast.md](bit_cast.md) | 0/? | ? | yes | no |
+| Sequencing / eval order | [sequencing.md](sequencing.md) | 0/1 | 1 | yes | no |
+| Comma / ternary | [comma_ternary.md](comma_ternary.md) | 0/? | ? | yes | no |
+| Operator overloading | [operator_overloading.md](operator_overloading.md) | 0/? | ? | yes | no |
 | Keywords and Identifiers | [keywords_identifiers.md](keywords_identifiers.md) | 0/0 | - | yes | no |
 
 ## Quizzes

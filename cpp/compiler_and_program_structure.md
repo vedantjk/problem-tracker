@@ -20,6 +20,7 @@
 7. Compile error vs linker error + examples? ok.
 
 ## Questions (getcracked)
+- [ ] Munch munch munch! — 30/08 — MISSED: `x+++++y` — knew maximal munch, mis-split it. Lexing is left-to-right, each token maximal: `x ++ ++ + y` → `(x++)++` on an rvalue → CE. Spaces would make `x++ + ++y` = 10. Related: `a+++b` = `a++ +b` compiles; pre-C++11 `vector<vector<int>>` `>>` munch.
 - Steps to C++ Development, Installing your IDE, Comments/Whitespace/Formatting/Printing: no questions.
 
 ## Compile vs link errors
