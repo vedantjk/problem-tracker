@@ -9,6 +9,16 @@
 ## Questions (getcracked)
 - [ ] One after the other — 30/08 — MISSED: `++x * x++` — didn't flag the unsequenced modification+read as UB.
 
+## Syntax anchors
+```cpp
+int y = ++x * x++;    // UB: * sequences nothing (parens wouldn't help)
+++x && x++;           // ok: && sequences
+(++x, x--);           // ok: comma sequences
+arr[i] = i++;         // ok since C++17 (= sequences RHS before LHS)
+x + x++;              // still UB
+std::cout << x+++++y; // CE: munches as (x++)++ + y, rvalue++
+```
+
 ## Traps / interview one-liners
 - "Mental shortcut: same scalar modified twice (or modified+read) in one full expression with no sequencing operator between → UB."
 - "C++17 defined evaluation order for <<, =, [], and made function args indeterminately sequenced — many old 'UB!' interview answers are now just 'unspecified order'. Know which standard the interviewer means."

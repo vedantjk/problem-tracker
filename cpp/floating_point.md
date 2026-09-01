@@ -23,6 +23,22 @@ Defined but surprising:
 - `0.1 + 0.2 != 0.3`; `nan != nan` (true); `+0.0 == -0.0` (true) yet `1/+0.0 != 1/-0.0`; float loses integers above 2^24.
 - `-ffast-math` trades all the IEEE guarantees away — NaN checks may be deleted.
 
+## Syntax anchors
+```cpp
+// IEEE-754 single: 1 sign | 8 exp (bias 127) | 23 frac (+hidden 1)
+// 123.456f:
+//   123      = 1111011b
+//   .456     = 0111010010111100011...b
+//   normalize 1.1110110111010010111100011 x 2^6
+//   exponent 127+6 = 133 = 10000101b
+//   frac: drop hidden 1, keep 23, round-to-nearest-even
+
+std::numeric_limits<double>::min();        // 2.2e-308  smallest NORMAL
+std::numeric_limits<double>::denorm_min(); // 4.9e-324  smallest positive
+std::numeric_limits<double>::epsilon();    // 2.2e-16   gap at 1.0 (x+1.0 > 1.0)
+std::numeric_limits<double>::lowest();     // -1.8e308  most negative
+```
+
 ## Traps / interview one-liners
 - "0.1 is infinite in binary → 0.1+0.2 != 0.3; compare with epsilon relative to magnitude, never ==."
 - "min() = smallest normal (2.2e-308), denorm_min() = smallest positive (4.9e-324), epsilon() = gap at 1.0 (2.2e-16), lowest() = most negative. Integer min() is most-negative — the inconsistency lowest() fixes."

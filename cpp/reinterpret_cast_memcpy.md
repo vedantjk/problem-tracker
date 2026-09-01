@@ -12,6 +12,16 @@
 - UB: dereference after aliasing-violating cast; misaligned dereference; writing through a const-stripped pointer to a const object.
 - Legal: round-trip T* → void*/uintptr_t → T*; T* → char* for byte inspection; pointer to first member ↔ standard-layout struct.
 
+## Syntax anchors
+```cpp
+B* b = reinterpret_cast<B*>(&a);  // unrelated A* -> B*: UB at b->y
+int* p = reinterpret_cast<int*>(&f); *p;  // float pun: strict-aliasing UB
+
+float f = 3.14f;
+int i;
+std::memcpy(&i, &f, sizeof f);    // the blessed pun: same asm, defined
+```
+
 ## Traps / interview one-liners
 - "reinterpret_cast is free at runtime; what it buys you is UB at the access, per strict aliasing. char/unsigned char/std::byte are the only universal aliases."
 - "Parsing a network buffer as `reinterpret_cast<const Header*>(buf)` is the idiom everyone writes and it's technically UB (aliasing + lifetime); memcpy into a struct optimizes to the identical code and is defined. C++23 adds std::start_lifetime_as to bless the direct read." (my ITCH parser: this exact question)

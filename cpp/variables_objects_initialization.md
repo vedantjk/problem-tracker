@@ -24,6 +24,30 @@ Compile errors:
 UB:
 - `int x; std::cout << x;` — reading a default-initialized automatic scalar. (Static-storage `int x;` is 0 — fine.)
 
+## Syntax anchors
+```cpp
+int a = 5;   // copy-init
+int b(5);    // direct-init
+int c{5};    // direct-list-init (preferred)
+int d{};     // value-init -> 0
+int w1{4.5}; // CE: narrowing
+
+struct Point { double x{0.0}; double y{0.0}; };
+const Point p { .x = 10.0, .y = 20.0 };      // designated (C++20)
+const Point o { .x{100.0}, .y{-100.0} };     // brace form ok
+const Point t { .x = 50.0, .y{-40.0} };      // mixing = and {} ok
+
+struct Date { int year; int month; int day; static int mode; };
+Date d1{ .mode = 10 };              // CE: static member
+Date d2{ .day = 1, .year = 2010 };  // CE: out of order
+Date d3{ 2050, .month = 12 };       // CE: positional + designated mix
+Date d4{ .mh.min = 55 };            // CE: nested designator (C-only)
+
+std::string foo();        // vexing parse: function decl, not empty string
+Double d(MyInt(i));       // vexing parse again
+Double ok((MyInt(i)));    // extra parens fix; or Double ok{MyInt(i)};
+```
+
 ## Traps / interview one-liners
 - "Prefer `{}`: no narrowing, no vexing parse, and `{}` alone means value-init (zero) instead of garbage."
 - "Uninitialized local read is UB, not 'random value': the compiler may assume it never happens."

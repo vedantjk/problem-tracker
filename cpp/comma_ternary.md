@@ -14,6 +14,15 @@
 - Sequenced: condition first, then only the taken branch — `x ? ++y : ++z` is safe.
 - Usable where statements can't go: initializers, constexpr expressions, member-init lists.
 
+## Syntax anchors
+```cpp
+z = (a, b);  // z = b (comma evaluates a, discards, yields b)
+z = a, b;    // (z = a), b -- comma is BELOW assignment
+std::cout << (x < 0) ? "neg" : "pos";  // prints the bool! parenthesize whole ternary
+true ? -1 : 2u;                        // 4294967295: branches unify to unsigned
+(c ? a : b) = 5;                       // legal: same-type lvalue branches
+```
+
 ## Traps / interview one-liners
 - "return a, b; returns b — a classic bug when someone 'returns two values'."
 - "Comma in a subscript `arr[i, j]` was deprecated in C++20 and repurposed in C++23 for multidimensional operator[]."

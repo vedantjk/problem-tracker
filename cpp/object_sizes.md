@@ -20,6 +20,24 @@ Unspecified / trap (not UB by itself):
 - Padding byte contents are unspecified — memcmp on structs compares garbage: two equal-valued structs can memcmp unequal.
 - Layout between access-specifier groups was implementation-defined pre-C++23; don't hardcode offsets — use offsetof (itself conditionally-supported on non-standard-layout types).
 
+## Syntax anchors
+```cpp
+class A { float m1; const int m2; static int m3; char m4; };
+// sizeof(A) = float + int + char + padding; statics not in the object
+
+class C1 { char c; int i1, i2, i3; long l; short s; };   // holes after c and i3
+class C2 { int i1, i2, i3; long l; short s; char c; };   // repacked, fewer holes
+// (article numbers are 32-bit; on LP64 recompute with long=8, vptr=8)
+
+class Base    { virtual void f(); int a; };   // vptr(8) + int(4) + pad(4) = 16
+class Derived : public Base { virtual void g(); int b; };  // 16: b fills pad, no 2nd vptr
+
+class ABase { int m; };
+class BBase : public virtual ABase { int m; };  // + vbase ptr
+class CBase : public virtual ABase { int m; };  // + vbase ptr
+class ABCD  : public BBase, public CBase { int m; };  // ONE shared ABase copy
+```
+
 ## Traps / interview one-liners
 - "sizeof includes padding; the struct is rounded to its alignment so it can be arrayed."
 - "Reorder members by decreasing alignment to kill holes; `pahole` shows them."

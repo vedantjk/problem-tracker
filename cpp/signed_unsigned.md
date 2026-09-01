@@ -26,6 +26,25 @@ UB:
 Defined but treacherous:
 - `0u - 1` → 4294967295; `v.size() - 1` on empty vector; `unsigned short a=0,b=1; a-b > 0` false but true for unsigned int (promotion flip).
 
+## Syntax anchors
+```cpp
+unsigned short x = 0;
+unsigned short y = x - 1;   // wraps on ASSIGNMENT back: 65535
+
+unsigned short a = 0, b = 1;
+if (a - b > 0)   // false! promoted to int: 0-1 = -1
+// compiler-explorer view: (static_cast<int>(a) - static_cast<int>(b)) > 0
+// same code with unsigned int a,b -> true (0u-1u = 4294967295)
+
+void foo(int);      // 1
+void foo(unsigned); // 2
+foo(-1.5);          // CE: ambiguous, double->int and double->unsigned same rank
+
+uint64_t val = 0;
+for (int i = 0; i < 64; i++)
+    val |= (1u << i);    // UB at i=32: 1u is 32-bit. Fix: 1ull << i
+```
+
 ## Traps / interview one-liners
 - "Signed overflow UB / unsigned wrap defined — but unsigned is the more dangerous default because wrap is silent: `v.size() - 1` on an empty vector is 2^64-1."
 - "Sub-int unsigned types don't behave unsigned in arithmetic: they promote to int first."

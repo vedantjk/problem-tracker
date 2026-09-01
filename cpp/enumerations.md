@@ -17,6 +17,15 @@ Compile error:
 UB:
 - Casting a value outside the bit-field range into an unscoped enum with NO fixed underlying type: `enum Color {R,G,B}; Color c = Color(7);` (range is 0-3). With `enum class` or `: int`, same cast is defined.
 
+## Syntax anchors
+```cpp
+enum class FeePriority { One = 0, Two, Three };
+FeePriority p = FeePriority(3);           // legal: fits underlying int
+std::cout << (int)p;                      // 3 (needs the cast: no implicit conv)
+auto v = std::to_underlying(p);           // C++23, <utility>
+using enum FeePriority;                   // C++20: One now visible unqualified
+```
+
 ## Traps / interview one-liners
 - "enum class = scoped + no implicit int conversion + fixed underlying type. Specify `: uint8_t` for wire formats."
 - "Enum can legally hold non-enumerator values — switch defaults must handle them."

@@ -12,6 +12,22 @@
 - UB: `bits[i]` with i >= N — operator[] does NOT bounds-check.
 - Throws: `bits.test(i)` with i >= N → std::out_of_range (the checked twin of operator[]); `to_ulong()` when bits above position 31 are set → std::overflow_error.
 
+## Syntax anchors
+```cpp
+std::bitset<8> bits{ 0b0000'0101 };
+bits.set(3);    // -> 0000 1101
+bits.flip(4);   // -> 0001 1101
+bits.reset(4);  // -> 0000 1101
+bits.test(3);   // 1 (throws out_of_range if idx >= N; bits[i] doesn't check -> UB)
+bits.size(); bits.count(); bits.all(); bits.any(); bits.none();
+
+std::uint8_t c{ 0b00001111 };
+std::bitset<32>(~c);      // 1111...11110000  (~ promoted to int first)
+std::bitset<32>(c << 6);  // bits NOT lost: grew into the promoted int
+std::uint8_t cneg{ ~c };  // CE: narrowing from int
+c = ~c;                   // warning only: assignment narrows quietly
+```
+
 ## Traps / interview one-liners
 - "operator[] is unchecked, test() throws — same split as vector [] vs at()."
 - "count() is a popcount; for raw integers C++20 gives std::popcount/countl_zero/countr_zero in <bit>, which compile to POPCNT/LZCNT — the fast way to scan a bitmap of price levels."

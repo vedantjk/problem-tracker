@@ -30,6 +30,47 @@ UB:
 - Non-void lambda flowing off the end (same as any function).
 - Calling a moved-from std::function: not UB but throws bad_function_call — know the difference.
 
+## Syntax anchors
+```cpp
+auto l = [captures](params) -> ret { body; };   // full form
+
+// 4 ways to receive a callable:
+void repeat1(int n, const std::function<void(int)>& fn); // type-erased
+template <typename T> void repeat2(int n, const T& fn);  // template (inlines)
+void repeat3(int n, const auto& fn);                     // C++20 abbreviation
+void repeat4(int n, void (*fn)(int));                    // fn ptr: captureless only
+
+// generic lambda: static local is PER-INSTANTIATION
+auto print = [](auto value) {
+    static int callCount{0};
+    std::cout << callCount++ << ": " << value << '\n';
+};
+print("hello"); // 0: hello
+print("world"); // 1: world
+print(1);       // 0: 1   <- new instantiation, new static
+print(2);       // 1: 2
+print("again"); // 2: again
+
+int ammo{10};
+auto shoot1 = [ammo]() mutable { --ammo; };  // decrements the COPY
+auto shoot2 = [&ammo]()        { --ammo; };  // decrements main's ammo
+
+// default-capture rules
+[health, armor, &enemies](){};  // explicit mix
+[=, &enemies](){};              // all by value, enemies by ref
+[&, armor](){};                 // all by ref, armor by value
+[&, &armor](){};                // CE: & twice
+[=, armor](){};                 // CE: = twice
+[armor, &health, &armor](){};   // CE: armor twice
+[armor, &](){};                 // CE: default must be first
+
+// init-capture (new var visible only in lambda)
+std::find_if(v.begin(), v.end(),
+    [userArea{width * height}](int a) { return userArea == a; });
+
+auto f = [] -> int { };  // C++23 syntax; missing return -> UB when called
+```
+
 ## Traps / interview one-liners
 - "A lambda is a struct with `operator()`; captures are its members. Everything else follows from that."
 - "Closure sizes (verified): `[]` → 1 (empty struct), `[x]` int → 4 (copy), `[&x]` → 8 (reference stored as pointer). `sizeof(int&)` still reports 4: the language gives references no size of their own, but a reference member/capture costs pointer storage — `sizeof(struct{int&})` == 8."

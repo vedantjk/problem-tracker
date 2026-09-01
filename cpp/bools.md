@@ -11,5 +11,13 @@ UB:
 Failure mode (defined):
 - `cin >> b` with input `2` or `yes` → b unchanged-ish, stream enters failure state; all later reads no-op until `cin.clear()`.
 
+## Syntax anchors
+```cpp
+bool b{};
+std::cin >> std::boolalpha;   // accept "true"/"false" (case-sensitive)
+std::cin >> b;
+std::cout << std::boolalpha << b;  // prints true/false, not 1/0
+```
+
 ## Traps / interview one-liners
 - "sizeof(bool) is 1, but reading a bool whose byte holds a value other than 0/1 (e.g. via memcpy) is UB."

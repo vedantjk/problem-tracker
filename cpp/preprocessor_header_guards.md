@@ -20,6 +20,31 @@ Silent wrongness:
 - `#pragma once` with the same header duplicated at two paths → both copies included → redefinition CE far from the cause.
 - A `#define` before an `#include` renaming something inside the header (macros have no scope).
 
+## Syntax anchors
+```cpp
+#define PRINT_JOE
+#ifdef PRINT_JOE
+    std::cout << "Joe\n";   // compiled
+#endif
+#ifdef PRINT_BOB
+    std::cout << "Bob\n";   // stripped: PRINT_BOB not defined
+#endif
+
+#if 0   // block-comment-proof way to disable code
+    std::cout << "Steve\n";  /* nested comments fine here */
+#endif
+
+void foo() {
+#define MY_NAME "Alex"   // no scope! identical to a top-of-file define (from here down)
+}
+int main() { std::cout << MY_NAME; } // works
+
+#ifndef XYZ_H   // classic guard
+#define XYZ_H
+// ...
+#endif
+```
+
 ## Traps / interview one-liners
 - "Guards solve within-TU duplication; `inline`/`extern` solve across-TU duplication. Different problems."
 - "Standard headers never break because they're guarded and contain only declarations, types, templates, inline."

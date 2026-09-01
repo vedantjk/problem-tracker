@@ -11,5 +11,10 @@
 - Executable statement at namespace scope: `namespace N { std::cout << 1; }` — CE. (A variable definition with a side-effectful initializer is the legal workaround.)
 - Ambiguous name after two `using namespace` pulls in the same name → CE at the *use*, not the using.
 
+## Syntax anchors
+```cpp
+namespace Active = Foo::Goo;   // namespace alias
+```
+
 ## Traps / interview one-liners
 - "Anonymous namespace = internal linkage for everything inside, the C++ replacement for file-`static`."
