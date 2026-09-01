@@ -12,6 +12,10 @@
 ## Questions (getcracked)
 - [ ] A very small value — 30/08 — MISSED: answered denorm_min; condition "x + 1.0 > 1.0" defines epsilon(). Smallest-positive (denorm_min 4.9e-324) vs smallest-that-moves-1.0 (epsilon 2.2e-16) — read the condition, not the headline. (Platform's own explanation conflates them too; epsilon is the gap at 1.0, denorm_min is the smallest positive double.)
 
+## Quiz log (Claude)
+- 30/08: exchange price representation (×10^4 ITCH, venue-dependent scales, tick size ≠ representation) — ok.
+- 31/08: numeric_limits quartet — 4/4, prior miss reversed.
+
 ## UB vs implementation-defined vs defined-but-surprising
 UB:
 - Out-of-range float→integral conversion at runtime: `double d=1e20; int x = d;` — NOT a wrap like integral→integral; genuinely UB.
