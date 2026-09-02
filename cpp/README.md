@@ -15,7 +15,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
-| [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (pending quiz) |
+| [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 
 ## Where is...? (every concept, A-Z)
@@ -36,6 +36,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - continue (runs for's end-expression; while-loop infinite-loop trap) → control_flow
 - case labels (constant, unique, '6'==54 collision) → control_flow
 - case scoping / init-in-case CE / explicit block fix → control_flow
+- catch matching (no conversions, derived→base, const&) / catch-all must be last → error_handling
 - braces: auto x{1,2} / initializer_list → initialization_deduction
 - char arithmetic & promotion → types_conversions
 - comma operator (precedence, return a,b) → expressions
@@ -54,7 +55,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - enum / enum class / to_underlying / using enum → types_conversions
 - epsilon vs denorm_min vs min vs lowest → floating_point
 - erroneous behavior (C++26) → ub_catalog, types_conversions
-- exceptions / stack unwinding / [except.ctor] return-object rule → error_handling (pending), plus gc bcad miss logged there
+- exceptions (all of it: throw/try/catch, unwinding, terminate, cost model) → error_handling
+- [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
 - expected (std::expected/unexpected/unexpect, error(), transform_error) → error_handling
 - EXIT_SUCCESS / status codes → build_linkage
 - [[fallthrough]] attribute / fallthrough rules → control_flow
@@ -65,6 +67,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
 - forward progress rule (side-effect-free infinite loop UB) → control_flow, ub_catalog
+- function try blocks (ctor init-list catches, implicit rethrow) → error_handling
 - halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
 - header guards / #pragma once → build_linkage
@@ -94,6 +97,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
+- noexcept destructors (default since C++11; throwing dtor → terminate) → error_handling
 - nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
 - optional (std::optional, all of it) → error_handling
 - numeric_limits quartet → floating_point
@@ -114,6 +118,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - reinterpret_cast legal-pattern checklist → bits_punning
 - reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
+- rethrow (bare throw vs throw e slicing) → error_handling
 - RVO / NRVO / -fno-elide-constructors → functions_scope_lambdas
 - scope vs duration vs lifetime → functions_scope_lambdas
 - sequencing (C++14 vs C++17 table) → expressions
@@ -123,6 +128,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - signature (excludes return type) → build_linkage
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
+- stack unwinding (search-then-unwind, dtors per frame, zero-cost tables) → error_handling
 - stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
 - static init order fiasco → functions_scope_lambdas (+ build_linkage)
 - static local in generic lambda (per-instantiation) → functions_scope_lambdas
@@ -132,6 +138,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
+- terminate (uncaught throw; unwind impl-defined) → error_handling
 - ternary (precedence, branch unification, lvalue) → expressions
 - thread_local (per-thread copy, lazy locals, fs-segment access) → initialization_deduction
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
@@ -177,6 +184,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 |---|---|---|---|---|---|
 | 29/08/2026 | Beginner C++ (getcracked) | 11/20 | 18:11 | top 9.7% of 248 ("Cracked") | Baseline, cold. 2 coding Qs skipped. Missed: full-specialization member def (no `template<>`), fold `sum(2,0.5,..)` is double (arith conversions per `+`), macro double-eval `121`, `delete` on `malloc`, `const alias` = top-level const (`int* const`), `class A; struct A{}` same entity. Priority: Templates, Pointers/const, new/delete, Classes. Retake after tree. |
 | 31/08/2026 | Claude notes quiz #1 (11 Q) | 8 clean | ~30m | — | MISSED: SQUARE(2+3)=11 (macro paste), auto& keeps const (REPEAT). Precision dings: padding offsets map, 1<<31=INT_MIN, NRVO vs guaranteed elision. |
+| 01/09/2026 | Claude quiz #2 (10 Q, day's material + exceptions) | 8.5/10 | ~30m | — | HALVES: catch(...)-first is CE not catch-everything; uncaught→unwind impl-defined (dtors not guaranteed); switch decl-vs-init terminology + "garbage" for UB (REPEAT). Clean: ctor-throw member destruction, exit cleanup order, segments, access tiers, and_then retest, slicing rethrow, constinit. |
 
 ## Template (per concept file)
 ```
