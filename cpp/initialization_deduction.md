@@ -85,6 +85,41 @@ auto s2{"moo"sv};  // std::string_view
 
 auto  v1 = obj.getRef();  // int   (copy)
 auto& v2 = obj.getRef();  // int&  (or const int& if source is const!)
+
+// ---- storage-init (cppstories) ----
+// the three init pathways for globals:
+double z = 100.0;   // constant-init: baked into data segment at compile time
+int x;              // zero-init: BSS, guaranteed 0 (local `int x;` would be garbage!)
+Value v{ 42 };      // dynamic-init: ctor runs at startup, before main
+
+// static init order fiasco, minimal repro:
+// b.cpp
+Point createPoint(double x, double y) { return Point{ x, y }; }
+Point center = createPoint(100, 200);          // dynamic-init
+// a.cpp
+extern Point center;
+Point offset = { center.x + 100, center.y + 200 };  // reads center — may still be ZEROED
+// link order decides; offset = {100,200} or {200,400}. Fix: Meyers singleton / constant-init.
+
+// constinit vs constexpr (C++20):
+constinit std::pair<int, double> global { 42, 42.2 };  // compile-time init, MUTABLE
+constexpr std::pair<int, double> constG { 42, 42.2 };  // compile-time init, const
+global = { 10, 10.1 };   // ok
+// constG = { 10, 10.1 };  // CE
+
+// thread_local: one per thread, ctor/dtor per thread
+struct Value {
+    Value(int x) : v(x) { std::cout << "Value(" << v << ")\n"; }
+    ~Value() noexcept   { std::cout << "~Value(" << v << ")\n"; }
+    int v{ 0 };
+};
+thread_local Value tls{ 42 };
+void foo() { tls.v = 100; }        // touches THIS thread's copy
+// { std::jthread w1{foo}, w2{foo}; }  → two Value(42)/~Value(42) pairs + main's
+
+// static local: lazy init (first call), persists across calls
+int counter_up() { static int counter = 0; return ++counter; }
+// 4 calls → returns 4
 ```
 
 ## Traps / interview one-liners
