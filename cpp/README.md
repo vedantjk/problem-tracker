@@ -15,6 +15,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
+| [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), exceptions (pending quiz) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 
 ## Where is...? (every concept, A-Z)
@@ -53,6 +54,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - enum / enum class / to_underlying / using enum → types_conversions
 - epsilon vs denorm_min vs min vs lowest → floating_point
 - erroneous behavior (C++26) → ub_catalog, types_conversions
+- exceptions / stack unwinding / [except.ctor] return-object rule → error_handling (pending), plus gc bcad miss logged there
+- expected (std::expected, C++23, error WITH reason) → error_handling
 - EXIT_SUCCESS / status codes → build_linkage
 - [[fallthrough]] attribute / fallthrough rules → control_flow
 - fixed-point prices ×10^4 (ITCH/venues) → floating_point traps
@@ -79,6 +82,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
 - macro scope (none) → build_linkage
+- monadic optional ops and_then/transform/or_else (C++23) → error_handling
 - malloc/free (size tracked by allocator, brk/sbrk/mmap, calloc/realloc) → memory_layout
 - memory errors, the OSTEP seven (overflow, leak, dangling, double/invalid free) → memory_layout, ub_catalog
 - main() specialness → build_linkage
@@ -90,6 +94,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
+- nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
+- optional (std::optional, all of it) → error_handling
 - numeric_limits quartet → floating_point
 - ODR rules 1/2/3 → build_linkage
 - operator overloading (homes, can't-overload list, && short-circuit loss, <=>) → expressions
