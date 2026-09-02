@@ -11,6 +11,7 @@
 
 ## Memory segments: stack vs heap (learncpp 20.2 + OSTEP 14.1, read 01/09)
 - Five segments of a running program: **code/text** (compiled instructions, read-only) · **data** (initialized globals/statics) · **BSS** (zero-initialized globals/statics — costs no space in the binary, just a size) · **heap** · **call stack**.
+- data-vs-BSS is sorted by VALUE, not by presence of an initializer (verified 01/09, objdump): `int a;` → .bss, `int b = 0;` → **.bss too** (explicit zero!), `int c = 5;` → .data, `int d[1000];` → 4000B of .bss but ~0B in the binary.
 - **Stack = automatic memory** (OSTEP's framing): allocation/deallocation managed *implicitly by the compiler*. `int x;` in a function → compiler makes room on call, frees on return. Corollary: anything that must outlive the call must NOT live there.
 - **Heap = explicit memory**: you (`new`/`malloc`) allocate, you free. OSTEP's one-liner example packs both in a line: `int *x = (int*)malloc(sizeof(int));` — the *pointer* x is a stack allocation the compiler handles; the *pointee* is a heap allocation you handle.
 - Stack frame contents: return address, args, locals, saved registers. **Stack pointer (SP)** register tracks the top; "popping" a frame = moving SP — no memory is cleaned, the bytes just get overwritten by the next push (why reading popped-frame garbage sometimes "works").
