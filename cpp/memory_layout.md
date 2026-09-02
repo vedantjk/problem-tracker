@@ -20,6 +20,21 @@
 - Choose: stack for small, scope-bound; heap for large or outliving-the-scope. Heap costs: leak risk, slower alloc, indirection.
 - OSTEP 14.2 side notes worth keeping: `malloc(size_t)` returns `void*` (NULL on failure); `sizeof` is a compile-time **operator**, not a function — `sizeof(x)` on `int* x = malloc(10*sizeof(int))` gives 8 (pointer!), not 40, but `int x[10]; sizeof(x)` = 40 (static array size known). String alloc idiom: `malloc(strlen(s) + 1)` for the NUL.
 
+### OSTEP 14.2-14.4: malloc/free + the error catalog (read 01/09)
+- **14.2 malloc**: in C, casting the result (`(int*)malloc(...)`) is pure reassurance, not needed for correctness (C++ differs: `void*` doesn't implicitly convert, cast required). Passing a variable to sizeof is legal but trap-prone (the pointer-vs-array thing above).
+- **14.3 free**: takes only the pointer — **the allocator tracks the size itself** (in its own metadata, usually a header just below the returned pointer). That's why free needs exactly the pointer malloc returned.
+- **14.4 the seven memory errors** (each maps into ub_catalog):
+  1. Forgetting to allocate: `char* dst; strcpy(dst, src)` → segfault ("YOU DID SOMETHING WRONG WITH MEMORY YOU FOOLISH PROGRAMMER AND I AM ANGRY"). Fix: malloc or `strdup`.
+  2. Not allocating enough (**buffer overflow**): `malloc(strlen(src))` missing the +1 for NUL — often *appears* to work (allocators over-allocate/round up), classic security-vuln source.
+  3. Uninitialized read: malloc'd memory holds unknown bytes (calloc zeroes).
+  4. Forgetting to free (**leak**): matters for long-running processes; GC languages don't save you — a live reference pins the chunk forever.
+  5. Freeing too early (**dangling pointer**): a later malloc recycles the chunk while you still use it.
+  6. **Double free**: undefined; allocator metadata corrupts, crashes common.
+  7. **Invalid free**: anything that isn't exactly a malloc-returned pointer (middle of a block, stack address).
+- The "it compiled / it ran ≠ it's correct" tip + tooling: valgrind (purify historically). Overflows that scribble past the end can be silently harmless for years.
+- **Why exiting leaks nothing**: two levels of memory management — the malloc library manages the heap *within* the process's address space; the OS hands out pages and **reclaims all of them at process death** regardless of free. So short-lived-program leaks are "fine" (bad habit); leaks kill long-running servers... and the OS itself has nobody to clean up after it.
+- **14.5 preview**: malloc/free are *library* calls layered on system calls — `brk`/`sbrk` (move the heap's end, never call directly) and `mmap` (anonymous regions). `calloc` = malloc + zero; `realloc` = grow by new-region + copy.
+
 ## Compile errors vs unspecified
 - CE: `sizeof` on incomplete type (`struct S; sizeof(S);`) — why forward-declared types can't be by-value members.
 - Unspecified: padding byte contents (memcmp on structs compares garbage); pre-C++23 layout between access-specifier groups; use offsetof.
