@@ -94,6 +94,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - pointers-to-int (uintptr_t round-trip) → bits_punning
 - popcount / <bit> / countl_zero → bits_punning
 - prefix vs postfix ++ (lvalue/rvalue, class-type cost) → expressions
+- range-based for (auto/auto&/const auto&, decayed-array CE, no index, views::reverse, C++23 temporary fix) → control_flow
 - preprocessor pipeline & translation phases → build_linkage
 - promotion flips comparison (unsigned short a-b) → types_conversions
 - references: sizeof(int&) vs reference members → memory_layout

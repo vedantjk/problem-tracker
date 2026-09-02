@@ -84,6 +84,18 @@
 - Off-by-one: `i < 5` vs `i <= 5` — say the intended count out loud ("runs for i = 1..5, that's <=").
 - for vs while: for when there's an obvious loop variable; while when there isn't.
 
+### Range-based for (for-each)
+- `for (element_declaration : container) statement;` — element gets each element's **value** (not an index). Works on anything that knows its bounds: std::vector/array, non-decayed C arrays, list/map/set. Empty container → body just doesn't run.
+- Element type choice (same legal-binding model as auto notes → initialization_deduction):
+  - `auto` — you want to modify a **copy** (or elements are cheap scalars)
+  - `auto&` — modify the **originals**
+  - `const auto&` — just viewing. **Default to this**: if the element type later changes from `std::string_view` to `std::string`, plain `auto` silently starts deep-copying every element; `const auto&` stays free.
+- **Decayed C arrays don't work** — a pointer carries no length, so the loop can't know where to stop → CE. (Array function parameters are always decayed → can't range-for over them.)
+- **No index available** — by design: ranges like `std::list` have no indices. Need the index → manual counter or classic for.
+- Reverse (C++20 ranges): `for (const auto& w : std::views::reverse(words))`.
+- Doesn't iterate enumerations directly (enum is not a range).
+- Beyond the page, the dangling trap: pre-C++23, `for (auto x : getObj().vec)` was UB — only the *full* range expression's temporary got lifetime-extended, not `getObj()` when you take `.vec` off it. **C++23 (P2718) fixed it**: all temporaries in the range expression now live for the whole loop. Know both halves for interviews.
+
 ### break / continue
 - `break` terminates the enclosing loop **or switch**; execution resumes right after it. `return` exits the whole function (skips any code after the loop). Both only affect the **innermost** enclosing construct — C++ has no labeled break (unlike Java); escaping nested loops = flag, function + return, or (rarely) goto.
 - `continue` ends the current iteration: jumps to the **bottom of the loop body**.
@@ -120,7 +132,7 @@
 - Best practice: **only halt when there's no safe way to return normally from main.** Prefer exceptions for errors (they unwind → local destructors run). And robust programs assume they can die anyway (crash, kill, power loss) → autosave/journal rather than trust clean shutdown.
 
 ## Questions (getcracked) / Quiz log
-_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8 / 8.9 / 8.10 / 8.11 / 8.12 read 01/09/2026)_
+_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8-8.12 / 16.8 (range-for) read 01/09/2026)_
 
 ## Compile errors vs UB
 Compile errors:
@@ -220,6 +232,18 @@ std::int64_t pow(int base, int exponent)
     for (int i{ 0 }; i < exponent; ++i)      // i < n runs exactly n times
         total *= base;
     return total;
+}
+
+// range-based for
+std::vector<std::string> words{ "peter", "likes", "frozen", "yogurt" };
+for (const auto& word : words)                       // const auto& = view, no copies
+    std::cout << word << ' ';
+for (const auto& word : std::views::reverse(words))  // C++20 <ranges>
+    std::cout << word << ' ';
+
+void print(int arr[])          // decayed to int* — no length
+{
+    for (int e : arr) {}       // CE: cannot range-for a decayed array
 }
 
 // halts
