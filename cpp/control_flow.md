@@ -92,7 +92,12 @@
   - `const auto&` — just viewing. **Default to this**: if the element type later changes from `std::string_view` to `std::string`, plain `auto` silently starts deep-copying every element; `const auto&` stays free.
 - **Decayed C arrays don't work** — a pointer carries no length, so the loop can't know where to stop → CE. (Array function parameters are always decayed → can't range-for over them.)
 - **No index available** — by design: ranges like `std::list` have no indices. Need the index → manual counter or classic for.
-- Reverse (C++20 ranges): `for (const auto& w : std::views::reverse(words))`.
+- Reverse iteration — the full menu:
+  - `std::views::reverse` (C++20) — the only one that plugs straight into range-for.
+  - `rbegin()/rend()` (+ `crbegin()/crend()` const versions) — reverse iterators, classic loop: `for (auto it = v.rbegin(); it != v.rend(); ++it)`. `rbegin()` points at the **last** element; `++` walks backwards. Not usable directly in range-for (range-for wants a range, not an iterator pair) — C++20 can wrap: `std::ranges::subrange(v.rbegin(), v.rend())`.
+  - `reverse_iterator::base()` — returns the underlying forward iterator **one past** the element the reverse iterator refers to (`&*it.base() == &*it + 1`). The off-by-one to know when erasing via a reverse iterator: `v.erase(std::next(it).base())`.
+  - Index backwards: `for (int i = n - 1; i >= 0; --i)` (signed counter!); unsigned-safe idiom `for (size_t i = v.size(); i-- > 0;)` — test-then-decrement, so i is the valid index inside the body and the loop stops after i==0.
+  - `std::reverse(v.begin(), v.end())` is different: it **mutates** the container in place, not an iteration order.
 - Doesn't iterate enumerations directly (enum is not a range).
 - Beyond the page, the dangling trap: pre-C++23, `for (auto x : getObj().vec)` was UB — only the *full* range expression's temporary got lifetime-extended, not `getObj()` when you take `.vec` off it. **C++23 (P2718) fixed it**: all temporaries in the range expression now live for the whole loop. Know both halves for interviews.
 

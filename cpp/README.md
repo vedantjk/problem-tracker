@@ -99,6 +99,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - promotion flips comparison (unsigned short a-b) → types_conversions
 - references: sizeof(int&) vs reference members → memory_layout
 - reinterpret_cast legal-pattern checklist → bits_punning
+- reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
 - RVO / NRVO / -fno-elide-constructors → functions_scope_lambdas
 - scope vs duration vs lifetime → functions_scope_lambdas
