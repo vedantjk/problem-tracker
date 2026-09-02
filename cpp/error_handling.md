@@ -14,6 +14,20 @@
 - **No `optional<T&>`** through C++23 (CE); C++26 adds it (P2988). `optional<T*>` is redundant (pointers already nullable), `optional<bool>` is a confusing tri-state — avoid both.
 - When: "exactly one obvious reason for no value" — lookup miss, not-yet-loaded, optional input. NOT for error reporting (no room for a reason — that's `std::expected` (C++23) or exceptions).
 - C++23 monadic ops: `and_then` / `transform` / `or_else` — chain without if-ladders.
+- **transform vs and_then (gc question, 01/09)** — the nested-optional trap:
+  - `transform(f)`: f returns a plain value; transform **wraps** it → callable returning `optional<int>` yields `optional<optional<int>>`. The OUTER layer is engaged whenever the callable ran at all, so `has_value()` lies about the inner failure.
+  - `and_then(f)`: f must itself return an optional; and_then **flattens** (no extra wrap). Callable already returns optional → use and_then.
+  ```cpp
+  std::optional<int> safe_divide(int a, int b)
+  { return b == 0 ? std::nullopt : std::optional{a / b}; }
+
+  std::optional<int> opt{ 5 };
+  auto r1 = opt.transform([](int x){ return safe_divide(x, 0); });
+  // r1: optional<optional<int>> — ENGAGED outer, empty inner → r1.has_value() == true (!)
+  auto r2 = opt.and_then([](int x){ return safe_divide(x, 0); });
+  // r2: optional<int> — nullopt, as intended
+  ```
+  - Rule: callable returns T → transform; callable returns optional<T> → and_then. (Haskell fmap vs bind, if that helps it stick.)
 
 ## Exceptions (learncpp 27.1-27.7)
 _(read 01/09; notes to be written after quiz — misses so far: gc "So close to unwinding" bcad question: thought unwinding skips remaining dtors + missed that the pending return object is destroyed by unwinding in reverse-construction order; [except.ctor]¶2. Note: gcc/clang/MSVC all non-conforming on it: bacd/bad/bad.)_

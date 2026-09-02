@@ -82,7 +82,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
 - macro scope (none) → build_linkage
-- monadic optional ops and_then/transform/or_else (C++23) → error_handling
+- monadic optional ops and_then/transform/or_else, nested-optional trap → error_handling
 - malloc/free (size tracked by allocator, brk/sbrk/mmap, calloc/realloc) → memory_layout
 - memory errors, the OSTEP seven (overflow, leak, dangling, double/invalid free) → memory_layout, ub_catalog
 - main() specialness → build_linkage
