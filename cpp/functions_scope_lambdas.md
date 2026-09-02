@@ -6,6 +6,25 @@
 - Call overhead: return address, register saves, arg shuffle per ABI, stack frame — and the call is an optimization BARRIER (the real cost). Inlining removes it at i-cache expense; net effect: measure.
 - Flowing off the end of a non-void function: UB (CE only for `return;` with no value; `void f(){return 0;}` CE). Compilers warn, don't reject.
 
+## Recursion & the call stack (learncpp 20.3, 01/09)
+- Every recursive call pushes a frame; no base case → stack exhaustion → crash (learncpp's broken countdown died around count -11732). Default stack ≈ 8MB Linux / 1MB MSVC → depth limit is real: linear recursion on a 10^6-element LC input WILL overflow; recurse on log-depth structures (trees, halving), iterate on linear ones.
+- Base case = input whose answer is trivial (0, 1, empty). Termination condition guards the recursive call.
+- **Sequencing trap in recursive args**: `return sumTo(--sumto) + sumto;` — the two operands of `+` are indeterminately sequenced, so which `sumto` the right side reads is unspecified (pre-C++17 UB). Pass `sumto - 1`, never mutate. (→ expressions sequencing table.)
+- **Static-local memoization idiom**:
+  ```cpp
+  int fibonacci(std::size_t count)
+  {
+      static std::vector results{ 0, 1 };   // CTAD → vector<int>; initialized once
+      if (count < std::size(results))
+          return results[count];
+      results.push_back(fibonacci(count - 1) + fibonacci(count - 2));
+      return results[count];
+  }
+  ```
+  Naive fib(12) ≈ 1205 calls → 35 with memo. Notes: magic-static *initialization* is thread-safe (C++11); the *mutation* (`push_back`) is not — data race if called concurrently. Cache persists across top-level calls (static duration) — feature or bug depending on the problem.
+- **Tail call** = call as the last action, nothing after it. Compilers *may* turn tail recursion into a loop (no stack growth) — but C++ does **not** guarantee TCO (unlike Scheme); at -O0 it won't happen, so never rely on it for correctness. The countdown's "pop" prints after the call → not a tail call, frames must survive.
+- Iterative is almost always faster (no frame overhead / call is an optimization barrier, see above). Recursion earns its keep when: markedly simpler, depth is bounded, or the iterative version just hand-rolls a stack anyway (tree traversals). learncpp: "favor iteration over recursion, except when recursion really makes sense."
+
 ## Scope · duration · linkage (three separate properties)
 - Scope: where the NAME is visible (compile-time). Duration: when the OBJECT lives (automatic/static/dynamic/thread). Linkage: whether the same name elsewhere is the same ENTITY (none/internal/external).
 - Locals: block scope, automatic duration, no linkage. `static` local: block scope, static duration. Namespace-scope: external linkage by default; anonymous namespace/`static` → internal.

@@ -95,6 +95,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - popcount / <bit> / countl_zero → bits_punning
 - prefix vs postfix ++ (lvalue/rvalue, class-type cost) → expressions
 - range-based for (auto/auto&/const auto&, decayed-array CE, no index, views::reverse, C++23 temporary fix) → control_flow
+- recursion (stack depth, static-local memo, no guaranteed TCO, --x sequencing trap) → functions_scope_lambdas
 - preprocessor pipeline & translation phases → build_linkage
 - promotion flips comparison (unsigned short a-b) → types_conversions
 - references: sizeof(int&) vs reference members → memory_layout
@@ -117,6 +118,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
+- tail call optimization (not guaranteed in C++) → functions_scope_lambdas
 - ternary (precedence, branch unification, lvalue) → expressions
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
