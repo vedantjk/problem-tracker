@@ -11,7 +11,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [floating_point.md](floating_point.md) | IEEE-754, numeric_limits, float traps |
 | [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&& |
 | [expressions.md](expressions.md) | sequencing, maximal munch, comma/ternary, ++/--, operator overloading |
-| [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping) |
+| [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping), while/do-while/for loops |
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
@@ -43,6 +43,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - data races → ub_catalog (pointer)
 - default-init vs value-init (garbage vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
+- do-while (semicolon, scope-outside-block gotcha) → control_flow
 - early return → control_flow
 - endian / std::endian → bits_punning
 - endl vs '\n' → build_linkage
@@ -55,18 +56,22 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - fixed-width ints / size_t / ptrdiff_t / uint8_t-prints-as-char → types_conversions
 - float→int out-of-range UB → floating_point
 - fold expressions (quiz miss context) → README quiz table
+- for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
+- forward progress rule (side-effect-free infinite loop UB) → control_flow, ub_catalog
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
 - header guards / #pragma once → build_linkage
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
 - if (x) non-bool condition conversion → control_flow
 - if-else vs switch (when to use which) → control_flow
+- infinite loops (while(true) idiom, semicolon null-body, unsigned counter wrap) → control_flow
 - inline (ODR meaning, requirements, why not everything) → build_linkage
 - integral promotion (sub-int → signed int) → types_conversions
 - jump table (why switch is integral-only) → control_flow
 - keywords (92) & special identifiers → build_linkage
 - lambdas (captures, mutable, sizes, passing, generic, constexpr) → functions_scope_lambdas
 - lifetime extension (const&/&& on temporaries; doesn't chain) → initialization_deduction
+- loop counters (signed! unsigned >= 0 bug) → control_flow
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
 - macro scope (none) → build_linkage
@@ -113,6 +118,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - UB taxonomy + master list → ub_catalog
 - uninitialized reads → initialization_deduction, ub_catalog
 - unsigned wrap (arithmetic + conversion) → types_conversions
+- while / do-while / for (full loop notes) → control_flow
 - vexing parse → initialization_deduction
 - virtual inheritance sizes → memory_layout
 - vptr → memory_layout
@@ -144,7 +150,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | std::bit_cast | bits_punning | (pending) |
 | Comma and ? | expressions | Munch munch munch!: MISSED |
 | Operator overloading (intro) | expressions | (pending) |
-| if / switch (learncpp 4.10, 8.5, 8.6 — read 01/09) | control_flow | (pending) |
+| if / switch / loops (learncpp 4.10, 8.5-8.6, 8.8-8.10 — read 01/09) | control_flow | (pending) |
 
 ## Quizzes
 | Date | Quiz | Score | Time | Percentile | Notes |

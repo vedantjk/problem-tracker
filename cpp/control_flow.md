@@ -1,4 +1,4 @@
-# Control Flow (if / switch)
+# Control Flow (if / switch / loops)
 
 ## Core model
 
@@ -44,8 +44,48 @@
   }
   ```
 
+### while
+- `while (condition) statement;` — condition checked **first**; false on entry → body never runs. Re-checked after each iteration.
+- Intentional infinite loop: **`while (true)`** is the idiom (not `for(;;)`, though that's equivalent — omitted for-condition is treated as `true`). Exit via `return` / `break` / `exit` / exception.
+- **Loop counters: use signed.** The classic unsigned bug:
+  ```cpp
+  unsigned int count{ 10 };
+  while (count >= 0)   // always true — unsigned can't be negative
+      --count;          // 0 → wraps to 4294967295 (defined wrap, but infinite loop)
+  ```
+  Same bug in for-form: `for (unsigned int i{ 9 }; i >= 0; --i)`. (Ties into size_t underflow loops → types_conversions.)
+- Every-Nth-iteration action: `if (count % 10 == 0)` on the counter.
+- Nested loops: declare the inner counter **inside** the outer body — it's recreated (and reinitialized) each outer iteration. Smallest scope needed, always.
+- Naming: `i/j/k` fine by convention (Fortran heritage); descriptive (`count`, `index`) when it helps.
+
+### do-while
+- ```cpp
+  do
+      statement;
+  while (condition);   // semicolon AFTER the (condition)
+  ```
+- Body runs **first**, condition checked after → always executes at least once. Use case: menu/input validation.
+- **Scoping gotcha**: anything declared inside the do-block is dead before the `while (condition)` runs — variables the condition needs must be declared **outside** the loop.
+- Best practice: favor plain `while` when it's an equal choice (condition at the bottom obscures the logic).
+
+### for
+- `for (init-statement; condition; end-expression) statement;`
+- Order: **init once → condition (exit if false) → body → end-expression → back to condition**. End-expression runs *after* the body.
+- Desugars to (note the extra scope braces — init variables have loop scope):
+  ```cpp
+  { init-statement; while (condition) { statement; end-expression; } }
+  ```
+- Any of the three parts can be omitted; `for (;;)` = infinite (omitted condition = true).
+- Multiple counters: define together in init, advance with the comma operator in the end-expression — the one blessed comma-operator use (→ expressions):
+  ```cpp
+  for (int x{ 0 }, y{ 9 }; x < 10; ++x, --y)
+  ```
+- **Prefer `<` / `<=` over `!=`** in numeric conditions: if the counter can jump past the target (`i += 2` crossing an odd bound), `!=` spins forever, `<` still terminates.
+- Off-by-one: `i < 5` vs `i <= 5` — say the intended count out loud ("runs for i = 1..5, that's <=").
+- for vs while: for when there's an obvious loop variable; while when there isn't.
+
 ## Questions (getcracked) / Quiz log
-_(none yet — learncpp 4.10 / 8.5 / 8.6 read 01/09/2026)_
+_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8 / 8.9 / 8.10 read 01/09/2026)_
 
 ## Compile errors vs UB
 Compile errors:
@@ -84,6 +124,14 @@ case 2:
 ```
 The CE-vs-UB line: the compiler rejects a jump over an *initialization*, but a jump over a bare *declaration + later assignment* compiles, and reading it on the path that skipped the assignment is UB.
 
+Loops — mostly logic bugs, not UB:
+```cpp
+while (count <= 10);   // semicolon = null body → infinite loop; the {} after is a separate block
+unsigned int i{ 10 };
+while (i >= 0) --i;    // NOT UB (unsigned wrap is defined) — just an infinite loop
+```
+One real UB: a loop with no observable side effects that never terminates is UB (forward-progress rule) — compilers may assume it exits and delete it. `while (true) {}` with an empty body is the canonical example (→ ub_catalog).
+
 ## Syntax anchors
 ```cpp
 void printDigitName(int x)
@@ -112,6 +160,32 @@ int abs(int x)
         return -x;  // early return
     return x;
 }
+
+// loops
+while (true)                       // idiom for intentional infinite loop
+{
+    char c{};
+    std::cin >> c;
+    if (c == 'n') break;
+}
+
+int selection{};                   // OUTSIDE the do-block — condition needs it
+do
+{
+    std::cin >> selection;
+}
+while (selection < 1 || selection > 4);   // semicolon here
+
+for (int x{ 0 }, y{ 9 }; x < 10; ++x, --y)   // multi-counter: comma in end-expression
+    std::cout << x << ' ' << y << '\n';
+
+std::int64_t pow(int base, int exponent)
+{
+    std::int64_t total{ 1 };
+    for (int i{ 0 }; i < exponent; ++i)      // i < n runs exactly n times
+        total *= base;
+    return total;
+}
 ```
 
 ## Traps / interview one-liners
@@ -120,3 +194,9 @@ int abs(int x)
 - switch beats if-else chain when: one integral/enum expression, equality against a small constant set (evaluated once, jump-table-able). if-else when: ranges, `&&`/`||` of conditions, non-equality compares, floats, bools.
 - Case labels share one scope → init in a non-final case is CE; wrap the case body in `{}` to initialize.
 - `return cond;` not `if (cond) return true; else return false;`.
+- Signed loop counters; `unsigned i >= 0` is forever-true (wrap, not UB).
+- `while (cond);` — stray semicolon is a null body; the block below runs once, after the (infinite) loop.
+- `<`/`<=` over `!=` in numeric loop conditions — survives the counter jumping past the bound.
+- do-while: condition variables live **outside** the block; semicolon after `(condition)`.
+- `for (int i{0}; i < n; ++i)` runs exactly n times — the off-by-one anchor.
+- Side-effect-free infinite loop = UB (forward progress); `while(true)` with real work is fine.
