@@ -9,6 +9,17 @@
 - References: `sizeof(int&)` reports sizeof(int) (language: references aren't objects), but a reference MEMBER costs pointer storage: `sizeof(struct{int&})` == 8. Same for lambda by-ref captures.
 - Beware 32-bit-era articles (vptr/long = 4).
 
+## Memory segments: stack vs heap (learncpp 20.2 + OSTEP 14.1, read 01/09)
+- Five segments of a running program: **code/text** (compiled instructions, read-only) · **data** (initialized globals/statics) · **BSS** (zero-initialized globals/statics — costs no space in the binary, just a size) · **heap** · **call stack**.
+- **Stack = automatic memory** (OSTEP's framing): allocation/deallocation managed *implicitly by the compiler*. `int x;` in a function → compiler makes room on call, frees on return. Corollary: anything that must outlive the call must NOT live there.
+- **Heap = explicit memory**: you (`new`/`malloc`) allocate, you free. OSTEP's one-liner example packs both in a line: `int *x = (int*)malloc(sizeof(int));` — the *pointer* x is a stack allocation the compiler handles; the *pointee* is a heap allocation you handle.
+- Stack frame contents: return address, args, locals, saved registers. **Stack pointer (SP)** register tracks the top; "popping" a frame = moving SP — no memory is cleaned, the bytes just get overwritten by the next push (why reading popped-frame garbage sometimes "works").
+- Why stack is fast: allocation = one SP bump, sizes known at compile time, direct addressing, hot in cache. Why heap is slow(er): allocator search/bookkeeping, successive `new`s not necessarily contiguous, access via pointer indirection.
+- Stack sizes: ~8MB g++/clang Linux, 1MB MSVC. Overflow triggers: big locals (`int arr[10'000'000]` ≈ 40MB) or deep recursion (learncpp measured crash at ~4,848 calls debug / ~128,679 release — frame size shrinks with -O). Result: OS kills you (segfault/access violation), not a C++ exception.
+- Growth direction (up vs down in addresses) is architecture-specific — don't assume frames at lower addresses.
+- Choose: stack for small, scope-bound; heap for large or outliving-the-scope. Heap costs: leak risk, slower alloc, indirection.
+- OSTEP 14.2 side notes worth keeping: `malloc(size_t)` returns `void*` (NULL on failure); `sizeof` is a compile-time **operator**, not a function — `sizeof(x)` on `int* x = malloc(10*sizeof(int))` gives 8 (pointer!), not 40, but `int x[10]; sizeof(x)` = 40 (static array size known). String alloc idiom: `malloc(strlen(s) + 1)` for the NUL.
+
 ## Compile errors vs unspecified
 - CE: `sizeof` on incomplete type (`struct S; sizeof(S);`) — why forward-declared types can't be by-value members.
 - Unspecified: padding byte contents (memcmp on structs compares garbage); pre-C++23 layout between access-specifier groups; use offsetof.

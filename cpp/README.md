@@ -12,7 +12,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&& |
 | [expressions.md](expressions.md) | sequencing, maximal munch, comma/ternary, ++/--, operator overloading |
 | [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping), while/do-while/for, break/continue, halts (exit/abort/terminate) |
-| [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage |
+| [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
@@ -80,6 +80,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - main() specialness → build_linkage
 - maximal munch (x+++++y, a+++b, >>) → expressions
 - memcpy as blessed pun → bits_punning
+- memory segments (code/data/BSS/heap/stack) → memory_layout
 - memory leaks: pointers vs pointees → functions_scope_lambdas traps
 - most vexing parse → initialization_deduction
 - NaN != NaN / signed zero → floating_point
@@ -111,6 +112,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - signature (excludes return type) → build_linkage
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
+- stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
 - static init order fiasco → functions_scope_lambdas (+ build_linkage)
 - static local in generic lambda (per-instantiation) → functions_scope_lambdas
 - static members (not in sizeof) → memory_layout
