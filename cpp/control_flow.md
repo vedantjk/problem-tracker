@@ -109,8 +109,18 @@
   Moral: counted loops → for, so the increment is continue-proof.
 - Style consensus (break/continue AND early returns): use them **when they simplify the logic** — trading a non-linear jump for less nesting and fewer flag booleans is usually a win. Middle ground for returns: validation returns at the top, one return after.
 
+### Halts (exiting the program early) — `<cstdlib>`
+- A **halt** is a function (not a keyword) that terminates the program. Normal vs abnormal termination: "normal" = expected exit (status code says success/failure, not how clean it was); "abnormal" = runtime error killed it.
+- **`std::exit(code)`** — normal termination: destroys **static-duration objects**, flushes/does file cleanup, returns code to the OS. `return` from main implicitly calls it with the return value. **Does NOT run destructors for any local variables**, current function or anywhere up the call stack → breaks RAII. That's the headline gotcha.
+- **`std::atexit(fn)`** — registers a callback run on `std::exit` (explicit OR implicit via main returning). `fn` takes nothing, returns nothing; pass the name, not a call. Multiple registrations run in **reverse** order.
+- **`std::abort()`** — abnormal termination: **no cleanup at all** (no statics, no atexit, no locals), no status code. Called implicitly by e.g. failed `assert`.
+- **`std::terminate()`** — the exception machinery's halt: called implicitly on an unhandled exception; by default it calls `std::abort()`.
+- **`std::quick_exit()` / `std::at_quick_exit()`** — normal termination that *skips* destroying static objects. Exists for multithreaded programs: `std::exit` from one thread destroys statics other threads may still be using → crash.
+- Cleanup matrix: locals — nobody destroys them; statics — exit yes / quick_exit no / abort no; atexit callbacks — exit only.
+- Best practice: **only halt when there's no safe way to return normally from main.** Prefer exceptions for errors (they unwind → local destructors run). And robust programs assume they can die anyway (crash, kill, power loss) → autosave/journal rather than trust clean shutdown.
+
 ## Questions (getcracked) / Quiz log
-_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8 / 8.9 / 8.10 / 8.11 read 01/09/2026)_
+_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8 / 8.9 / 8.10 / 8.11 / 8.12 read 01/09/2026)_
 
 ## Compile errors vs UB
 Compile errors:
@@ -211,6 +221,17 @@ std::int64_t pow(int base, int exponent)
         total *= base;
     return total;
 }
+
+// halts
+#include <cstdlib>
+void cleanup() { std::cout << "cleanup!\n"; }   // no params, no return
+
+int main()
+{
+    std::atexit(cleanup);   // name, not a call; runs on exit (reverse reg. order)
+    std::exit(0);           // statics destroyed + atexit run; LOCALS NOT destroyed
+    // std::abort();        // no cleanup at all; what assert failure calls
+}
 ```
 
 ## Traps / interview one-liners
@@ -225,3 +246,6 @@ std::int64_t pow(int base, int exponent)
 - do-while: condition variables live **outside** the block; semicolon after `(condition)`.
 - `for (int i{0}; i < n; ++i)` runs exactly n times — the off-by-one anchor.
 - Side-effect-free infinite loop = UB (forward progress); `while(true)` with real work is fine.
+- No halt runs local destructors — `std::exit` mid-function breaks RAII; exceptions unwind, halts don't.
+- Cleanup matrix: statics — exit ✓ / quick_exit ✗ / abort ✗; atexit — exit only; locals — never.
+- Unhandled exception → `std::terminate()` → (default) `std::abort()`.

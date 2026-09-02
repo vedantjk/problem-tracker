@@ -11,7 +11,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [floating_point.md](floating_point.md) | IEEE-754, numeric_limits, float traps |
 | [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&& |
 | [expressions.md](expressions.md) | sequencing, maximal munch, comma/ternary, ++/--, operator overloading |
-| [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping), while/do-while/for loops |
+| [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping), while/do-while/for, break/continue, halts (exit/abort/terminate) |
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
@@ -60,6 +60,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
 - forward progress rule (side-effect-free infinite loop UB) → control_flow, ub_catalog
+- halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
 - header guards / #pragma once → build_linkage
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
