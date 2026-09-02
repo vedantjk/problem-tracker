@@ -84,8 +84,33 @@
 - Off-by-one: `i < 5` vs `i <= 5` — say the intended count out loud ("runs for i = 1..5, that's <=").
 - for vs while: for when there's an obvious loop variable; while when there isn't.
 
+### break / continue
+- `break` terminates the enclosing loop **or switch**; execution resumes right after it. `return` exits the whole function (skips any code after the loop). Both only affect the **innermost** enclosing construct — C++ has no labeled break (unlike Java); escaping nested loops = flag, function + return, or (rarely) goto.
+- `continue` ends the current iteration: jumps to the **bottom of the loop body**.
+- **The gotcha**: in a for loop, continue still runs the end-expression (`++i` lives outside the body), so counting stays correct:
+  ```cpp
+  for (int count{ 0 }; count < 10; ++count)
+  {
+      if ((count % 4) == 0)
+          continue;          // ++count STILL runs
+      std::cout << count << ' ';
+  }  // 1 2 3 5 6 7 9
+  ```
+  In a while/do-while, your `++count` is inside the body — continue placed above it **skips the increment → infinite loop**:
+  ```cpp
+  while (count < 10)
+  {
+      if (count == 5)
+          continue;   // jumps past ++count below → stuck at 5 forever
+      std::cout << count;
+      ++count;
+  }
+  ```
+  Moral: counted loops → for, so the increment is continue-proof.
+- Style consensus (break/continue AND early returns): use them **when they simplify the logic** — trading a non-linear jump for less nesting and fewer flag booleans is usually a win. Middle ground for returns: validation returns at the top, one return after.
+
 ## Questions (getcracked) / Quiz log
-_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8 / 8.9 / 8.10 read 01/09/2026)_
+_(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8 / 8.9 / 8.10 / 8.11 read 01/09/2026)_
 
 ## Compile errors vs UB
 Compile errors:

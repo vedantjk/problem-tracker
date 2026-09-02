@@ -31,7 +31,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
 - bool (boolalpha, cin failure, non-0/1 byte UB) → types_conversions
-- break vs return in switch → control_flow
+- break vs return (switch + loops, innermost-only, no labeled break) → control_flow
+- continue (runs for's end-expression; while-loop infinite-loop trap) → control_flow
 - case labels (constant, unique, '6'==54 collision) → control_flow
 - case scoping / init-in-case CE / explicit block fix → control_flow
 - braces: auto x{1,2} / initializer_list → initialization_deduction
