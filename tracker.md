@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 106 Solved · most recent: *Kth Largest Element In An Array* (28/08/2026).
+**Progress:** 110 Solved · most recent: *Reverse Linked List* (31/08/2026). W1 getcracked closed 14/14.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -23,7 +23,7 @@
 | Arrays & Hashing | Top K Frequent Elements | Med | Solved | 28/08/2026 | 15 | 4 | NC250. Heap of all m distinct: O(m log m). Min-heap size k: O(m log k). Bucket sort by count (size n+1), walk from n down: O(n), the intended one. nth_element also O(m) avg. |
 | Arrays & Hashing | Encode and Decode Strings | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Range Sum Query 2D Immutable | Med | Todo | | | | NC250 |
-| Arrays & Hashing | Product of Array Except Self | Med | Todo | | | | NC250 |
+| Arrays & Hashing | Product of Array Except Self | Med | Solved | 31/08/2026 | 15 | 3 | NC250. Prefix pass into ans, then suffix as a running scalar multiplied in reverse — O(1) extra. Original used int suffix[n] (VLA — not legal C++, gcc extension); rewrote without it. |
 | Arrays & Hashing | Valid Sudoku | Med | Todo | | | | NC250 |
 | Arrays & Hashing | Longest Consecutive Sequence | Med | Solved | 28/08/2026 | 10 | 4 | NC250. Set; only start a run when x-1 absent. MUST iterate the set not nums, else duplicates re-walk runs → O(n²). Guard INT_MAX+1 overflow. Alt sort+scan O(n log n). |
 | Arrays & Hashing | Best Time to Buy And Sell Stock II | Med | Todo | | | | NC250 |
@@ -66,7 +66,7 @@
 | Stack | Implement Stack Using Queues | Easy | Todo | | | | NC250 |
 | Stack | Implement Queue using Stacks | Easy | Todo | | | | NC250 |
 | Stack | Asteroid Collision | Med | Todo | | | | NC250 |
-| Stack | Daily Temperatures | Med | Todo | | | | NC250 |
+| Stack | Daily Temperatures | Med | Solved | 31/08/2026 | 10 | 4 | NC250. Monotonic decreasing stack of indices; pop while warmer, answer = i - popped. Each index pushed/popped once → O(n) amortized. |
 | Stack | Online Stock Span | Med | Todo | | | | NC250 |
 | Stack | Car Fleet | Med | Todo | | | | NC250 |
 | Stack | Simplify Path | Med | Todo | | | | NC250 |
@@ -85,14 +85,14 @@
 | Binary Search | Search a 2D Matrix | Med | Todo | | | | NC250 |
 | Binary Search | Capacity to Ship Packages Within D Days | Med | Todo | | | | NC250 |
 | Binary Search | Find Minimum In Rotated Sorted Array | Med | Todo | | | | NC250 |
-| Binary Search | Search In Rotated Sorted Array | Med | Todo | | | | NC250 |
+| Binary Search | Search In Rotated Sorted Array | Med | Solved | 31/08/2026 | 20 | 3 | NC250. Binary search: one half is always sorted — check nums[l]<=nums[m] to find it, then range-test target against the sorted half to pick a side. Kept l+(r-l)/2 discussion (constraints make l+r safe here). |
 | Binary Search | Search In Rotated Sorted Array II | Med | Todo | | | | NC250 |
 | Binary Search | Split Array Largest Sum | Hard | Todo | | | | NC250 |
 | Binary Search | Median of Two Sorted Arrays | Hard | Todo | | | | NC250 |
 | Binary Search | Find in Mountain Array | Hard | Todo | | | | NC250 |
 | Linked List | Add Two Numbers | Med | Solved | 24/06/2026 | 5 | 4 | Linked list with a while loop. |
 | Linked List | Merge k Sorted Lists | Hard | Solved | 25/06/2026 | 10 | 3 | Have a queue and merge 2 at a time; check for empty lists. |
-| Linked List | Reverse Linked List | Easy | Todo | | | | NC250 |
+| Linked List | Reverse Linked List | Easy | Solved | 31/08/2026 | 5 | 4 | NC250. prev/curr/next pointer walk. Lesson: ListNode* temp in the loop is a stack POINTER, not an allocation — no leak (pointers vs pointees). std::exchange one-liner variant exists. |
 | Linked List | Merge Two Sorted Lists | Easy | Todo | | | | NC250 |
 | Linked List | Linked List Cycle | Easy | Solved | 28/08/2026 | 3 | 5 | NC250. Floyd slow/fast. Fast gains 1 per step inside the cycle so it can't skip slow. Cycle-start proof already in Find the Duplicate Number. |
 | Linked List | Reorder List | Med | Todo | | | | NC250 |
