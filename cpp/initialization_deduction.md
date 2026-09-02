@@ -8,6 +8,17 @@
 - List-init forbids narrowing, checked on the VALUE for constant expressions: `int x{4L}` ok, `unsigned u{-1}` CE, `int y{4.5}` CE, `int z{dbl_var}` CE regardless of contents.
 - Most vexing parse: whatever can be a function declaration, is. `std::string s();`, `Double d(MyInt(i));`. Fix: `{}` or extra parens. Direct-list-init of a temporary needs a one-word type: `unsigned int{5}` CE, `int{5}` fine (alias multi-word types).
 
+## Static-storage init phases + constinit (cppstories storage-init, read 01/09)
+- Non-local static/thread objects initialize in phases: **static initialization** first — either **constant-init** (value computable at compile time → baked into the data segment) or **zero-init** (everything else zeroed → BSS; pointers = nullptr) — then **dynamic initialization** at runtime before main for whatever couldn't be done at compile time (ctor calls, non-constexpr expressions).
+- This is *why* "static storage → zero first" in the default-init rule above: statics are always at least zero-initialized before anything else runs.
+- **Static init order fiasco** (→ functions_scope_lambdas): *dynamic* init order across translation units is unspecified — a global in TU1 whose initializer reads a dynamically-initialized global in TU2 may see it pre-init (zeroed). Constant-initialized globals are immune (done at compile time). Fixes: Meyers singleton (function-local static, lazy + thread-safe since C++11), or make the dependency constant-init.
+- **const vs constexpr vs constinit (C++20)** on globals:
+  - `const`: immutable, but init may still be dynamic (runtime). Gives internal linkage on non-extern globals.
+  - `constexpr`: forces constant-init AND immutable.
+  - `constinit`: forces constant-init (CE if the initializer isn't a constant expression) but stays **mutable** — "diagnose the fiasco away without giving up mutation". constexpr = constinit + const, roughly.
+- **thread_local**: one object per thread, initialized when the thread starts (or lazily for function-locals, like static locals), destroyed at thread exit. `static thread_local` at namespace scope ≡ `thread_local` (static is implied). Uses: per-thread RNG, per-thread counters/scratch. Cost note: TLS access goes through a segment register (fs on x86-64 Linux) — cheap but not free.
+- Linkage footnote: C++20 modules add **module linkage** to the none/internal/external trio.
+
 ## Aggregates & designated initializers (C++20)
 - Aggregate = array, or class with: no private/protected non-static members, no user-declared ctors, no virtual/private/protected bases, no virtual functions (default member initializers OK since C++14).
 - `T o{.a = 1, .b{2}}`: aggregates only, non-static members, declaration order, may skip (skipped → default member init, else value-init), no positional mix, no duplicates, no nesting (C-only).

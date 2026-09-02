@@ -9,7 +9,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [build_linkage.md](build_linkage.md) | build pipeline, ODR, inline, preprocessor/macros, headers, identifiers, namespaces |
 | [types_conversions.md](types_conversions.md) | promotions, signed/unsigned, shifts, fixed-width ints, enums, bools, overload ranks |
 | [floating_point.md](floating_point.md) | IEEE-754, numeric_limits, float traps |
-| [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&& |
+| [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&&, static init phases, constinit, thread_local |
 | [expressions.md](expressions.md) | sequencing, maximal munch, comma/ternary, ++/--, operator overloading |
 | [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping), while/do-while/for, break/continue, halts (exit/abort/terminate) |
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
@@ -39,6 +39,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - char arithmetic & promotion → types_conversions
 - comma operator (precedence, return a,b) → expressions
 - comments don't nest / #if 0 → build_linkage
+- const vs constexpr vs constinit (globals) → initialization_deduction
+- constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
 - conversion vs promotion ranks (overloads) → types_conversions
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
 - data races → ub_catalog (pointer)
@@ -125,6 +127,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
 - ternary (precedence, branch unification, lvalue) → expressions
+- thread_local (per-thread copy, lazy locals, fs-segment access) → initialization_deduction
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
 - uninitialized reads → initialization_deduction, ub_catalog
