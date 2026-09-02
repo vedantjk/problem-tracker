@@ -15,7 +15,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
-| [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), exceptions (pending quiz) |
+| [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (pending quiz) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 
 ## Where is...? (every concept, A-Z)
@@ -55,7 +55,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - epsilon vs denorm_min vs min vs lowest → floating_point
 - erroneous behavior (C++26) → ub_catalog, types_conversions
 - exceptions / stack unwinding / [except.ctor] return-object rule → error_handling (pending), plus gc bcad miss logged there
-- expected (std::expected, C++23, error WITH reason) → error_handling
+- expected (std::expected/unexpected/unexpect, error(), transform_error) → error_handling
 - EXIT_SUCCESS / status codes → build_linkage
 - [[fallthrough]] attribute / fallthrough rules → control_flow
 - fixed-point prices ×10^4 (ITCH/venues) → floating_point traps

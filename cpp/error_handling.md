@@ -1,4 +1,4 @@
-# Error Handling (std::optional · exceptions)
+# Error Handling (std::optional · std::expected · exceptions)
 
 ## std::optional — core model (learncpp + cppstories, read 01/09)
 - Vocabulary type (family: variant, any, string_view): "a T that might not be there," **value semantics** — it *contains* the T inline, no heap, assignment copies. sizeof = T + bool + padding: `optional<int>` = 8, `optional<double>` = 16 (alignment doubles the cost).
@@ -28,6 +28,19 @@
   // r2: optional<int> — nullopt, as intended
   ```
   - Rule: callable returns T → transform; callable returns optional<T> → and_then. (Haskell fmap vs bind, if that helps it stick.)
+
+## std::expected<T, E> — C++23 (cppstories, read 01/09)
+- "optional with a reason": holds a T (success) **or** an E (error) — never both, never neither. The missing piece between `optional` (no why) and exceptions (costly why). Value semantics, inline storage like optional.
+- Success: `expected<int, string> r{42};` default-ctor → T's default (0). Error: wrap it — `return std::unexpected("msg");` — or construct in place with the `std::unexpect` tag: `expected<int, string> e{std::unexpect, "err"}`. `std::in_place` tag for in-place T.
+- Access mirrors optional's tiers, doubled:
+  - value side: `*r` (UB if error) · `r.value()` (throws `std::bad_expected_access<E>` if error) · `r.value_or(dflt)`
+  - error side: `r.error()` — **UB if it actually holds a value**; check `if (!r)` first. C++26 adds `error_or`.
+  - both sides are mutable in place: `*r += 10;` `r.error() += " extended";`
+- `expected<void, E>` is the "may fail, returns nothing" shape: `return {};` on success.
+- Type rules: T can be void, not a reference (use `reference_wrapper`), not a C array, not expected itself. E must be a plain object type.
+- Monadic quartet: `and_then` (callable returns expected — flattens, same rule as optional's!) · `transform` (callable returns plain T — wraps) · `or_else` (handle/replace the error) · `transform_error` (map E→E', e.g. errno → your enum). Same nested-wrapping trap as optional above.
+- Canonical parse example: `std::from_chars` + map `std::errc` to messages — return `value` or `std::unexpected(reason)`.
+- vs exceptions: error path is a normal return — no unwind tables in play, cost is symmetric and predictable → the error-handling style low-latency code prefers on hot paths.
 
 ## Questions (getcracked) / Quiz log
 | Date | Question | Result | Reason |
@@ -68,6 +81,29 @@ ov.reset();                            // destroy → empty
 auto len = find_user(42)
     .transform([](const std::string& s) { return s.size(); })
     .value_or(0);
+
+// std::expected — parse with a reason
+#include <expected>
+#include <charconv>
+std::expected<int, std::string> convertToInt(const std::string& input) noexcept
+{
+    int value{};
+    auto [ptr, ec] = std::from_chars(input.data(), input.data() + input.size(), value);
+    if (ec == std::errc())                        return value;
+    if (ec == std::errc::invalid_argument)        return std::unexpected("invalid number format");
+    if (ec == std::errc::result_out_of_range)     return std::unexpected("number out of range");
+    return std::unexpected("unknown conversion error");
+}
+
+auto r = convertToInt("11111111111111111");
+if (r) std::cout << *r;
+else   std::cout << r.error();                    // error() UB if r has a value — check first
+
+std::expected<void, std::string> performAction(bool ok) noexcept
+{
+    if (ok) return {};                            // void success
+    return std::unexpected("action failed");
+}
 ```
 
 ## Traps / interview one-liners
@@ -75,4 +111,6 @@ auto len = find_user(42)
 - "Value semantics: optional copies its T. sizeof(optional<double>) = 16 — the bool costs a whole alignment slot."
 - "Empty compares less than everything engaged."
 - "optional answers IF it failed, expected/exceptions answer WHY."
+- "expected: value_or exists for T; error() is UB when engaged — the access tiers exist on BOTH sides."
+- "expected's error path is a plain return — predictable cost, no unwinder; why hot paths prefer it to throw."
 - "No optional references until C++26; optional<bool> and optional<T*> are smells."
