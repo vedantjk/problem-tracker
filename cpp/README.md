@@ -94,6 +94,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - operator void() oddity → initialization_deduction
 - overload ambiguity foo(-1.5) → types_conversions
 - padding / tail padding / offsets / pahole → memory_layout
+- pointer indirection cost x->foo() vs y.foo() (locality, SROA/aliasing) → memory_layout
 - pointers-to-int (uintptr_t round-trip) → bits_punning
 - popcount / <bit> / countl_zero → bits_punning
 - prefix vs postfix ++ (lvalue/rvalue, class-type cost) → expressions

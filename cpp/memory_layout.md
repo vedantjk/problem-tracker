@@ -35,6 +35,14 @@
 - **Why exiting leaks nothing**: two levels of memory management — the malloc library manages the heap *within* the process's address space; the OS hands out pages and **reclaims all of them at process death** regardless of free. So short-lived-program leaks are "fine" (bad habit); leaks kill long-running servers... and the OS itself has nobody to clean up after it.
 - **14.5 preview**: malloc/free are *library* calls layered on system calls — `brk`/`sbrk` (move the heap's end, never call directly) and `mmap` (anonymous regions). `calloc` = malloc + zero; `realloc` = grow by new-region + copy.
 
+### Why `x->foo()` can be slower than `y.foo()` (gc question, 01/09)
+Excluding the `new` itself, three layers (in increasing importance):
+1. **Naive indirection**: `x->foo()` = `(*x).foo()` — load the pointer, then access the object: two memory touches vs one. BUT with optimization x sits in a register, so at the callsite the generated code is often *identical* to the stack case. This reason mostly exists at -O0. (gc's own caveat.)
+2. **Locality — the one gc calls the real answer**: the top of the stack is essentially always hot in L1 (every call/return touches it); a heap object can be anywhere — cold miss ≈ 100-300 cycles, worse prefetch, allocator scatter. Dominates in memory-bound code.
+3. **The optimizer reason gc doesn't mention**: a stack object whose address never escapes can be **SROA'd / promoted into registers** — the object stops existing in memory at all, fields fold into constants. A heap object behind a pointer usually can't: the compiler must prove nothing aliases `*x` before caching loads across writes, and pointer escape kills that. Same family as "the call is an optimization barrier" (→ functions_scope_lambdas). C++14+ *may* elide `new` entirely in simple cases, but it's permission, not a guarantee (nothing like JVM escape analysis you can rely on).
+- If `foo()` is virtual, that's a separate, additional indirection (vptr load + fn-pointer load + no inlining) — orthogonal to stack vs heap.
+- One-liner for interviews: "same assembly at the callsite once optimized; the differences that survive are cache locality and what the optimizer is *allowed* to assume about aliasing."
+
 ## Compile errors vs unspecified
 - CE: `sizeof` on incomplete type (`struct S; sizeof(S);`) — why forward-declared types can't be by-value members.
 - Unspecified: padding byte contents (memcmp on structs compares garbage); pre-C++23 layout between access-specifier groups; use offsetof.
