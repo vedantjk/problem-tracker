@@ -11,6 +11,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [floating_point.md](floating_point.md) | IEEE-754, numeric_limits, float traps |
 | [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&& |
 | [expressions.md](expressions.md) | sequencing, maximal munch, comma/ternary, ++/--, operator overloading |
+| [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping) |
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
@@ -30,6 +31,9 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
 - bool (boolalpha, cin failure, non-0/1 byte UB) → types_conversions
+- break vs return in switch → control_flow
+- case labels (constant, unique, '6'==54 collision) → control_flow
+- case scoping / init-in-case CE / explicit block fix → control_flow
 - braces: auto x{1,2} / initializer_list → initialization_deduction
 - char arithmetic & promotion → types_conversions
 - comma operator (precedence, return a,b) → expressions
@@ -39,12 +43,14 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - data races → ub_catalog (pointer)
 - default-init vs value-init (garbage vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
+- early return → control_flow
 - endian / std::endian → bits_punning
 - endl vs '\n' → build_linkage
 - enum / enum class / to_underlying / using enum → types_conversions
 - epsilon vs denorm_min vs min vs lowest → floating_point
 - erroneous behavior (C++26) → ub_catalog, types_conversions
 - EXIT_SUCCESS / status codes → build_linkage
+- [[fallthrough]] attribute / fallthrough rules → control_flow
 - fixed-point prices ×10^4 (ITCH/venues) → floating_point traps
 - fixed-width ints / size_t / ptrdiff_t / uint8_t-prints-as-char → types_conversions
 - float→int out-of-range UB → floating_point
@@ -53,8 +59,11 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
 - header guards / #pragma once → build_linkage
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
+- if (x) non-bool condition conversion → control_flow
+- if-else vs switch (when to use which) → control_flow
 - inline (ODR meaning, requirements, why not everything) → build_linkage
 - integral promotion (sub-int → signed int) → types_conversions
+- jump table (why switch is integral-only) → control_flow
 - keywords (92) & special identifiers → build_linkage
 - lambdas (captures, mutable, sizes, passing, generic, constexpr) → functions_scope_lambdas
 - lifetime extension (const&/&& on temporaries; doesn't chain) → initialization_deduction
@@ -86,6 +95,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - RVO / NRVO / -fno-elide-constructors → functions_scope_lambdas
 - scope vs duration vs lifetime → functions_scope_lambdas
 - sequencing (C++14 vs C++17 table) → expressions
+- sequential/stacked case labels (≠ fallthrough) → control_flow
 - shadowing / -Wshadow → functions_scope_lambdas
 - shifts (count rule, value rules, x86 masking) → types_conversions
 - signature (excludes return type) → build_linkage
@@ -97,6 +107,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - std::function costs / bad_function_call → functions_scope_lambdas
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
+- switch (condition types, default, execution flow) → control_flow
 - ternary (precedence, branch unification, lvalue) → expressions
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
@@ -133,6 +144,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | std::bit_cast | bits_punning | (pending) |
 | Comma and ? | expressions | Munch munch munch!: MISSED |
 | Operator overloading (intro) | expressions | (pending) |
+| if / switch (learncpp 4.10, 8.5, 8.6 — read 01/09) | control_flow | (pending) |
 
 ## Quizzes
 | Date | Quiz | Score | Time | Percentile | Notes |
