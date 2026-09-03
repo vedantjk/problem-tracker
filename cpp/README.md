@@ -15,6 +15,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
 | [bits_punning.md](bits_punning.md) | bitset, bitwise promotion, strict aliasing, reinterpret_cast, memcpy, bit_cast |
 | [functions_scope_lambdas.md](functions_scope_lambdas.md) | calls/ABI, RVO/NRVO, scope/duration/linkage, lambdas, tuple |
+| [pointers_references.md](pointers_references.md) | pointers vs references, null/dangling/wild, const×pointer matrix, function pointers, pass by address, nullptr_t overloads |
 | [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 
@@ -48,7 +49,10 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
 - conversion vs promotion ranks (overloads) → types_conversions
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
+- const × pointer matrix (ptr-to-const vs const-ptr, right-to-left) → pointers_references
+- dangling pointer (deref UB; using the VALUE = impl-defined) → pointers_references
 - data races → ub_catalog (pointer)
+- default args don't apply through function pointers → pointers_references
 - default-init vs value-init (garbage vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
@@ -70,6 +74,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
 - forward progress rule (side-effect-free infinite loop UB) → control_flow, ub_catalog
+- function pointers (syntax, decay, overload disambiguation, no void* conversion) → pointers_references
 - function try blocks (ctor init-list catches, implicit rethrow) → error_handling
 - halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
@@ -100,6 +105,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
+- nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t → pointers_references
 - noexcept destructors (default since C++11; throwing dtor → terminate) → error_handling
 - nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
 - optional (std::optional, all of it) → error_handling
@@ -109,7 +115,9 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - operator void() oddity → initialization_deduction
 - overload ambiguity foo(-1.5) → types_conversions
 - padding / tail padding / offsets / pahole → memory_layout
+- pass by address (null-check patterns, optional params, int*& reseating) → pointers_references
 - pointer indirection cost x->foo() vs y.foo() (locality, SROA/aliasing) → memory_layout
+- pointers vs references (object vs name; the 5 differences) → pointers_references
 - pointers-to-int (uintptr_t round-trip) → bits_punning
 - popcount / <bit> / countl_zero → bits_punning
 - prefix vs postfix ++ (lvalue/rvalue, class-type cost) → expressions
@@ -181,6 +189,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Comma and ? | expressions | Munch munch munch!: MISSED |
 | Operator overloading (intro) | expressions | (pending) |
 | if / switch / loops (learncpp 4.10, 8.5-8.6, 8.8-8.10 — read 01/09) | control_flow | (pending) |
+| Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | (pending) |
 
 ## Quizzes
 | Date | Quiz | Score | Time | Percentile | Notes |
