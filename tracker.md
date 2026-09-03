@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 111 Solved · most recent: *Two Sum II* (03/09/2026). W2 LC: 1/18.
+**Progress:** 112 Solved · most recent: *Longest Repeating Character Replacement* (03/09/2026). W2 LC: 2/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -49,7 +49,7 @@
 | Two Pointers & Sliding Window | Trapping Rain Water | Hard | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Contains Duplicate II | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Longest Substring Without Repeating Characters | Med | Solved | 28/08/2026 | 10 | 4 | NC250. Sliding window with set (shrink left until no dup). Better: array<int,256> last-seen index, left = max(left, last[c]+1); the >= left guard stops stale occurrences moving left backwards. |
-| Two Pointers & Sliding Window | Longest Repeating Character Replacement | Med | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | Longest Repeating Character Replacement | Med | Solved | 03/09/2026 | 20 | 3 | NC250, W2. Window valid iff len - max_freq <= k. KEY: stale max_freq (never recomputed on shrink) is still correct — ans only improves on a new TRUE max, when window is valid; stale-max windows can't exceed a previously recorded valid one. Verbalize this proof. array<int,26> > unordered_map. O(n)/O(1). |
 | Two Pointers & Sliding Window | Permutation In String | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Minimum Size Subarray Sum | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Find K Closest Elements | Med | Todo | | | | NC250 |
