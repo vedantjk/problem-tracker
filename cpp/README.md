@@ -107,6 +107,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - memory segments (code/data/BSS/heap/stack) → memory_layout
 - memory leaks: pointers vs pointees → functions_scope_lambdas traps
 - most vexing parse → initialization_deduction
+- moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage

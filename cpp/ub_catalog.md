@@ -29,6 +29,12 @@
 - Reserved identifiers (NDR) → build_linkage
 - ODR rule-3 mismatch (NDR) → build_linkage
 - Padding bytes via memcmp (unspecified, not UB) → memory_layout
+- **Moved-from std-library objects: "valid but unspecified state"** (gc "Unspecified behavior", 02/09):
+  - **Valid** = class invariants hold; every operation WITHOUT preconditions is safe: `.size()`, `.clear()`, `.empty()`, assignment, destruction. **Unspecified** = the value could be anything — empty, or even the ORIGINAL contents (a small string under SSO can't have its buffer stolen; the move degrades to a copy and may leave the source untouched).
+  - Precondition-carrying ops are the danger: `front()`, `back()`, `v[0]`, `*it` on a moved-from container — if it happens to be empty, that's the usual UB, not something new.
+  - "Unless otherwise specified" is load-bearing: `std::unique_ptr` is GUARANTEED null after move, `std::shared_ptr` guaranteed empty — smart pointers are specified, containers aren't.
+  - Applies to *std* types by that clause; YOUR types' moved-from state is whatever your move ctor leaves — make it at least destructible + assignable (dtor always runs on the source).
+  - Reuse is fine: `s = "new";` or `s.clear();` puts it back in a known state. And remember `std::move` moves nothing — it's a cast to rvalue-ref; the move happens in the receiving ctor/assignment.
 
 ## Questions (getcracked)
 - [x] _global_variable — 29/08 — ok
