@@ -30,6 +30,7 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 - Calling: `(*fcnPtr)(5)` explicit or `fcnPtr(5)` implicit — identical. Null fp call = UB, check first.
 - **Default arguments do NOT apply through a function pointer.** Defaults are call-site sugar resolved at compile time against the *declaration*; through a pointer the call resolves at runtime, so `fcnPtr()` on `void f(int x = 0)` is a CE (signature is `void(*)(int)`). Flip side: you can *use* this to pick an overload that defaults would otherwise make ambiguous.
 - Function pointers do NOT implicitly convert to `void*` (object-pointer world and function-pointer world are formally separate; POSIX `dlsym` forces the cast anyway — conditionally-supported).
+- **`std::cout << foo` prints `1`** (gc, 02/09): the name decays to a function pointer; there's no `operator<<` for function pointers, and *because* function pointers don't convert to `void*` (the overload that prints data-pointer addresses), the only viable conversion is → bool. Non-null → `1` (`true` under boolalpha). clang warns `-Wpointer-bool-conversion` ("will always evaluate to true"). Printing the actual address needs `reinterpret_cast<void*>(&foo)` (conditionally-supported).
 - Ergonomics ladder: raw fp → `using ValidateFn = bool(*)(int,int);` → `std::function<bool(int,int)>` (type-erased, costs — → functions_scope_lambdas) → `auto fp{&foo};`.
 - Callback anchor: `void selectionSort(int* arr, int size, bool (*cmp)(int,int));`.
 
@@ -40,8 +41,21 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 - Null-handling pattern: `assert(ptr);` (document + debug-trap) AND `if (!ptr) return;` (production) — assert is not a substitute for the check.
 - Optional out/in-param via `const int* id = nullptr` works but **overloading is better** (no null-deref risk, literals work); today: `std::optional` for optional *values* (→ error_handling), pointer only when you need to *mutate* an optional target.
 - **Reseating the caller's pointer needs `int*& refptr`** (reference to pointer). `int&*` is CE — "no pointers to references" (references aren't objects). Plain `int* ptr2` param: `ptr2 = nullptr;` changes only the copy.
+- **What nullptr actually is**: a prvalue of type `std::nullptr_t` — NOT a pointer type itself. It's a "null pointer constant" that implicitly converts to any pointer type (and pointer-to-member type). That's why it's overload-safe where 0/NULL aren't.
 - **0 / NULL / nullptr in overload resolution**: `print(0)` → `print(int)`; `print(NULL)` → impl-defined mess (may be int, may be ambiguous); `print(nullptr)` → `print(int*)` reliably. nullptr's type is `std::nullptr_t` — you can overload on it: `void print(std::nullptr_t)`. But a *pointer variable holding nullptr* still calls `print(int*)` — **overloading matches on types, not values**.
 - Unifying view: references compile to pointers, pass-by-address copies an address — mechanically "C++ passes everything by value"; the semantics differ at the language level.
+
+## Pointer arithmetic & array decay (gc, 02/09)
+- `int x[5]` at address 0, `sizeof(int)==4`:
+  - `&x + 1` → **20**. `&x` has type `int(*)[5]` — pointer to the WHOLE array; +1 steps one whole array (`sizeof(int[5])` = 20).
+  - `x + 1` → **4**. `x` decays to `int*`; +1 steps one **pointee** (`sizeof(int)` = 4).
+- Rule: `p + n` advances `n * sizeof(*p)` — size of the *pointed-to type*, never "size of the pointer" (gc's explanation misspoke here: pointer size is 8 on x86-64 and irrelevant to the stride).
+- Same fact underlies `sizeof(x)` = 20 vs `sizeof(x+0)` = 8, and the `(&x)[1]` end-of-array idiom.
+
+## argv is null-terminated (gc, 02/09)
+- The standard guarantees **`argv[argc] == 0`** — not UB, explicitly specified ([basic.start.main]). argv acts like a null-terminated array, same shape as a C-string: walk `for (char** p = argv; *p; ++p)` with no count.
+- Why it exists: lets argv pass directly to APIs expecting null-terminated arrays (`execv(path, argv)`); portability history (some old compilers didn't set it — one more reason it's now nailed down in the standard).
+- Practice: use argc; keep the terminator fact in the back pocket.
 
 ## Compile errors vs UB vs impl-defined
 - CE: `int* p{5}` (literal address); `int* p{&constInt}`; `int&*` (pointer to reference); `f(&5)`; calling through fp with missing "default" arg; overloaded-name decay without target type.
@@ -49,7 +63,7 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 - Impl-defined: using (not dereferencing) a dangling pointer's value; what NULL expands to.
 
 ## Questions (getcracked) / Quiz log
-- (none yet)
+- [x] &x + 1 vs x + 1 (array at 0, sizeof(int)=4) — 02/09 — ok (20, 4). Note gc's own explanation said "size of the pointer" for op two; correct reasoning is size of the POINTEE.
 
 ## Syntax anchors
 ```cpp
@@ -86,6 +100,18 @@ void print(std::nullptr_t);  // catches literal nullptr only —
 int* pv{nullptr}; print(pv); // still int* (types, not values)
 
 void safe(const int* ptr) { assert(ptr); if (!ptr) return; /* use *ptr */ }
+
+int x[5]{0,1,2,3,4};       // at addr 0, sizeof(int)==4:
+// &x + 1  → 20   (int(*)[5]: strides sizeof(int[5]))
+// x  + 1  → 4    (decayed int*: strides sizeof(int))
+// sizeof(x) == 20, sizeof(x + 0) == 8
+
+void hello();
+std::cout << hello;        // 1 — fp→bool (no void* conversion for fps)
+std::cout << reinterpret_cast<void*>(&hello);  // the address (cond.-supported)
+
+for (char** p = argv; *p; ++p)   // argv[argc] == 0, guaranteed
+    std::cout << *p << '\n';
 ```
 
 ## Traps / interview one-liners
@@ -96,3 +122,6 @@ void safe(const int* ptr) { assert(ptr); if (!ptr) return; /* use *ptr */ }
 - "0 is an int, NULL is a mystery, nullptr is a pointer. Overload on nullptr_t if you must catch it."
 - "Reseat a caller's pointer with int*&; int&* doesn't exist because references aren't objects."
 - "Mechanically everything is pass-by-value — sometimes the value is an address."
+- "&x + 1 jumps the array, x + 1 jumps an element — pointer arithmetic strides by pointee size."
+- "cout << functionName prints 1: no void* conversion for function pointers, so bool wins."
+- "argv[argc] is guaranteed null — argv is a null-terminated array by the standard."

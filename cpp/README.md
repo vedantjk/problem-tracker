@@ -27,6 +27,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - aliasing (strict) rule + audit checklist → bits_punning
 - Anki-priority repeat miss: auto& keeps const → initialization_deduction
 - anonymous namespace / internal linkage → build_linkage
+- argv[argc] == 0 guarantee (null-terminated argv) → pointers_references
+- array decay / pointer arithmetic (&x+1 vs x+1 stride) → pointers_references
 - ASCII anchors ('A'=65, 'a'=97, '0'=48) → types_conversions
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
@@ -105,7 +107,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
-- nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t → pointers_references
+- cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
+- nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t (prvalue, not a pointer type) → pointers_references
 - noexcept destructors (default since C++11; throwing dtor → terminate) → error_handling
 - nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
 - optional (std::optional, all of it) → error_handling
@@ -189,7 +192,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Comma and ? | expressions | Munch munch munch!: MISSED |
 | Operator overloading (intro) | expressions | (pending) |
 | if / switch / loops (learncpp 4.10, 8.5-8.6, 8.8-8.10 — read 01/09) | control_flow | (pending) |
-| Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | (pending) |
+| Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | &x+1 vs x+1 ok |
 
 ## Quizzes
 | Date | Quiz | Score | Time | Percentile | Notes |
