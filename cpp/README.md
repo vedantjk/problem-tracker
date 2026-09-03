@@ -41,7 +41,10 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - char arithmetic & promotion → types_conversions
 - comma operator (precedence, return a,b) → expressions
 - comments don't nest / #if 0 → build_linkage
+- const return-by-value blocks move (const rvalue ≠ T&&) → initialization_deduction
+- const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction
 - const vs constexpr vs constinit (globals) → initialization_deduction
+- cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
 - conversion vs promotion ranks (overloads) → types_conversions
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas

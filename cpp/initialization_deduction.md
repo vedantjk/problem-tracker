@@ -19,6 +19,11 @@
 - **thread_local**: one object per thread, initialized when the thread starts (or lazily for function-locals, like static locals), destroyed at thread exit. `static thread_local` at namespace scope ≡ `thread_local` (static is implied). Uses: per-thread RNG, per-thread counters/scratch. Cost note: TLS access goes through a segment register (fs on x86-64 Linux) — cheap but not free.
 - Linkage footnote: C++20 modules add **module linkage** to the none/internal/external trio.
 
+## const nuances beyond the basics (learncpp 5.1, read 02/09)
+- **`const` return-by-value is a pessimization, not just clutter**: `const std::string getName()` makes the returned temporary a *const rvalue* — it can't bind to `std::string&&`, so `std::string s = getName();` calls the COPY ctor instead of move. Fundamental types: const silently ignored. Class types: you just banned moving from your own return value.
+- **Top-level const on a value parameter is not part of the signature**: `void f(int)` and `void f(const int)` declare the SAME function (defining both = redefinition CE, not an overload). Legal idiom: declare `void f(int);` in the header, define `void f(const int x)` in the .cpp — const-local discipline without interface noise.
+- **cv vocabulary** (standardese): `const` + `volatile` are the only two type qualifiers; types are **cv-unqualified** (`int`) or **cv-qualified** (`const int`). volatile = "may change outside the program" (MMIO/signal handlers), NEVER thread synchronization; C++20 deprecated volatile compound assignment (`v += 1`), C++23 un-deprecated the bitwise ones (`|=`, `&=`, `^=`).
+
 ## Aggregates & designated initializers (C++20)
 - Aggregate = array, or class with: no private/protected non-static members, no user-declared ctors, no virtual/private/protected bases, no virtual functions (default member initializers OK since C++14).
 - `T o{.a = 1, .b{2}}`: aggregates only, non-static members, declaration order, may skip (skipped → default member init, else value-init), no positional mix, no duplicates, no nesting (C-only).
@@ -120,6 +125,14 @@ void foo() { tls.v = 100; }        // touches THIS thread's copy
 // static local: lazy init (first call), persists across calls
 int counter_up() { static int counter = 0; return ++counter; }
 // 4 calls → returns 4
+
+// ---- const nuances (learncpp 5.1) ----
+const std::string getName() { return "alex"; }
+std::string s = getName();   // COPY, not move: const rvalue won't bind to string&&
+
+void f(int);                 // header
+void f(const int x) { }      // .cpp — SAME function; top-level const not in signature
+// void f(int x) {} + void f(const int x) {}  → redefinition CE, not overload
 ```
 
 ## Traps / interview one-liners
