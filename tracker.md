@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 110 Solved · most recent: *Reverse Linked List* (31/08/2026). W1 getcracked closed 14/14.
+**Progress:** 111 Solved · most recent: *Two Sum II* (03/09/2026). W2 LC: 1/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -40,7 +40,7 @@
 | Two Pointers & Sliding Window | Merge Strings Alternately | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Merge Sorted Array | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Remove Duplicates From Sorted Array | Easy | Todo | | | | NC250 |
-| Two Pointers & Sliding Window | Two Sum II Input Array Is Sorted | Med | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | Two Sum II Input Array Is Sorted | Med | Solved | 03/09/2026 | 5 | 4 | NC250, W2. Two-pointer on sorted: sum>target shrink right, else grow left — each step eliminates one index. static_cast<int> on size() makes empty-input right=-1 safe. Mention int-overflow-proof compare (target - numbers[right]) in interviews. O(n)/O(1). |
 | Two Pointers & Sliding Window | 3Sum | Med | Solved | 28/08/2026 | 15 | 4 | NC250. Sort, fix i, two-pointer inside; skip dup i. Only ONE of the x/y dup-skip loops is required for correctness (the other is an optimization), but zero is wrong. Use i+2<n not i<size()-2 (unsigned underflow). O(n²). |
 | Two Pointers & Sliding Window | 4Sum | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Rotate Array | Med | Todo | | | | NC250 |
