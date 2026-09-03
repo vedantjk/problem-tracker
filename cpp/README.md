@@ -91,7 +91,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - jump table (why switch is integral-only) → control_flow
 - keywords (92) & special identifiers → build_linkage
 - lambdas (captures, mutable, sizes, passing, generic, constexpr) → functions_scope_lambdas
-- lifetime extension (const&/&& on temporaries; doesn't chain) → initialization_deduction
+- lifetime extension (const&/&& on temporaries; doesn't chain; direct-binding only, never through a return) → initialization_deduction, pointers_references
+- lvalue references (no reseat, binding rules, conversion-temporary trap) → pointers_references
 - loop counters (signed! unsigned >= 0 bug) → control_flow
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
@@ -121,6 +122,8 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - overload ambiguity foo(-1.5) → types_conversions
 - padding / tail padding / offsets / pahole → memory_layout
 - pass by address (null-check patterns, optional params, int*& reseating) → pointers_references
+- pass by value vs const& (2×pointer cheap-to-copy rule, string_view by value) → pointers_references
+- out params / in-out params (why discouraged) → pointers_references
 - pointer indirection cost x->foo() vs y.foo() (locality, SROA/aliasing) → memory_layout
 - pointers vs references (object vs name; the 5 differences) → pointers_references
 - pointers-to-int (uintptr_t round-trip) → bits_punning
@@ -135,6 +138,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
 - rethrow (bare throw vs throw e slicing) → error_handling
+- return by reference / address (safe cases, static-local aliasing, max(a,b)=7) → pointers_references
 - RVO / NRVO / -fno-elide-constructors → functions_scope_lambdas
 - scope vs duration vs lifetime → functions_scope_lambdas
 - sequencing (C++14 vs C++17 table) → expressions
@@ -157,6 +161,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - terminate (uncaught throw; unwind impl-defined) → error_handling
 - ternary (precedence, branch unification, lvalue) → expressions
 - thread_local (per-thread copy, lazy locals, fs-segment access) → initialization_deduction
+- top-level vs low-level const (deduction drop rules, auto* vs auto) → initialization_deduction
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
 - uninitialized reads → initialization_deduction, ub_catalog

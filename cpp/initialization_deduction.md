@@ -36,6 +36,12 @@ For `const std::string& src`:
 - `auto&& x = src` → `const std::string&` — forwarding: lvalue collapses to lvalue-ref; rvalue → rvalue-ref.
 - String literals: `auto s = "hi"` → `const char*` never std::string; `"s"s` / `"sv"sv` from std::literals fix it.
 - Braces: `auto x = {1,2}` → initializer_list; `auto x{5}` → int; `auto x{1,2}` → CE.
+- **Top-level vs low-level const vocabulary (learncpp 12.14, 02/09)** — the cleaner model behind all of the above:
+  - Top-level const = const on the object itself (`const int x`, `int* const p`). Low-level const = const on what's *accessed through* a ref/pointer (`const int&`, `const int*`).
+  - Deduction **drops references and top-level const; keeps low-level const; never drops pointers**.
+  - The twice-missed case restated: `auto x = getConstRef()` — dropping the ref *promotes* the low-level const to top-level, which then ALSO drops → plain `std::string`. `auto&` keeps the ref, so the const stays low-level and survives.
+- **`auto*` vs `auto` for pointers**: same deduced type when the initializer IS a pointer, but `auto*` is a compile-time assertion (non-pointer initializer = CE) and re-applies pointer-ness explicitly. const placement works like a normal declaration: `const auto* p` = ptr-to-const, `auto* const p` = const ptr, `const auto* const` = both. Gotcha: `const auto p{ getPtr() };` makes the POINTER const (top-level), not the pointee.
+- Best practice: re-state `&`, `const`, `*` even when deduction would supply them — intent over inference.
 - `operator void()` never used by casts: `(void)x`, `static_cast<void>(x)` just discard; only `x.operator void()` calls it.
 
 ## Compile errors vs UB
@@ -90,6 +96,14 @@ auto s2{"moo"sv};  // std::string_view
 
 auto  v1 = obj.getRef();  // int   (copy)
 auto& v2 = obj.getRef();  // int&  (or const int& if source is const!)
+
+// auto with pointers (12.14): pointers never drop, top-level const does
+std::string* getPtr();
+auto  p1{ getPtr() };        // std::string*
+auto* p2{ getPtr() };        // std::string* — CE if initializer weren't a pointer
+const auto* p3{ getPtr() };  // const std::string*   (pointee const)
+auto* const p4{ getPtr() };  // std::string* const   (pointer const)
+const auto  p5{ getPtr() };  // std::string* const — const lands on the POINTER
 
 // ---- storage-init (cppstories) ----
 // the three init pathways for globals:

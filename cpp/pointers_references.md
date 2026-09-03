@@ -1,6 +1,6 @@
 # Pointers & References
 
-(learncpp 12.7-12.8, 12.9-12.11, 20.1 — read 02/09)
+(learncpp 12.3-12.15, 20.1 — read 02/09)
 
 ## Core model
 - A pointer is an OBJECT holding an address; a reference is a NAME for an object (not an object itself — though a reference *member* costs pointer storage, → memory_layout). Consequences: pointers reseat/null/uninitialized-exist, references must bind at birth and never reseat.
@@ -11,6 +11,23 @@
 - Pointer → bool: null → false, everything else → true (`if (ptr)`).
 - **Dangling pointer nuance**: *dereferencing* a dangling pointer is UB, but merely *using its value* (copying it, `p == q`) after the pointee dies is **implementation-defined**, not UB — the standard only guarantees assigning a new value (e.g. `p = nullptr;`) is safe. So even `if (dangling)` is off the well-defined map.
 - Destruction does NOT null your pointers — dangling detection is entirely on you; there's no way to distinguish a valid pointer from a dangling one at runtime.
+
+## Lvalue references (12.3-12.6)
+- Must initialize; no reseating — `ref = y` writes y's VALUE into the referent, it never rebinds. Reseating needs `std::reference_wrapper`.
+- Non-const `T&` binds only to *modifiable lvalues* of matching type: no const objects, no rvalues, and no different-type lvalues either (conversion yields an rvalue → rejected).
+- `int& r2{ r1 }` is NOT a reference-to-reference — r1 evaluates to its referent, r2 just aliases the same object. `int&&` was free syntax, repurposed for rvalue refs in C++11.
+- Reference and referent have independent lifetimes; referent dying first = dangling (access UB). References aren't objects — often compiled away entirely.
+- **`const T&` binds to everything**: modifiable lvalues (read-only view), const lvalues, and rvalues (with lifetime extension).
+- **Conversion-on-binding trap**: binding `const int& r` to a `short s` (or `5.0`) creates a TEMPORARY int from the converted value and binds to *that*. Later writes to `s` are invisible through `r` — you're watching a snapshot, not the object. Same-type binding aliases; cross-type binding copies.
+- **Lifetime extension**: a temporary DIRECTLY bound to a const local reference lives as long as the reference. Only direct binding — not through a function return (→ max/min dangling trap below), and it doesn't chain.
+- **constexpr references** can only bind to static-storage objects (globals/static locals) — an automatic variable's address isn't a compile-time constant.
+
+## Pass by reference (12.5-12.6) & in/out params (12.13)
+- `T&` param: no copy, callee writes visible; accepts modifiable lvalues ONLY (`f(5)` CE, `f(constVar)` CE) — which is why non-const ref params are rare.
+- `const T&` param: no copy + accepts everything incl. literals. Default for class types.
+- **Cheap-to-copy rule**: pass by value when `sizeof(T) <= 2 * sizeof(void*)` (≤16B on x86-64) AND no setup cost (no allocation/ctor work). Fundamentals + small trivial structs by value; class types by const&; unsure → const&.
+- Strings: **prefer `std::string_view` by value** (C++17+) — handles string/string_view/C-string args cheaply; `const std::string&` is only cheap for std::string args (a C-string literal argument constructs a whole temporary std::string). Caveat: string_view not guaranteed null-terminated.
+- **Out params** (non-const ref/pointer, "Out" suffix, rightmost): discouraged — caller must pre-declare, call site hides which args get written, no temporaries. Prefer return values (RVO makes them free); non-const ref only for in-out params or perf-critical giant objects. Pass-by-address at least makes mutation visible at the call site (`&i`) at the cost of null handling.
 
 ## const × pointer matrix
 Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
@@ -50,6 +67,17 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 - Flip side: if `c` were `const int`, the call is a CE — `int&` can't bind to a const object (no mutable view of a constant).
 - **std::max/std::min tie-breaking**: both return the FIRST argument when equal (`max(a,b)` = `b < a ? a : b` — equal → a... spelled as "if equivalent, returns a" on cppreference). So `const int& mx = std::max(x, x); x = 11;` → mx reads 11 (it aliases x).
 - Adjacent trap (not in gc's Q): `const int& r = std::max(a, b + 1);` — the `b + 1` temporary materializes for the call, max returns a `const&` *into an argument*, and lifetime extension does NOT apply through a function return → dangling after the full expression.
+
+## Return by reference / address (12.12)
+- Rule: the returned object must outlive the function. Ref to a plain local = dangling (compilers catch only trivial cases).
+- **Lifetime extension does not cross a function return** (the general rule behind the max trap above): direct binding extends, bounced-through-a-return binding doesn't.
+- Safe returns: (a) a reference PARAMETER (`return (a < b) ? a : b;` — both live in the caller); (b) a static local — but non-const static + returned ref = shared mutable state across every caller (`getNextId()` aliasing surprise), avoid; (c) a member of an object outliving the call (the real-world case: `obj.getName()`).
+- Rvalue-argument nuance: an rvalue bound to a `const&` param lives to the end of the FULL EXPRESSION containing the call — `std::cout << foo("temp")` fine; saving the returned ref past the statement dangles.
+- Assigning a returned reference to a value variable COPIES (`const int id{ getNextId() };` — independent). Dangling only bites when you *keep it as a reference*.
+- Non-const ref return makes the call an lvalue: `max(a, b) = 7;` assigns through — the mechanism behind `v[i] = x` (operator[] returns T&).
+- Return by address: same lifetime rules + nullptr as "no object"; caller must null-check. Prefer reference unless no-object is real (today: std::optional/expected for values, → error_handling).
+
+## Pointer arithmetic & array decay (gc, 02/09)
 - `int x[5]` at address 0, `sizeof(int)==4`:
   - `&x + 1` → **20**. `&x` has type `int(*)[5]` — pointer to the WHOLE array; +1 steps one whole array (`sizeof(int[5])` = 20).
   - `x + 1` → **4**. `x` decays to `int*`; +1 steps one **pointee** (`sizeof(int)` = 4).
@@ -117,6 +145,26 @@ std::cout << reinterpret_cast<void*>(&hello);  // the address (cond.-supported)
 
 for (char** p = argv; *p; ++p)   // argv[argc] == 0, guaranteed
     std::cout << *p << '\n';
+
+// references
+int v1{5}, v2{6};
+int& r{ v1 };
+r = v2;              // v1 = 6; NO rebind — references never reseat
+// int& bad;         // CE: must initialize
+// int& bad2{ 5 };   // CE: non-const ref can't bind rvalue
+
+short s{ 3 };
+const int& cr{ s };  // conversion → binds a TEMPORARY int(3)
+s = 42;              // cr still 3 — watching a snapshot, not s
+
+const int& ext{ 5 };            // lifetime-extended: fine for ext's whole life
+const int& bounce(const int& x) { return x; }
+const int& dang{ bounce(5) };   // DANGLING: extension doesn't cross a return
+
+int& maxRef(int& a, int& b) { return (a > b) ? a : b; }
+maxRef(v1, v2) = 7;             // call is an lvalue: writes the bigger one
+
+void getSinCos(double deg, double& sinOut, double& cosOut);  // out-param style: avoid
 ```
 
 ## Traps / interview one-liners
@@ -132,3 +180,8 @@ for (char** p = argv; *p; ++p)   // argv[argc] == 0, guaranteed
 - "argv[argc] is guaranteed null — argv is a null-terminated array by the standard."
 - "A const reference is a read-only window, not a frozen object — another alias can still write."
 - "std::max/min return the first argument on ties — and returning const& means feeding them a temporary can dangle."
+- "Assigning to a reference writes the referent; references never reseat."
+- "Cross-type const-ref binding copies into a temporary — you alias the snapshot, not the variable."
+- "Lifetime extension is direct-binding only: it never survives a function return and never chains."
+- "Cheap to copy = fits in two pointers and no ctor work; otherwise const&. Strings: string_view by value."
+- "Out-params hide writes at the call site; return values are free (RVO). Reach for T& params last."
