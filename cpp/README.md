@@ -52,6 +52,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - conversion vs promotion ranks (overloads) → types_conversions
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
 - const × pointer matrix (ptr-to-const vs const-ptr, right-to-left) → pointers_references
+- const ref = read-only view not immutability (aliasing writes visible) → pointers_references
 - dangling pointer (deref UB; using the VALUE = impl-defined) → pointers_references
 - data races → ub_catalog (pointer)
 - default args don't apply through function pointers → pointers_references
@@ -95,6 +96,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
 - macro scope (none) → build_linkage
+- max/min tie-breaking (first arg) + const& return dangling → pointers_references
 - monadic optional ops and_then/transform/or_else, nested-optional trap → error_handling
 - malloc/free (size tracked by allocator, brk/sbrk/mmap, calloc/realloc) → memory_layout
 - memory errors, the OSTEP seven (overflow, leak, dangling, double/invalid free) → memory_layout, ub_catalog

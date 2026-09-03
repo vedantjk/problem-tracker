@@ -45,7 +45,11 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 - **0 / NULL / nullptr in overload resolution**: `print(0)` → `print(int)`; `print(NULL)` → impl-defined mess (may be int, may be ambiguous); `print(nullptr)` → `print(int*)` reliably. nullptr's type is `std::nullptr_t` — you can overload on it: `void print(std::nullptr_t)`. But a *pointer variable holding nullptr* still calls `print(int*)` — **overloading matches on types, not values**.
 - Unifying view: references compile to pointers, pass-by-address copies an address — mechanically "C++ passes everything by value"; the semantics differ at the language level.
 
-## Pointer arithmetic & array decay (gc, 02/09)
+## const references & aliasing (gc "In one out the other", 02/09)
+- `void bar(int& a, const int& b)` called as `bar(c, c)`: both alias `c`. `a = 1` writes c; printing `b` shows **1**. A const reference is a **read-only view, not a promise of immutability** — the object can still change through another name. (Same root as the SROA/aliasing note in memory_layout: the compiler can't cache a load through `const T&` across writes it can't prove independent.)
+- Flip side: if `c` were `const int`, the call is a CE — `int&` can't bind to a const object (no mutable view of a constant).
+- **std::max/std::min tie-breaking**: both return the FIRST argument when equal (`max(a,b)` = `b < a ? a : b` — equal → a... spelled as "if equivalent, returns a" on cppreference). So `const int& mx = std::max(x, x); x = 11;` → mx reads 11 (it aliases x).
+- Adjacent trap (not in gc's Q): `const int& r = std::max(a, b + 1);` — the `b + 1` temporary materializes for the call, max returns a `const&` *into an argument*, and lifetime extension does NOT apply through a function return → dangling after the full expression.
 - `int x[5]` at address 0, `sizeof(int)==4`:
   - `&x + 1` → **20**. `&x` has type `int(*)[5]` — pointer to the WHOLE array; +1 steps one whole array (`sizeof(int[5])` = 20).
   - `x + 1` → **4**. `x` decays to `int*`; +1 steps one **pointee** (`sizeof(int)` = 4).
@@ -64,6 +68,7 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 
 ## Questions (getcracked) / Quiz log
 - [x] &x + 1 vs x + 1 (array at 0, sizeof(int)=4) — 02/09 — ok (20, 4). Note gc's own explanation said "size of the pointer" for op two; correct reasoning is size of the POINTEE.
+- [x] In one out the other (int& + const int& aliasing same var) — 02/09 — ok (prints 1).
 
 ## Syntax anchors
 ```cpp
@@ -125,3 +130,5 @@ for (char** p = argv; *p; ++p)   // argv[argc] == 0, guaranteed
 - "&x + 1 jumps the array, x + 1 jumps an element — pointer arithmetic strides by pointee size."
 - "cout << functionName prints 1: no void* conversion for function pointers, so bool wins."
 - "argv[argc] is guaranteed null — argv is a null-terminated array by the standard."
+- "A const reference is a read-only window, not a frozen object — another alias can still write."
+- "std::max/min return the first argument on ties — and returning const& means feeding them a temporary can dangle."
