@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 114 Solved · most recent: *Minimum Size Subarray Sum* (03/09/2026). W2 LC: 4/18.
+**Progress:** 115 Solved · most recent: *Trapping Rain Water* (03/09/2026). W2 LC: 5/18 (sliding-window block complete incl. the Hard).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -46,7 +46,7 @@
 | Two Pointers & Sliding Window | Rotate Array | Med | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Container With Most Water | Med | Solved | 28/08/2026 | 5 | 4 | NC250. Two pointers, move the shorter side. Proof: moving the taller side shrinks width and can't raise the min, so no candidate is lost. Max area 1e9 fits int. |
 | Two Pointers & Sliding Window | Boats to Save People | Med | Todo | | | | NC250 |
-| Two Pointers & Sliding Window | Trapping Rain Water | Hard | Todo | | | | NC250 |
+| Two Pointers & Sliding Window | Trapping Rain Water | Hard | Solved | 03/09/2026 | 15 | 4 | NC250, W2. Solved with prefix/suffix max arrays (O(n) space) — finds it intuitive. O(1) two-pointer: settle the side with SMALLER known max (`lmax <= rmax` comparison) — min() only needs its smaller arg exact, unexplored middle only raises the losing side. Prefer that form over height[l]<height[r] (needs an inductive proof). |
 | Two Pointers & Sliding Window | Contains Duplicate II | Easy | Todo | | | | NC250 |
 | Two Pointers & Sliding Window | Longest Substring Without Repeating Characters | Med | Solved | 28/08/2026 | 10 | 4 | NC250. Sliding window with set (shrink left until no dup). Better: array<int,256> last-seen index, left = max(left, last[c]+1); the >= left guard stops stale occurrences moving left backwards. |
 | Two Pointers & Sliding Window | Longest Repeating Character Replacement | Med | Solved | 03/09/2026 | 20 | 3 | NC250, W2. Window valid iff len - max_freq <= k. KEY: stale max_freq (never recomputed on shrink) is still correct — ans only improves on a new TRUE max, when window is valid; stale-max windows can't exceed a previously recorded valid one. Verbalize this proof. array<int,26> > unordered_map. O(n)/O(1). |
