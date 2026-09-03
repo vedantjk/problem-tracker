@@ -89,6 +89,13 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 - Why it exists: lets argv pass directly to APIs expecting null-terminated arrays (`execv(path, argv)`); portability history (some old compilers didn't set it — one more reason it's now nailed down in the standard).
 - Practice: use argc; keep the terminator fact in the back pocket.
 
+## unique_ptr ownership mechanics (gc "I'm moving in.", 02/09)
+- The owned object dies when the unique_ptr **currently holding the non-null pointer** dies — never "where it was created".
+- By-value `unique_ptr<A>` parameter = ownership **sink**: `x(std::move(p1))` move-constructs the param, p1 becomes null (guaranteed, → ub_catalog moved-from). Param is a local of x → destroyed at x's return → A deleted THERE. `~unique_ptr` on null = no-op, so p1's dtor at end of main prints nothing.
+- gc's "1324" snippet: 1 (ctor) · 3 (body) · **2 (param dies at end of x)** · 4. The wrong answer 1342 assumes ownership stayed with p1.
+- Signature flips the story: `x(const unique_ptr<A>&)` = borrow, no transfer → 1342 (A dies at end of main). Signature IS the ownership contract.
+- Nuance beyond gc: WHEN a parameter is destroyed is **implementation-defined** — end of function body (gcc/clang) or end of the caller's full expression (MSVC) [expr.call]. Both are before `<< 4`, so 1324 is robust here, but don't claim "at function return" as a standard guarantee.
+
 ## Compile errors vs UB vs impl-defined
 - CE: `int* p{5}` (literal address); `int* p{&constInt}`; `int&*` (pointer to reference); `f(&5)`; calling through fp with missing "default" arg; overloaded-name decay without target type.
 - UB: dereferencing wild/null/dangling; calling a null function pointer.
@@ -97,6 +104,8 @@ Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
 ## Questions (getcracked) / Quiz log
 - [x] &x + 1 vs x + 1 (array at 0, sizeof(int)=4) — 02/09 — ok (20, 4). Note gc's own explanation said "size of the pointer" for op two; correct reasoning is size of the POINTEE.
 - [x] In one out the other (int& + const int& aliasing same var) — 02/09 — ok (prints 1).
+- [ ] **MISSED 02/09: I'm moving in.** (unique_ptr by-value param) — answered 1342; A dies with the PARAM at end of x, not with p1 at end of main. Reason: tracked lifetime by where the object was created, not by who currently owns the pointer.
+  - **Anki**: front: "`x(unique_ptr<A> ptr)` called with `std::move(p1)` — when does ~A run?" back: "When ptr (the param) is destroyed at x's return — ownership moved in; p1 is null and its dtor is a no-op. By-value unique_ptr param = sink; const& = borrow (then A dies with p1)."
 
 ## Syntax anchors
 ```cpp

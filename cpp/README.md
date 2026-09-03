@@ -165,6 +165,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - top-level vs low-level const (deduction drop rules, auto* vs auto) → initialization_deduction
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
+- unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
 - uninitialized reads → initialization_deduction, ub_catalog
 - unsigned wrap (arithmetic + conversion) → types_conversions
 - while / do-while / for (full loop notes) → control_flow
