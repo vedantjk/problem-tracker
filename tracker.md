@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 116 Solved · most recent: *Car Fleet* (03/09/2026). W2 LC: 6/18.
+**Progress:** 117 Solved · most recent: *Online Stock Span* (03/09/2026). W2 LC: 7/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -67,7 +67,7 @@
 | Stack | Implement Queue using Stacks | Easy | Todo | | | | NC250 |
 | Stack | Asteroid Collision | Med | Todo | | | | NC250 |
 | Stack | Daily Temperatures | Med | Solved | 31/08/2026 | 10 | 4 | NC250. Monotonic decreasing stack of indices; pop while warmer, answer = i - popped. Each index pushed/popped once → O(n) amortized. |
-| Stack | Online Stock Span | Med | Todo | | | | NC250 |
+| Stack | Online Stock Span | Med | Solved | 03/09/2026 | 10 | 4 | NC250, W2. Monotonic strictly-decreasing stack of (index, price); span = idx - idx(last strictly greater). Equal prices pop (<=). Amortized O(1)/call (push+pop once each), worst single call O(n) — throughput vs tail latency point. Alt: store (price, span) and accumulate. |
 | Stack | Car Fleet | Med | Solved | 03/09/2026 | 20 | 3 | NC250, W2. Sort by position, reverse sweep on arrival time; strictly-slower-behind starts new fleet, ties merge. It's a monotonic stack keeping only the top. Float-free compare: cross-multiply (target-pi)*sj vs (target-pj)*si in long long. O(n log n). |
 | Stack | Simplify Path | Med | Todo | | | | NC250 |
 | Stack | Decode String | Med | Todo | | | | NC250 |
