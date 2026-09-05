@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 119 Solved · most recent: *Decode String* (05/09/2026). W2 LC: 9/18 (stack block complete).
+**Progress:** 120 Solved · most recent: *Merge Two Sorted Lists* (05/09/2026). W2 LC: 10/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -93,7 +93,7 @@
 | Linked List | Add Two Numbers | Med | Solved | 24/06/2026 | 5 | 4 | Linked list with a while loop. |
 | Linked List | Merge k Sorted Lists | Hard | Solved | 25/06/2026 | 10 | 3 | Have a queue and merge 2 at a time; check for empty lists. |
 | Linked List | Reverse Linked List | Easy | Solved | 31/08/2026 | 5 | 4 | NC250. prev/curr/next pointer walk. Lesson: ListNode* temp in the loop is a stack POINTER, not an allocation — no leak (pointers vs pointees). std::exchange one-liner variant exists. |
-| Linked List | Merge Two Sorted Lists | Easy | Todo | | | | NC250 |
+| Linked List | Merge Two Sorted Lists | Easy | Solved | 05/09/2026 | 10 | 4 | NC250, W2. In-place splice, stable (<= prefers l1), O(n+m)/O(1). Dummy-node idiom kills the head special case + trailing ifs (cur->next = l1 ? l1 : l2). Dummy = the tool for any delete/insert-at-head problem. |
 | Linked List | Linked List Cycle | Easy | Solved | 28/08/2026 | 3 | 5 | NC250. Floyd slow/fast. Fast gains 1 per step inside the cycle so it can't skip slow. Cycle-start proof already in Find the Duplicate Number. |
 | Linked List | Reorder List | Med | Todo | | | | NC250 |
 | Linked List | Remove Nth Node From End of List | Med | Todo | | | | NC250 |
