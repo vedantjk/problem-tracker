@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 118 Solved · most recent: *Asteroid Collision* (05/09/2026). W2 LC: 8/18.
+**Progress:** 119 Solved · most recent: *Decode String* (05/09/2026). W2 LC: 9/18 (stack block complete).
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -70,7 +70,7 @@
 | Stack | Online Stock Span | Med | Solved | 03/09/2026 | 10 | 4 | NC250, W2. Monotonic strictly-decreasing stack of (index, price); span = idx - idx(last strictly greater). Equal prices pop (<=). Amortized O(1)/call (push+pop once each), worst single call O(n) — throughput vs tail latency point. Alt: store (price, span) and accumulate. |
 | Stack | Car Fleet | Med | Solved | 03/09/2026 | 20 | 3 | NC250, W2. Sort by position, reverse sweep on arrival time; strictly-slower-behind starts new fleet, ties merge. It's a monotonic stack keeping only the top. Float-free compare: cross-multiply (target-pi)*sj vs (target-pj)*si in long long. O(n log n). |
 | Stack | Simplify Path | Med | Todo | | | | NC250 |
-| Stack | Decode String | Med | Todo | | | | NC250 |
+| Stack | Decode String | Med | Solved | 05/09/2026 | 20 | 3 | NC250, W2. Stack of (prefix, count): push on number, reset cur on '[', splice prev + cur*times on ']'. O(output). REPEAT TRAP: isdigit(char) is UB for negative chars — cast to unsigned char (same as Valid Palindrome). Accumulate times=times*10+(c-'0') over stoi. |
 | Stack | Maximum Frequency Stack | Hard | Todo | | | | NC250 |
 | Stack | Largest Rectangle In Histogram | Hard | Todo | | | | NC250 |
 | Binary Search | Find First and Last Position of Element in Sorted Array | Med | Solved | 23/06/2026 | 10 | 3 | lower_bound = first ≥ target, upper_bound = first > target. Check lower_bound; if end or ≠ target return {−1,−1}, else upper_bound−1. equal_range returns both at once. Manual: standard binary search with a first/last flag (first ⇒ right=mid−1, else left=mid+1). |
