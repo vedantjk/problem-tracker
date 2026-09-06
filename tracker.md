@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 127 Solved · most recent: *Capacity to Ship Packages* (06/09/2026). W2 LC: 17/18.
+**Progress:** 128 Solved · most recent: *K Closest Points to Origin* (06/09/2026). **W2 LC CLOSED 18/18.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -136,7 +136,7 @@
 | Heap / Priority Queue | Reorganize String | Med | Solved | 06/07/2026 | | | |
 | Heap / Priority Queue | Kth Largest Element In a Stream | Easy | Solved | 05/09/2026 | 10 | 4 | NC250, W2. Size-k min-heap of the k largest; top = gatekeeper = answer. Early-reject when val <= top at capacity. O(log k)/add. Reused add() in ctor. Watch size_t-vs-int compare. |
 | Heap / Priority Queue | Last Stone Weight | Easy | Todo | | | | NC250 |
-| Heap / Priority Queue | K Closest Points to Origin | Med | Todo | | | | NC250 |
+| Heap / Priority Queue | K Closest Points to Origin | Med | Solved | 06/09/2026 | 10 | 4 | NC250, W2. Min-heap of all n, pop k (O(n log n)); knew int fits (dist <= 2e8). Ladder: size-k MAX-heap O(n log k) (flip of Kth Largest gatekeeper) → nth_element O(n) avg = expected optimal (no output-order requirement). Store {dist, index} not vector copies. |
 | Heap / Priority Queue | Kth Largest Element In An Array | Med | Solved | 28/08/2026 | 15 | 3 | NC250. Min-heap size k O(n log k) (use greater<int>, not negation: -INT_MIN UB). Real answer: quickselect / nth_element O(n) avg; random pivot + 3-way partition to avoid O(n²) on sorted/duplicate input. nth_element = introselect. Write quickselect by hand. |
 | Heap / Priority Queue | Task Scheduler | Med | Todo | | | | NC250 |
 | Heap / Priority Queue | Single Threaded CPU | Med | Todo | | | | NC250 |
