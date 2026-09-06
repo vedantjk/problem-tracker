@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 121 Solved · most recent: *Remove Nth Node From End* (05/09/2026). W2 LC: 11/18.
+**Progress:** 122 Solved · most recent: *Find Minimum In Rotated Sorted Array* (05/09/2026). W2 LC: 12/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -84,7 +84,7 @@
 | Binary Search | Guess Number Higher Or Lower | Easy | Todo | | | | NC250 |
 | Binary Search | Search a 2D Matrix | Med | Todo | | | | NC250 |
 | Binary Search | Capacity to Ship Packages Within D Days | Med | Todo | | | | NC250 |
-| Binary Search | Find Minimum In Rotated Sorted Array | Med | Todo | | | | NC250 |
+| Binary Search | Find Minimum In Rotated Sorted Array | Med | Solved | 05/09/2026 | 10 | 3 | NC250, W2. FIRST ATTEMPT WRONG on [3,1,2]: right=mid-1 discarded mid when nums[mid]<=nums[right] (mid is a CANDIDATE there). Fixed with bank-and-discard: ans=min(ans,nums[mid]) then right=mid-1 — keeps the universal <= template. Rule: exclude mid only after proving it can't be the answer OR banking it. Compare vs nums[right] not nums[left] (left is ambiguous unrotated). |
 | Binary Search | Search In Rotated Sorted Array | Med | Solved | 31/08/2026 | 20 | 3 | NC250. Binary search: one half is always sorted — check nums[l]<=nums[m] to find it, then range-test target against the sorted half to pick a side. Kept l+(r-l)/2 discussion (constraints make l+r safe here). |
 | Binary Search | Search In Rotated Sorted Array II | Med | Todo | | | | NC250 |
 | Binary Search | Split Array Largest Sum | Hard | Todo | | | | NC250 |
