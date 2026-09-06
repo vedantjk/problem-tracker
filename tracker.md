@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 123 Solved · most recent: *Search a 2D Matrix* (05/09/2026). W2 LC: 13/18.
+**Progress:** 124 Solved · most recent: *Kth Largest Element In a Stream* (05/09/2026). W2 LC: 14/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -134,7 +134,7 @@
 | Heap / Priority Queue | Find Median from Data Stream | Hard | Solved | 26/07/2026 | 15 | 4 | Two heaps: max-heap for the lower half, min-heap for the upper half. Rebalance so their sizes differ by ≤1. Median = top of the larger heap, or the average of both tops when equal. Handle empty/edge cases in the balance step. |
 | Heap / Priority Queue | Find Servers That Handled Most Number of Requests | Hard | Solved | 26/07/2026 | 25 | 3 | Min-heap of (freeTime, serverId) for busy servers + an ordered set of free server ids. Per request: pop the heap to free servers with end ≤ arrival (move them into the set). Wrap-around assignment: lower_bound(i%k) in the free set, else begin(); if the set is empty, drop the request. Track per-server counts, return the max. |
 | Heap / Priority Queue | Reorganize String | Med | Solved | 06/07/2026 | | | |
-| Heap / Priority Queue | Kth Largest Element In a Stream | Easy | Todo | | | | NC250 |
+| Heap / Priority Queue | Kth Largest Element In a Stream | Easy | Solved | 05/09/2026 | 10 | 4 | NC250, W2. Size-k min-heap of the k largest; top = gatekeeper = answer. Early-reject when val <= top at capacity. O(log k)/add. Reused add() in ctor. Watch size_t-vs-int compare. |
 | Heap / Priority Queue | Last Stone Weight | Easy | Todo | | | | NC250 |
 | Heap / Priority Queue | K Closest Points to Origin | Med | Todo | | | | NC250 |
 | Heap / Priority Queue | Kth Largest Element In An Array | Med | Solved | 28/08/2026 | 15 | 3 | NC250. Min-heap size k O(n log k) (use greater<int>, not negation: -INT_MIN UB). Real answer: quickselect / nth_element O(n) avg; random pivot + 3-way partition to avoid O(n²) on sorted/duplicate input. nth_element = introselect. Write quickselect by hand. |
