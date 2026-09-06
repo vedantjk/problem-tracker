@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 122 Solved · most recent: *Find Minimum In Rotated Sorted Array* (05/09/2026). W2 LC: 12/18.
+**Progress:** 123 Solved · most recent: *Search a 2D Matrix* (05/09/2026). W2 LC: 13/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -82,7 +82,7 @@
 | Binary Search | Binary Search | Easy | Todo | | | | NC250 |
 | Binary Search | Search Insert Position | Easy | Todo | | | | NC250 |
 | Binary Search | Guess Number Higher Or Lower | Easy | Todo | | | | NC250 |
-| Binary Search | Search a 2D Matrix | Med | Todo | | | | NC250 |
+| Binary Search | Search a 2D Matrix | Med | Solved | 05/09/2026 | 15 | 3 | NC250, W2. Two searches (last row w/ first<=target, then in-row). Hesitated on min-vs-max banking — RULE: bank-and-go-right = last/largest, bank-and-go-left = first/smallest; monotone movement means plain ans=mid suffices, never min/max. Cleaner: flatten to 1D, matrix[mid/n][mid%n], plain exact-match. Two-phase is for 2D Matrix II. |
 | Binary Search | Capacity to Ship Packages Within D Days | Med | Todo | | | | NC250 |
 | Binary Search | Find Minimum In Rotated Sorted Array | Med | Solved | 05/09/2026 | 10 | 3 | NC250, W2. FIRST ATTEMPT WRONG on [3,1,2]: right=mid-1 discarded mid when nums[mid]<=nums[right] (mid is a CANDIDATE there). Fixed with bank-and-discard: ans=min(ans,nums[mid]) then right=mid-1 — keeps the universal <= template. Rule: exclude mid only after proving it can't be the answer OR banking it. Compare vs nums[right] not nums[left] (left is ambiguous unrotated). |
 | Binary Search | Search In Rotated Sorted Array | Med | Solved | 31/08/2026 | 20 | 3 | NC250. Binary search: one half is always sorted — check nums[l]<=nums[m] to find it, then range-test target against the sorted half to pick a side. Kept l+(r-l)/2 discussion (constraints make l+r safe here). |
