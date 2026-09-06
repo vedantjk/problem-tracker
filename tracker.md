@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 120 Solved · most recent: *Merge Two Sorted Lists* (05/09/2026). W2 LC: 10/18.
+**Progress:** 121 Solved · most recent: *Remove Nth Node From End* (05/09/2026). W2 LC: 11/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -96,7 +96,7 @@
 | Linked List | Merge Two Sorted Lists | Easy | Solved | 05/09/2026 | 10 | 4 | NC250, W2. In-place splice, stable (<= prefers l1), O(n+m)/O(1). Dummy-node idiom kills the head special case + trailing ifs (cur->next = l1 ? l1 : l2). Dummy = the tool for any delete/insert-at-head problem. |
 | Linked List | Linked List Cycle | Easy | Solved | 28/08/2026 | 3 | 5 | NC250. Floyd slow/fast. Fast gains 1 per step inside the cycle so it can't skip slow. Cycle-start proof already in Find the Duplicate Number. |
 | Linked List | Reorder List | Med | Todo | | | | NC250 |
-| Linked List | Remove Nth Node From End of List | Med | Todo | | | | NC250 |
+| Linked List | Remove Nth Node From End of List | Med | Solved | 05/09/2026 | 10 | 4 | NC250, W2. One pass: lead pointer n ahead from dummy, walk both till lead hits tail, prev->next skips. Deleted the node (good) but heap-allocated the dummy = leak — dummy goes on the STACK (ListNode dummy;), scope-bound scratch. |
 | Linked List | Copy List With Random Pointer | Med | Todo | | | | NC250 |
 | Linked List | Reverse Linked List II | Med | Todo | | | | NC250 |
 | Linked List | Reverse Nodes In K Group | Hard | Todo | | | | NC250 |
