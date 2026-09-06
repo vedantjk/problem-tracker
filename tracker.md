@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 124 Solved · most recent: *Kth Largest Element In a Stream* (05/09/2026). W2 LC: 14/18.
+**Progress:** 125 Solved · most recent: *Reorder List* (06/09/2026). W2 LC: 15/18.
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -95,7 +95,7 @@
 | Linked List | Reverse Linked List | Easy | Solved | 31/08/2026 | 5 | 4 | NC250. prev/curr/next pointer walk. Lesson: ListNode* temp in the loop is a stack POINTER, not an allocation — no leak (pointers vs pointees). std::exchange one-liner variant exists. |
 | Linked List | Merge Two Sorted Lists | Easy | Solved | 05/09/2026 | 10 | 4 | NC250, W2. In-place splice, stable (<= prefers l1), O(n+m)/O(1). Dummy-node idiom kills the head special case + trailing ifs (cur->next = l1 ? l1 : l2). Dummy = the tool for any delete/insert-at-head problem. |
 | Linked List | Linked List Cycle | Easy | Solved | 28/08/2026 | 3 | 5 | NC250. Floyd slow/fast. Fast gains 1 per step inside the cycle so it can't skip slow. Cycle-start proof already in Find the Duplicate Number. |
-| Linked List | Reorder List | Med | Todo | | | | NC250 |
+| Linked List | Reorder List | Med | Solved | 06/09/2026 | 10 | 3 | NC250, W2. Triple play: slow/fast middle, reverse back half from slow, interleave. Didn't sever first half — works because merge terminates at reversed tail's nullptr and last assignment overwrites the stale link; be ready to argue that, or cut with prevOfSlow->next=nullptr. |
 | Linked List | Remove Nth Node From End of List | Med | Solved | 05/09/2026 | 10 | 4 | NC250, W2. One pass: lead pointer n ahead from dummy, walk both till lead hits tail, prev->next skips. Deleted the node (good) but heap-allocated the dummy = leak — dummy goes on the STACK (ListNode dummy;), scope-bound scratch. |
 | Linked List | Copy List With Random Pointer | Med | Todo | | | | NC250 |
 | Linked List | Reverse Linked List II | Med | Todo | | | | NC250 |
