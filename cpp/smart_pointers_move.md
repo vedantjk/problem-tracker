@@ -215,7 +215,36 @@ std::unique_ptr<FILE, int(*)(FILE*)> file2{ std::fopen("x", "r"), &std::fclose }
 
 The misuses all come from mixing a raw pointer with the owner. Constructing two `unique_ptr`s from the same raw pointer produces a double delete. Deleting the raw pointer yourself while a `unique_ptr` still owns it produces a double delete when the owner is destroyed. Keeping a raw copy of `p.get()` past the owner's lifetime produces a dangling pointer. Using `make_unique` everywhere removes the raw pointer from the picture at the moment of creation, which removes the first two entirely.
 
+## std::shared_ptr
+
+`std::shared_ptr<T>` is the copyable owner. Any number of `shared_ptr`s may own one object, and the object is deleted when the last of them is destroyed or reset. That works because every `shared_ptr` to a given object refers to one shared control block holding the owner count. Copying a `shared_ptr` increments the count, destroying one decrements it, and whoever brings it to zero deletes the object. Moving a `shared_ptr` transfers the reference without touching the count, and the source becomes empty.
+
+The rule that follows from the control block is the one everyone gets wrong once: always create a new `shared_ptr` from an existing `shared_ptr`, never from the same raw pointer twice. Two `shared_ptr`s constructed from one raw pointer each allocate their own control block, each believes it is the sole owner, and the object is deleted twice.
+
+```cpp
+Resource* raw = new Resource;
+std::shared_ptr<Resource> p1{ raw };
+std::shared_ptr<Resource> p2{ raw };   // second control block: double delete
+std::shared_ptr<Resource> p3{ p1 };    // correct: shares p1's control block
+```
+
+Prefer `std::make_shared<T>(args...)`, available since C++11. It makes the mistake above impossible because the raw pointer never appears, and it is faster: constructing a `shared_ptr` from a raw pointer performs two allocations, one for the object already made by `new` and one for the control block, whereas `make_shared` allocates the object and the control block together in one block. That also puts the count next to the object, which helps locality. The one drawback of the combined allocation is that the object's storage cannot be released until the last `weak_ptr` also goes away, because the control block and the object share the block; for a large object with long-lived weak observers, the separate-allocation form frees the object sooner.
+
+A `shared_ptr` is two pointers, commonly sixteen bytes on a 64-bit target: one to the object and one to the control block. The control block holds the strong count, the weak count for `std::weak_ptr`, and the deleter and allocator if custom ones were supplied. Because the deleter lives in the control block rather than in the `shared_ptr`'s type, `shared_ptr<T>` is one type regardless of how the object will be destroyed, unlike `unique_ptr`, where the deleter is a template parameter. That is also why a `shared_ptr` can be created from a `unique_ptr` with any deleter: `std::shared_ptr<T> sp = std::move(up);` moves ownership in and stores the deleter. The reverse conversion does not exist, because a `shared_ptr` cannot prove it is the only owner. The guidance that follows is to return `unique_ptr` from factories; the caller can convert to shared ownership later, and nothing forces it.
+
+The counts are updated atomically, so copying and destroying `shared_ptr`s from several threads is safe, and two threads can each hold their own `shared_ptr` to one object without coordination. That is exactly as far as the guarantee goes. The object itself is not protected; two threads writing through their `shared_ptr`s race like any other shared data. And the atomic increments are not free: passing a `shared_ptr` by value costs an atomic increment on entry and an atomic decrement on exit, on a cache line shared by every owner. Pass `const std::shared_ptr<T>&` when the callee only needs to use the object and might copy the pointer, and pass `T&` or `T*` when it only uses the object, which is most functions. Take `shared_ptr` by value only where the callee will store a share.
+
+`std::shared_ptr<T[]>` gained proper array support in C++20; before that, managing an array through `shared_ptr` needed a custom deleter and had no `operator[]`. As with `unique_ptr`, a container is almost always the better choice. A `shared_ptr` can be null and converts to `bool` the same way; test before dereferencing.
+
+The price of shared ownership is that nobody knows when the object will die, so any owner that is never destroyed keeps it alive forever. The specific version of that problem is a cycle: two objects each holding a `shared_ptr` to the other never reach a count of zero. `std::weak_ptr` exists to break the cycle and is the next section.
+
 ## Errors and pitfalls
+
+Two `shared_ptr`s built from the same raw pointer have two control blocks and double-delete. Build the second from the first, or use `make_shared` so there is no raw pointer.
+
+A `shared_ptr` makes the count thread-safe, not the object. Concurrent writes through separate `shared_ptr`s still race.
+
+Passing `shared_ptr` by value where the callee does not keep a share pays two atomic operations for nothing. Pass a reference or a raw pointer.
 
 Constructing two `unique_ptr`s from one raw pointer, or calling `delete` on a pointer a `unique_ptr` owns, double-deletes. `make_unique` prevents both by never exposing the raw pointer.
 
@@ -285,6 +314,18 @@ It makes the class correct by default: the implicit destructor releases the reso
 
 One pointer with the default deleter or any stateless deleter, because an empty deleter takes no storage. A function-pointer deleter has to be stored, so that spelling is two words. I use a functor or a captureless lambda for custom deleters to keep it pointer-sized.
 
+### What is inside a shared_ptr and why does make_shared matter?
+
+Two pointers: one to the object and one to a control block holding the strong count, the weak count, and any custom deleter. Constructing from a raw pointer means two allocations, the object and the block; make_shared does one allocation holding both, which is faster and keeps the count next to the object. It also removes the raw pointer from the code, so the two-control-blocks double-delete cannot happen. The one cost is that the object's storage lives until the last weak_ptr goes, because it shares the block.
+
+### Is shared_ptr thread-safe?
+
+The reference count is. Copying and destroying shared_ptrs across threads is safe, and each thread can hold its own. The object it points to is not protected at all. And the atomic count updates are real cost on a contended cache line, which is why I pass a reference or raw pointer to functions that only use the object and reserve pass-by-value for functions that store a share.
+
+### Can you convert between unique_ptr and shared_ptr?
+
+unique_ptr to shared_ptr, yes, by moving it in; the deleter travels into the control block. shared_ptr to unique_ptr, no, because a shared_ptr cannot prove it is the only owner. So factories return unique_ptr and let callers decide whether to share.
+
 ## Practice history
 
 ### Reading
@@ -294,3 +335,4 @@ One pointer with the default deleter or any stateless deleter, because an empty 
 - learncpp 22.3 Move constructors and move assignment — read 07/09.
 - learncpp 22.4 std::move — read 07/09.
 - learncpp 22.5 std::unique_ptr — read 07/09.
+- learncpp 22.6 std::shared_ptr — read 07/09.

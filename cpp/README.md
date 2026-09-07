@@ -178,6 +178,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
 - smart pointers: copyable-with-count vs move-only fork (shared_ptr vs unique_ptr), why C++11 needed rvalue refs → smart_pointers_move
+- shared_ptr (control block, two-raw-pointer double delete, make_shared single allocation + weak_ptr caveat, 16 bytes, deleter in block not type, atomic count = thread-safe count not object, pass by const& or T*, unique→shared only) → smart_pointers_move
 - stack unwinding (search-then-unwind, dtors per frame, zero-cost tables) → error_handling
 - stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
 - static init order fiasco → functions_scope_lambdas (+ build_linkage)
