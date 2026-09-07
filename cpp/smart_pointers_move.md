@@ -106,7 +106,95 @@ void example()
 
 `std::make_unique<int>(42)` creates the int and returns its owner. `std::move(first)` expresses `first` as a source that may be moved from; it does not transfer the pointer by itself. Constructing `second` from that expression invokes `unique_ptr`'s move constructor, which transfers ownership and leaves `first` empty. Writing `auto second = first;` would request a copy and fail to compile. Other types define their own moved-from state, so the empty-source guarantee here is specific to `unique_ptr`. For the parameter-passing conventions, sink by value versus borrow by reference, see [pointers and references](pointers_references.md). For the state of a moved-from object, see the [UB catalog](ub_catalog.md).
 
+## Using std::move
+
+`std::move`, from `<utility>`, is a cast. It takes an lvalue and returns it as an rvalue reference, which is what lets overload resolution pick a move operation for an object that has a name. It performs no move itself; whether anything is transferred depends on the constructor or assignment that receives the result. See [value categories](value_categories.md) for the expression-level view.
+
+The canonical demonstration is swap. Written with copies, swapping two objects costs one copy construction and two copy assignments, each of which may allocate. Written with `std::move` it costs three moves, each a pointer shuffle:
+
+```cpp
+template <typename T>
+void mySwapMove(T& a, T& b)
+{
+    T tmp{ std::move(a) };   // move construct: a is now moved-from
+    a = std::move(b);        // move assign
+    b = std::move(tmp);      // move assign
+}
+```
+
+This is why sorting algorithms and container reallocation got faster in C++11 without any change to their source: every swap and every element relocation became a move for types that support it. The same cast is how a value is handed into a container without copying, `v.push_back(std::move(str))`, and how ownership passes between smart pointers, `auto q = std::move(p)`.
+
+The rule for when to write it: only on an object whose current value you no longer need. After the move the source is in a valid but unspecified state, so it may be assigned to, cleared, reset, or destroyed, but operations that depend on its contents, such as indexing or `front()`, are not safe without first establishing what it holds. Moving a value out and immediately moving a new value in, without touching the object in between, is a normal and safe pattern. The full moved-from contract is in the [UB catalog](ub_catalog.md).
+
+## Move constructors and move assignment
+
+A copy constructor and copy assignment operator take `const T&` and produce an independent object, which for an owning type means allocating a new resource and copying the contents. A move constructor and move assignment operator take `T&&` and instead take over the source's resource, leaving the source in a state that is safe to destroy. For a pointer-owning class the transfer is a pointer copy followed by nulling the source, which is what makes moving cheap.
+
+```cpp
+template <typename T>
+class Auto_ptr4
+{
+    T* m_ptr{};
+public:
+    Auto_ptr4(T* ptr = nullptr) : m_ptr(ptr) {}
+    ~Auto_ptr4() { delete m_ptr; }
+
+    Auto_ptr4(const Auto_ptr4& a)                 // copy: allocate and deep copy
+        : m_ptr(a.m_ptr ? new T(*a.m_ptr) : nullptr) {}
+
+    Auto_ptr4(Auto_ptr4&& a) noexcept             // move: steal and null the source
+        : m_ptr(a.m_ptr)
+    {
+        a.m_ptr = nullptr;
+    }
+
+    Auto_ptr4& operator=(const Auto_ptr4& a)
+    {
+        if (&a == this) return *this;
+        delete m_ptr;
+        m_ptr = a.m_ptr ? new T(*a.m_ptr) : nullptr;
+        return *this;
+    }
+
+    Auto_ptr4& operator=(Auto_ptr4&& a) noexcept
+    {
+        if (&a == this) return *this;
+        delete m_ptr;                             // release what we held
+        m_ptr = a.m_ptr;
+        a.m_ptr = nullptr;
+        return *this;
+    }
+
+    T& operator*() const { return *m_ptr; }
+    T* operator->() const { return m_ptr; }
+};
+```
+
+The move operations are selected when the initializer or right-hand side is an rvalue: a temporary such as a function's return value, or an lvalue the caller has cast with `std::move`. With an lvalue source the copy operations are selected. Overload resolution makes that choice, so `mainres = generateResource();` moves and `mainres = other;` copies, and nothing in the class body needs to test which case it is in.
+
+Nulling the source is not optional. Both objects have destructors, and if the source still pointed at the resource after the transfer, its destructor would delete what the destination now owns. The moved-from object must remain valid enough to be destroyed and assigned to; for this class that means holding null. The self-assignment check matters less for moves than for copies because `x = std::move(x)` is rare, but it costs one comparison and keeps the delete from destroying the very resource about to be stolen.
+
+Mark move operations `noexcept`. The reason is concrete rather than stylistic: `std::vector` must keep its strong exception guarantee when it reallocates, so it moves elements into the new buffer only if their move constructor cannot throw, and otherwise falls back to copying them. The library makes that decision with `std::move_if_noexcept`. A move constructor that is not declared `noexcept` makes every vector of that type copy on growth, silently throwing away the benefit of having written it. A move that only shuffles pointers and integers has nothing to throw, so the declaration is honest.
+
+## When the compiler writes the move operations for you
+
+The compiler generates an implicit move constructor and move assignment operator only when the class declares none of the following: a copy constructor, a copy assignment operator, a move constructor, a move assignment operator, or a destructor. Declaring any one of them, including declaring a destructor that does nothing, suppresses the implicit moves, and the class falls back to copying wherever a move would have been selected. This is a common cause of silently slow code: a class that adds a logging destructor and loses its move operations.
+
+The generated moves are memberwise. Each member is moved if its type has a move operation and copied otherwise. A raw pointer member is copied, not nulled, so a class that owns through a raw pointer cannot rely on the implicit move; it has to write both moves by hand, as `Auto_ptr4` does. A class that owns through members that already move correctly, such as `std::unique_ptr`, `std::string`, or `std::vector`, needs no user-declared special members at all. That is the rule of zero: keep ownership inside members that manage themselves and declare nothing.
+
+The rule of five is the other half. If a class declares or deletes any one of the copy constructor, copy assignment, move constructor, move assignment, or destructor, it should make a deliberate decision about all five, because declaring one changes what the compiler generates for the others. For an owning type that manages a raw resource, that means writing all five. Deleting the copy operations, `T(const T&) = delete;` and `T& operator=(const T&) = delete;`, is how a class states that it is move-only, which is exactly what `std::unique_ptr` does. Deleting the move operations as well makes the class immovable. Deleting only the moves while leaving copies is a trap: a deleted function still participates in overload resolution, so an rvalue source selects the deleted move and fails to compile instead of falling back to the copy.
+
+A local object returned by value is treated as an rvalue in the return statement even though its name is an lvalue, so `return res;` moves rather than copies when copy elision does not remove the operation entirely. Writing `return std::move(res);` is at best redundant and at worst defeats named return value optimization; see [copy elision](functions_scope_lambdas.md) and [value categories](value_categories.md).
+
+One implementation trap: writing move assignment as `std::swap(*this, other)` recurses forever, because `std::swap` is itself implemented with move construction and move assignment of the type. A class that wants swap-based assignment writes its own member swap that exchanges the members directly, then implements move assignment in terms of that.
+
 ## Errors and pitfalls
+
+A user-declared destructor, even an empty one, suppresses the implicit move operations. The class then copies where it would have moved, with no diagnostic. Either remove the destructor or declare the moves as `= default`.
+
+A move constructor without `noexcept` causes `std::vector` to copy elements on reallocation rather than move them.
+
+Forgetting to null the source's pointer in a move leaves two owners and produces a double delete when the source is destroyed.
 
 Deleting the same pointer twice is undefined behavior. It is the natural consequence of two owning objects holding one address, which is why an owning type must decide whether it is copyable or move-only before anything else.
 
@@ -132,8 +220,27 @@ It transferred ownership through its copy constructor and copy assignment, using
 
 Rvalue references let a class provide distinct copy and move overloads. With the usual overloads, a non-const temporary or a non-const object expressed through std::move can select the move operation. std::move only changes how the source expression is treated; the selected constructor or assignment performs the transfer. This lets unique_ptr prohibit copying while allowing ownership transfer.
 
+### What does a move constructor do, and why noexcept?
+
+It takes an rvalue reference to the source, takes over the source's resource, and leaves the source safe to destroy, which for a pointer-owning class means copying the pointer and nulling the original. I mark it noexcept because std::vector only moves elements during reallocation if the move cannot throw; otherwise it copies to preserve its strong exception guarantee. A pointer shuffle has nothing to throw, so the declaration is honest and it keeps vectors of the type fast.
+
+### When does the compiler generate move operations?
+
+Only when the class declares no copy constructor, no copy assignment, no move operations, and no destructor. Declaring any one of them, even an empty destructor, suppresses the implicit moves and the class silently copies instead. The generated moves are memberwise, and a raw pointer member is copied rather than nulled, so a class that owns through a raw pointer has to write its moves by hand. If ownership lives in members like unique_ptr or string, I declare nothing and let the compiler do it, which is the rule of zero.
+
+### What is the rule of five?
+
+If I declare or delete any of the copy constructor, copy assignment, move constructor, move assignment, or destructor, I should decide about all five, because declaring one changes what the compiler generates for the rest. Deleting the two copy operations is how I make a type move-only. Deleting the moves while keeping copies is a trap, because a deleted move still wins overload resolution for an rvalue and the code fails to compile instead of copying.
+
+### Should you write return std::move(local)?
+
+No. A local returned by value is already treated as an rvalue in the return statement, so it moves without the cast, and copy elision may remove the operation entirely. Adding std::move can prevent named return value optimization, so it is redundant at best and slower at worst.
+
 ## Practice history
 
 ### Reading
 
 - learncpp 22.1 Introduction to smart pointers and move semantics — read 07/09.
+- learncpp 22.2 Rvalue references — read 07/09 (binding table and named-is-lvalue rule live in value_categories.md).
+- learncpp 22.3 Move constructors and move assignment — read 07/09.
+- learncpp 22.4 std::move — read 07/09.

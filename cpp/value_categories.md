@@ -92,7 +92,9 @@ int& alias = reference;             // OK: reference is an lvalue expression.
 int&& other = std::move(reference); // OK: the initializer is an xvalue.
 ```
 
-These declarations do not move an integer into a new object. They bind references to the same materialized integer. The literal's temporary remains alive for the lifetime extended by the initial local binding.
+These declarations do not move an integer into a new object. They bind references to the same materialized integer. The literal's temporary remains alive for the lifetime extended by the initial local binding. A non-const rvalue reference also permits modification through it, so after `int&& rref{ 5 };` the assignment `rref = 10;` compiles and changes the materialized temporary, which now holds ten.
+
+Returning an rvalue reference from a function is almost always wrong for the same reason returning an lvalue reference to a local is wrong: the referent must outlive the call, and an rvalue reference typically names something that is about to expire. Return by value and let the caller move if needed.
 
 ## Function calls and overload selection
 

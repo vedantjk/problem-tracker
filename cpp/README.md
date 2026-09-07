@@ -25,7 +25,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [pointers_references.md](pointers_references.md) | pointers vs references, null/dangling/wild, const×pointer matrix, function pointers, pass by address, nullptr_t overloads |
 | [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
-| [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references, unique_ptr move example, std::move versus the move operation, shared_ptr/weak_ptr overview |
+| [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references, unique_ptr move example, std::move versus the move operation (swap, push_back, when to use), move ctor/assign (steal-and-null, noexcept + vector), implicit move rules, rule of five/zero, implicit move on return, shared_ptr/weak_ptr overview |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
@@ -128,8 +128,12 @@ For a missed question, make an Anki card with the question on the front and a sh
 - placement new (construct in existing storage; keep its returned pointer; buffer owner releases storage) → allocators
 - pointer validation on free (uintptr_t explained, range/alignment/magic checks, null contract, exactness limits) → allocators
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
+- move constructor / move assignment (syntax, steal-and-null, when selected, self-move check, swap recursion trap) → smart_pointers_move
+- implicit move operations (suppressed by any user-declared copy/move/dtor; memberwise; raw pointer copied not nulled) → smart_pointers_move
+- implicit move on return (local lvalue treated as rvalue; don't write return std::move) → smart_pointers_move, value_categories
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
+- noexcept on move operations (vector reallocation, move_if_noexcept, strong exception guarantee) → smart_pointers_move
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
 - cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
 - nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t (prvalue, not a pointer type) → pointers_references
@@ -157,6 +161,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - references: sizeof(int&) vs reference members → memory_layout
 - reinterpret_cast legal-pattern checklist → bits_punning
 - RAII for heap memory (why smart pointers exist; early return / exception skips delete) → smart_pointers_move (unwinding: error_handling)
+- rule of five / rule of zero (declare one special member, decide all five; deleted move blocks copy fallback) → smart_pointers_move
+- rvalue references (syntax, binding rules, lifetime extension, modify through non-const, named is lvalue, don't return one) → value_categories
 - reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
 - rethrow (bare throw vs throw e slicing) → error_handling
