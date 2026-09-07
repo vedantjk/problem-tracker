@@ -307,6 +307,10 @@ The entries below preserve the original practice record. Use the explanations ab
 - 30/08 MISS + 31/08 REPEAT MISS: `auto& b = f()` where f returns `const T&` — said `T&` both times. auto& keeps const; deduction never produces an illegal binding. **Twice-missed: drill this.**
 - 31/08: bit_cast sizes + `auto&`/`const auto&` temporary pair (Q11) — all ok.
 
+### Questions (getcracked)
+
+- [x] Constipated constexpr — 07/09 — ok. Remove `static_assert(c > 0)`: a parameter is never a constant expression, even in a constexpr function, because the body must also serve run-time calls. To enforce the condition at compile time, make it a template parameter, or `throw` on violation, which is ill-formed during constant evaluation and a real exception at run time; `consteval` makes every call checked.
+
 ### Reading
 
 - learncpp 5.5 Constant expressions, 5.6 Constexpr variables — read 07/09.
