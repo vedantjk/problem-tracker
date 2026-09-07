@@ -6,6 +6,8 @@ A pointer is an object whose value can identify an object or function, a positio
 
 For an ordinary object pointer, dereferencing a valid pointer yields an lvalue referring to its pointee. Thus `*(&x)` refers to `x`. The symbols depend on context: `&` can declare a reference, take an address, or perform bitwise AND; `*` can declare a pointer, dereference one, or multiply.
 
+The address-of operator produces a typed pointer value, not a bare address. C++ has no address literals, so for an `int x`, the expression `&x` is a prvalue of type `int*` whose value is x's address. Printing `typeid(&x).name()` shows a pointer type (GCC's mangled spelling is `Pi`, pointer to int), and this typing is why `&x` participates in overload resolution, deduction, and pointer arithmetic as an `int*` rather than as a number.
+
 ```cpp
 int x = 5, y = 6;
 int* p = &x;
