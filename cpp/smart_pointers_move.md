@@ -242,7 +242,50 @@ The counts are updated atomically, so copying and destroying `shared_ptr`s from 
 
 The price of shared ownership is that nobody knows when the object will die, so any owner that is never destroyed keeps it alive forever. The specific version of that problem is a cycle: two objects each holding a `shared_ptr` to the other never reach a count of zero. `std::weak_ptr` exists to break the cycle and is the next section.
 
+## Circular references and std::weak_ptr
+
+Reference counting has one blind spot: a cycle. If object A holds a `shared_ptr` to B and B holds a `shared_ptr` to A, then when every outside owner goes away each object still has a count of one, held by the other, and neither is ever deleted. The classic example is two `Person` objects that partner up by storing a `shared_ptr` to each other. The degenerate form is an object that stores a `shared_ptr` to itself; a single object can then keep itself alive forever. Nothing crashes, nothing is reported, the memory is simply never returned, and a leak detector will show both objects still owned at exit.
+
+```cpp
+struct Person {
+    std::shared_ptr<Person> m_partner;   // A owns B, B owns A: neither count reaches zero
+};
+auto lucy  = std::make_shared<Person>();
+auto ricky = std::make_shared<Person>();
+lucy->m_partner  = ricky;
+ricky->m_partner = lucy;
+// lucy and ricky go out of scope: each Person's count drops from 2 to 1, never to 0
+```
+
+`std::weak_ptr<T>` breaks the cycle by observing without owning. It is created from a `shared_ptr` or another `weak_ptr`, never from a raw pointer, and it refers to the same control block but increments the weak count rather than the strong count. The object is deleted when the strong count reaches zero regardless of how many `weak_ptr`s exist. Replacing one side of the cycle with a `weak_ptr`, so A owns B and B merely observes A, lets both be freed when the outside owners are gone. The general rule for trees and graphs is that ownership points one way, typically parent to child, and back-pointers are weak.
+
+A `weak_ptr` cannot be used directly; it has no `operator*` or `operator->`, because the object might be gone. To use it you call `lock()`, which returns a `shared_ptr`: a fresh owner if the object is still alive, or an empty `shared_ptr` if it has been destroyed. That is the whole safety story. A raw back-pointer to a destroyed object is a dangling pointer that still looks valid; a `weak_ptr` to a destroyed object says so.
+
+```cpp
+struct Person {
+    std::weak_ptr<Person> m_partner;                      // observes, does not own
+
+    std::shared_ptr<Person> getPartner() const {
+        return m_partner.lock();                          // owner while in use, or empty
+    }
+};
+
+if (auto p = person.getPartner()) { /* p keeps the partner alive in this scope */ }
+```
+
+`expired()` reports whether the strong count is zero. Prefer `lock()` and test the result over `expired()` followed by `lock()`: in a program with other threads, the object can die between the two calls, whereas `lock()` is an atomic check-and-increment on the control block and either gives you an owner or does not. The result of `lock()` is a real `shared_ptr`, so holding it costs an atomic increment and keeps the object alive; take it, use it, let it go.
+
+Two consequences of the weak count. First, the control block itself lives until both counts are zero, so a `weak_ptr` keeps the control block alive after the object is gone. With `make_shared`, where the object and the block share one allocation, that means the object's storage is not returned until the last `weak_ptr` dies, even though the object has been destroyed. Second, `std::enable_shared_from_this<T>` is implemented with a `weak_ptr` member: a class that inherits from it can call `shared_from_this()` inside a member function to obtain a `shared_ptr` that shares the existing control block rather than starting a second one, which is the only safe way for an object to hand out ownership of itself. Calling it on an object not currently owned by a `shared_ptr` throws `std::bad_weak_ptr`.
+
+Uses beyond cycle-breaking are anywhere you want to refer to something without extending its life: caches that should not keep entries alive, observer lists, and back-pointers. A `weak_ptr` is the same size as a `shared_ptr`, two words.
+
 ## Errors and pitfalls
+
+Two `shared_ptr` members pointing at each other, or a `shared_ptr` member pointing at its own object, is a leak with no symptom except memory never returned. Make one direction weak.
+
+A `weak_ptr` has no `->`; call `lock()` and test the returned `shared_ptr`. Do not `expired()` then `lock()` in threaded code.
+
+`shared_from_this()` on an object that is not owned by a `shared_ptr` throws `std::bad_weak_ptr`; in particular it cannot be called from the constructor.
 
 Two `shared_ptr`s built from the same raw pointer have two control blocks and double-delete. Build the second from the first, or use `make_shared` so there is no raw pointer.
 
@@ -330,6 +373,22 @@ The reference count is. Copying and destroying shared_ptrs across threads is saf
 
 unique_ptr to shared_ptr, yes, by moving it in; the deleter travels into the control block. shared_ptr to unique_ptr, no, because a shared_ptr cannot prove it is the only owner. So factories return unique_ptr and let callers decide whether to share.
 
+### How does a shared_ptr cycle leak, and how do you fix it?
+
+Two objects that own each other through shared_ptr each hold the other's count at one after every outside owner is gone, so neither is deleted. There is no symptom other than memory never returned. I make one direction a weak_ptr, which refers to the same control block but does not count as an owner, so the objects are freed when the real owners go. The rule of thumb is ownership flows one way and back-pointers are weak.
+
+### How do you use a weak_ptr?
+
+I call lock(), which returns a shared_ptr: an owner if the object is alive, empty if not. I test that result rather than calling expired() first, because in threaded code the object can die between the two calls, while lock() is one atomic check-and-increment. A weak_ptr has no arrow operator on purpose, since the object might be gone.
+
+### What does a weak_ptr keep alive?
+
+Not the object, but the control block. That matters with make_shared, where the object and the block are one allocation: the object is destroyed when the last shared_ptr goes, but its storage is not returned until the last weak_ptr goes too.
+
+### What is enable_shared_from_this for?
+
+It lets an object hand out a shared_ptr to itself that shares the existing control block instead of creating a second one, which would double-delete. It is implemented with a weak_ptr member that the first shared_ptr owner fills in. Calling shared_from_this on an object nobody owns yet, including from its constructor, throws bad_weak_ptr.
+
 ## Practice history
 
 ### Questions (getcracked)
@@ -346,3 +405,4 @@ unique_ptr to shared_ptr, yes, by moving it in; the deleter travels into the con
 - learncpp 22.4 std::move — read 07/09.
 - learncpp 22.5 std::unique_ptr — read 07/09.
 - learncpp 22.6 std::shared_ptr — read 07/09.
+- learncpp 22.7 Circular dependency issues with shared_ptr, and weak_ptr — read 07/09.

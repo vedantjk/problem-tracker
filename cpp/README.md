@@ -56,6 +56,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - catch matching (no conversions, derived→base, const&) / catch-all must be last → error_handling
 - braces: auto x{1,2} / initializer_list → initialization_deduction
 - char arithmetic & promotion → types_conversions
+- circular reference / shared_ptr cycle leak (self-reference case; fix with weak_ptr one direction) → smart_pointers_move
 - comma operator (precedence, return a,b) → expressions
 - comments don't nest / #if 0 → build_linkage
 - const return-by-value can block moves (distinguish direct prvalue construction) → initialization_deduction
@@ -206,6 +207,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - unique_ptr<std::byte[]> as buffer owner (verify 24-byte layout; matching delete[]; no ownership flag) → allocators
 - uninitialized reads → initialization_deduction, ub_catalog
 - unsigned wrap (arithmetic + conversion) → types_conversions
+- weak_ptr (cycle breaking, lock() over expired(), keeps control block not object, make_shared storage caveat, enable_shared_from_this / bad_weak_ptr) → smart_pointers_move
 - while / do-while / for (full loop notes) → control_flow
 - vexing parse → initialization_deduction
 - virtual inheritance sizes → memory_layout
