@@ -155,7 +155,9 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - static local in generic lambda (per-instantiation) → functions_scope_lambdas
 - static members (not in sizeof) → memory_layout
 - std::function costs / bad_function_call → functions_scope_lambdas
+- string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
+- SSO (small string optimization; data() inside the object) → memory_layout
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas

@@ -36,6 +36,12 @@
 - **Why exiting leaks nothing**: two levels of memory management — the malloc library manages the heap *within* the process's address space; the OS hands out pages and **reclaims all of them at process death** regardless of free. So short-lived-program leaks are "fine" (bad habit); leaks kill long-running servers... and the OS itself has nobody to clean up after it.
 - **14.5 preview**: malloc/free are *library* calls layered on system calls — `brk`/`sbrk` (move the heap's end, never call directly) and `mmap` (anonymous regions). `calloc` = malloc + zero; `realloc` = grow by new-region + copy.
 
+### String literals vs std::string temporaries — location × value category (07/09, verified)
+- `"hello"` = `const char[N]` (NUL incl.), **static storage in .rodata**, alive all program — the expression refers to a PRE-EXISTING object ⇒ **lvalue**. `&"hello"` legal (`const char(*)[6]`); identical literals dedup'd by the linker (same address — unspecified, don't rely). Must be an lvalue: decay hands out &arr[0], and only existing objects have addresses. (`42` fits in an instruction as an immediate; a char array can't.)
+- `std::string("hello")` / `s1+s2` / `getName()` = expression CREATES a fresh nameless object ⇒ **prvalue**; dies at end of full expression. Rvalue-ness = no identity + imminent death = safe to move from. NOT about location!
+- Where a std::string lives (verified, -O0): the OBJECT (ptr/size/cap + SSO buffer) on the **stack** — temporaries materialize in the frame right beside named locals; contents **inside the object** for short strings (`small.data()` = `&small` + 16) or on the **heap** for long ones (`big.data()` in a different region). Three locations: .rodata source → stack object → heap payload.
+- Corollary: value category is a property of EXPRESSIONS, not objects/types/locations. A named std::string on the stack is an lvalue; the temporary in the very next stack slot is an rvalue.
+
 ### Why `x->foo()` can be slower than `y.foo()` (gc question, 01/09)
 Excluding the `new` itself, three layers (in increasing importance):
 1. **Naive indirection**: `x->foo()` = `(*x).foo()` — load the pointer, then access the object: two memory touches vs one. BUT with optimization x sits in a register, so at the callsite the generated code is often *identical* to the stack case. This reason mostly exists at -O0. (gc's own caveat.)
