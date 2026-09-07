@@ -138,6 +138,22 @@ Ordinary `new` acquires storage and then constructs; placement new skips the fir
 
 Null returns as a no-op. Then range and alignment checks using integer addresses, then a magic tag in the header. The tag is a constant meaning "live chunk written by this allocator," and zeroing it on free makes a double free fail the same check. Exact validation would need a side table or a chain walk, which is the metadata a bump allocator exists to avoid; if I want the canary stronger I make it address-dependent.
 
+### How would you support individual free calls in LIFO order on a stack allocator?
+
+The pointer being freed must be the top allocation, and freeing it moves the cursor back to where that allocation began, so the core is `offset_ = p - buf_`. What has to be added is a way to verify the pointer really is the top, because a middle free would silently corrupt everything after it. The cheapest check takes the size as well and confirms `p + size` equals the current cursor, which is the `std::allocator` and `std::pmr` convention. Keeping the last pointer handed out allows one level of pop. Writing the previous cursor as a small header before each allocation allows repeated pops at eight bytes each. Most real arenas skip per-pointer free entirely and offer mark and rewind, which is LIFO by construction, frees any number of allocations at once, and needs no validation because a mark is just an offset.
+
+### What happens if align is not a power of two?
+
+`std::align` requires a power of two and the behavior is undefined otherwise, so it cannot simply be passed through. If the specification guarantees a power of two, a violation is a programmer error and belongs in an assert. If the API is public, reject with `nullptr` or throw. If the API wants to be forgiving, round up to the next power of two, since a stricter alignment satisfies a looser one. Zero must be checked separately, because `align & (align - 1)` is zero for zero and `align - 1` wraps.
+
+### How does a stack allocator compare to alloca?
+
+Both hand out stack memory without the heap, and everything else differs. `alloca` carves space out of the current function's frame, so it is freed only when that function returns. It cannot be reset, cannot be shared with a callee, grows the frame on every call inside a loop, reports nothing on exhaustion, is a compiler extension rather than standard C++, and interferes with inlining. A stack allocator has a fixed compile-time capacity, an explicit lifetime tied to an object, a reset, a failure return, and can be passed by reference so many functions allocate from one arena. `alloca` is scoped to a frame and uncontrollable; a stack allocator is scoped to an object and explicit.
+
+### What is the purpose of std::max_align_t as the default alignment?
+
+`std::max_align_t` is a type whose alignment is the strictest any fundamental type needs, sixteen on x86-64. Defaulting to `alignof(std::max_align_t)` means a caller who does not specify gets memory suitable for any standard type, which is the same promise `malloc` and `new` make. Callers name an alignment only for over-aligned requests such as a cache line or a SIMD vector. It is also the right alignment for the buffer itself, so a default request at offset zero never needs padding. The related constant `__STDCPP_DEFAULT_NEW_ALIGNMENT__` is what `operator new` guarantees and is the same sixteen on this platform.
+
 ## Practice history
 
 ### getcracked problems
