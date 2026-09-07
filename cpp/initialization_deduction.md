@@ -89,6 +89,23 @@ constexpr int g{ cmax(5, 6) }; // OK: constexpr function with constant arguments
 
 The rule of thumb: use `constexpr` for any constant whose initializer is a constant expression, and `const` for a constant whose value is only known at run time, such as one computed from input or from a non-constexpr call. Types that allocate, such as `std::string` and `std::vector`, generally cannot be `constexpr` variables; C++20 allows them inside a constant evaluation only if the allocation is freed before the evaluation ends, so a `constexpr std::string` at namespace scope remains ill-formed. Use `std::string_view` or `std::array` for compile-time data.
 
+## constexpr functions, consteval, and the four keywords side by side
+
+A `constexpr` function is one that *may* be evaluated during compilation. Called with constant arguments in a context that needs a constant expression, it runs at compile time; called with run-time arguments, or in a context that does not require a constant, it is an ordinary function. The same body serves both, which is the point: `constexpr int cmax(int x, int y)` can size an array and can also be called on user input. A `constexpr` member function may additionally be `const`, and the two keywords answer different questions: `constexpr` says the call can be a constant expression, `const` says the call does not modify the object. A non-const `constexpr` member function is allowed to modify its object during constant evaluation, so a temporary built and mutated inside a `constexpr` function can still produce a constant result.
+
+`consteval`, added in C++20, applies only to functions and means the call *must* be a constant expression. Such a function is called an immediate function. It is the replacement for macros that compute values: `consteval int sum(int a, int b)` is fine in `sum(3, 4)` and a compile error in `sum(runtimeValue, 4)`. There are no `consteval` variables, and the address of an immediate function cannot be taken, since it does not exist at run time.
+
+`constinit`, also C++20, applies only to variables with static or thread storage duration and requires that their initialization be static, so it diagnoses the hidden dynamic initialization that causes the static initialization order problem. It does not make the variable const: a `constinit int global` may be assigned later, and precisely because it may change, it is *not* usable in constant expressions, so `std::array<int, global>` fails. Combinations follow from the meanings. `constinit const` compiles and is redundant with `constexpr` in effect. `constexpr constinit` does not compile, because `constexpr` already implies constant initialization and constness. `const constexpr` compiles and the `const` is redundant.
+
+| | Automatic local | Static or thread-local | Function | Usable in constant expressions |
+|---|---|---|---|---|
+| `const` | yes | yes | member functions only | only integral or enumeration types with a constant initializer |
+| `constexpr` | yes | yes | yes, may run at run time too | yes |
+| `consteval` | no | no | yes, must run at compile time | the call result, yes |
+| `constinit` | no | yes, forces static initialization | no | no, the variable may change |
+
+The way to keep them apart: `const` is about whether the *object* may change, `constexpr` is about whether a value or call *may* be computed at compile time, `consteval` is about whether a call *must* be, and `constinit` is about *when* a static is initialized without saying anything about whether it may change later.
+
 ## const, volatile, and return values
 
 Top-level const qualifies the object itself, as in `int* const p`. Low-level const describes the accessed object, as in `const int* p`. A read-only pointer or reference does not make the underlying object immutable through all aliases.
@@ -293,3 +310,4 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Reading
 
 - learncpp 5.5 Constant expressions, 5.6 Constexpr variables — read 07/09.
+- cppstories "const vs constexpr vs consteval vs constinit in C++20" — read 07/09.

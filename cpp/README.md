@@ -63,6 +63,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 - const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction
 - const vs constexpr vs constinit (globals) → initialization_deduction
 - constant expressions (what qualifies, required contexts, as-if optional folding, const-integral exception vs const double) → initialization_deduction
+- constexpr functions (may run at compile time or run time; constexpr vs const member functions) → initialization_deduction
+- consteval / immediate functions (must be compile time, functions only, no address) → initialization_deduction
+- const / constexpr / consteval / constinit four-way table; constinit not usable in constant expressions; keyword combinations → initialization_deduction
 - constexpr variables (must have constant initializer, implicitly const, not part of the type, any literal type, no params, string/vector limits) → initialization_deduction
 - cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
