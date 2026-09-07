@@ -393,9 +393,9 @@ It lets an object hand out a shared_ptr to itself that shares the existing contr
 
 ### Questions (getcracked)
 
-- [ ] shared_ptr<void> with custom deleters + std::swap — 07/09 — result not reported. Answer `X() Y() foo ~X() bar ~Y()`: reverse destruction order (ptr2 first), swap moves control-block pointers so deleters follow objects; works because the raw-pointer constructor is a template and erases object type and deleter into the control block. Platform text is sloppy: `std::unique_ptr ptr(new X())` without `<void>` is a CTAD compile error, and `unique_ptr<void>` fails a `static_assert`, not a runtime assertion.
+- [x] shared_ptr<void> with custom deleters + std::swap — 07/09 — ok. Answer `X() Y() foo ~X() bar ~Y()`: reverse destruction order (ptr2 first), swap moves control-block pointers so deleters follow objects; works because the raw-pointer constructor is a template and erases object type and deleter into the control block. Platform text is sloppy: `std::unique_ptr ptr(new X())` without `<void>` is a CTAD compile error, and `unique_ptr<void>` fails a `static_assert`, not a runtime assertion.
 
-- [ ] Who lives here? (control block contents) — 07/09 — result not reported. Answer 4: strong count, weak count, deleter, allocator. Plus, with make_shared/allocate_shared, the managed object itself sits in the same block.
+- [x] Who lives here? (control block contents) — 07/09 — ok. Answer 4: strong count, weak count, deleter, allocator. Plus, with make_shared/allocate_shared, the managed object itself sits in the same block.
 
 ### Reading
 
