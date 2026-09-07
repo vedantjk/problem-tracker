@@ -24,6 +24,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [pointers_references.md](pointers_references.md) | pointers vs references, null/dangling/wild, const×pointer matrix, function pointers, pass by address, nullptr_t overloads |
 | [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
+| [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references; later: move ctors, std::move, unique_ptr/shared_ptr/weak_ptr |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose (by what "free" means), address alignment with headers, std::align, placement new in/reinterpret_cast out, std::byte, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
@@ -42,6 +43,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - ASCII anchors ('A'=65, 'a'=97, '0'=48) → types_conversions
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
+- auto_ptr (copy-as-move, pass-by-value steals, delete not delete[], deprecated C++11 / removed C++17) → smart_pointers_move
 - bump allocator (no headers, no per-pointer free; "Bump Memory Allocator" problem is a mislabeled stack allocator) → allocators
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
@@ -70,6 +72,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
+- double delete from shallow-copied owning pointer → smart_pointers_move
 - early return → control_flow
 - endian / std::endian → bits_punning
 - endl vs '\n' → build_linkage
@@ -150,6 +153,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - promotion flips comparison (unsigned short a-b) → types_conversions
 - references: sizeof(int&) vs reference members → memory_layout
 - reinterpret_cast legal-pattern checklist → bits_punning
+- RAII for heap memory (why smart pointers exist; early return / exception skips delete) → smart_pointers_move (unwinding: error_handling)
 - reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
 - rethrow (bare throw vs throw e slicing) → error_handling
@@ -163,6 +167,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - signature (excludes return type) → build_linkage
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
+- smart pointers: copyable-with-count vs move-only fork (shared_ptr vs unique_ptr), why C++11 needed rvalue refs → smart_pointers_move
 - stack unwinding (search-then-unwind, dtors per frame, zero-cost tables) → error_handling
 - stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
 - static init order fiasco → functions_scope_lambdas (+ build_linkage)
