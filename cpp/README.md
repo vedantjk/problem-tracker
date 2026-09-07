@@ -58,6 +58,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - char arithmetic & promotion → types_conversions
 - circular reference / shared_ptr cycle leak (self-reference case; fix with weak_ptr one direction) → smart_pointers_move
 - comma operator (precedence, return a,b) → expressions
+- conditional operator value category (lvalue only if both branches same-type lvalues; mixed → prvalue copy, const& binds temporary not x) → expressions
 - comments don't nest / #if 0 → build_linkage
 - const return-by-value can block moves (distinguish direct prvalue construction) → initialization_deduction
 - const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction

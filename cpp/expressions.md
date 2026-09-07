@@ -44,7 +44,7 @@ Comma expressions are useful in a for-loop update with multiple counters. `retur
 
 The conditional operator selects one of two expressions. Arithmetic branches use a common type, so `true ? -1 : 2u` produces an unsigned result. Its type rules also cover class types, pointers, and void expressions; they are broader than arithmetic conversion alone.
 
-When both branches are same-type lvalues, the conditional result can itself be an lvalue: `(condition ? a : b) = 5` writes to the selected object. Parenthesize a conditional used with stream insertion, because `std::cout << condition ? "yes" : "no"` does not group as intended.
+When both branches are same-type lvalues, the conditional result can itself be an lvalue: `(condition ? a : b) = 5` writes to the selected object. When the branches differ in value category, the result is a prvalue, which means a copy, and that decides what a reference bound to the conditional actually refers to. In `int x = 1; const int& y = x > 0 ? x : 1;`, the branches are an lvalue and a prvalue, so the whole conditional is a prvalue holding a copy of x's value at that moment; `y` binds to that materialized temporary with its lifetime extended, not to `x`. After `x = 2;` the output is `21`, not `22`. Had the second branch been an lvalue int as well, such as another variable, the conditional would have been an lvalue and `y` would have aliased `x`. The result is decided by the branches' categories, not by which branch the condition picks at run time. Parenthesize a conditional used with stream insertion, because `std::cout << condition ? "yes" : "no"` does not group as intended.
 
 ## Operator overloading
 
@@ -111,6 +111,7 @@ The entries below preserve the original practice record. Use the explanations ab
 
 - [ ] One after the other — 30/08 — MISSED: `++x * x++` — didn't flag unsequenced mod+read UB.
 - [ ] Munch munch munch! — 30/08 — MISSED: `x+++++y` — knew the principle, mis-split the greedy scan.
+- [ ] The const or the ? — 07/09 — MISSED: `const int& y = x > 0 ? x : 1; x = 2;` prints `21`, answered `22`. Branches are lvalue and prvalue, so the conditional is a prvalue copy and `y` binds to a lifetime-extended temporary, not to `x`. Anki: "`const int& y = cond ? x : 1;` — does y alias x?" / "No. Mixed-category branches make the conditional a prvalue; y binds to a temporary copy. Only same-type lvalue branches give an lvalue result."
 
 ### Quiz log (Claude)
 
