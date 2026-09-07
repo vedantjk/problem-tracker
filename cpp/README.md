@@ -196,6 +196,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - std::move (expression cast versus actual move; named rvalue references) → value_categories, smart_pointers_move
 - string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
+- std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → initialization_deduction
 - SSO (small string optimization; data() inside the object) → memory_layout
 - std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators
 - std::byte (raw-memory type, bitwise operations, representation access, byte-stride pointer) → allocators

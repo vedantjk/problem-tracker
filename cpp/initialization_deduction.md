@@ -26,6 +26,8 @@ List-initialization rejects narrowing conversions. `int x{4.5};` is invalid even
 
 Braces are useful, but their constructor-selection rules matter. `std::vector<int> a(10, 1);` creates ten elements containing one, whereas `std::vector<int> b{10, 1};` creates two elements. A matching initializer-list constructor receives preference.
 
+`std::string` has the same shape of trap, driven by the first argument's type rather than by braces. `std::string s1("hello world", 5);` takes a `const char*` and a count, so `s1` is `"hello"`. `std::string s2("hello world"s, 5);` takes a `std::string` and a position, so `s2` is `" world"`, everything from index five to the end. The same number means "how many" in one overload and "starting where" in the other. A third overload takes a string, a position, and a count. And `std::string s(5, 'a')` is five copies of `'a'`, while `std::string s('a', 5)` compiles too, converting `'a'` to a count of 97 and filling with the character whose code is five. When building a string from part of another, `substr` or an iterator pair such as `std::string(src.begin() + 5, src.end())` says what it means and avoids the overload set entirely.
+
 If a declaration can be parsed as a function declaration, it is parsed that way. `std::string s();` declares a function instead of constructing an empty string. This is the most vexing parse; `std::string s{};` makes the object intent clear. The same issue arises with forms such as `Double d(MyInt(i));`.
 
 A functional conversion expression requires the appropriate type spelling. `unsigned int{5}` is not valid expression syntax; use a type alias such as `using UInt = unsigned int;` followed by `UInt{5}`, or use `static_cast<unsigned int>(5)`.
