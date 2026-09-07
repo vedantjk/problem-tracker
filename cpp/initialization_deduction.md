@@ -88,6 +88,25 @@ auto&& forwarded = source;     // const std::string&: source is an lvalue.
 
 An `auto&&` declaration in this deduction context is a forwarding reference. Lvalue initializers produce an lvalue reference after reference collapsing; rvalues generally produce an rvalue reference. A named rvalue-reference variable is itself an lvalue expression when used by name.
 
+The mechanics follow template deduction. For an lvalue initializer of type `T`, `auto` is deduced as `T&`, and `T& &&` collapses to `T&`. For an rvalue initializer, `auto` is deduced as `T`, and the declaration is `T&&`. Const on the initializer is kept in both cases because it is low-level once a reference is involved. The result is a declaration that binds to anything without copying and without ever failing to bind, which is why `auto&&` is the safe spelling in a range-for over elements that might be proxies or temporaries.
+
+```cpp
+std::string a = "world";
+std::string  MakeString();                    // returns by value
+std::string& Foo(std::string& s);             // returns an lvalue reference
+std::string&& Bar(std::string&& s);           // returns an rvalue reference
+
+auto&& x1 = a;                  // a is an lvalue           → std::string&
+auto&& x2 = MakeString();       // prvalue, materialized    → std::string&&, lifetime extended
+auto&& x3 = std::move(a);       // xvalue                   → std::string&&, refers to a
+auto&& x4 = Foo(a);             // lvalue (T& return)       → std::string&, alias for a
+auto&& x5 = Bar(MakeString());  // xvalue (T&& return)      → std::string&&, DANGLES after this line
+const std::string c = "k";
+auto&& x6 = c;                  // const lvalue             → const std::string&
+```
+
+Whatever the deduced type, the names `x1` through `x6` are lvalues when used, because a name is an lvalue. The declared type says what the variable bound to; it does not make later uses of the name into rvalues. Passing `x3` onward moves nothing unless the call writes `std::move(x3)` or, in a template, `std::forward<T>(x3)`.
+
 Given `const std::string& getConstRef();`, `auto r{getConstRef()};` creates a separate `std::string`. Plain `auto` deduces a value type, so `r` is neither a reference nor const. Use `auto&` or `const auto&` to keep a read-only reference to the original string, or `const auto` for a const copy. Here, `const auto&` makes the read-only intent explicit.
 
 The keyword `constexpr` is not part of a type and is never deduced; a `constexpr auto` declaration must say so itself.
