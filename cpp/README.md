@@ -24,6 +24,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [pointers_references.md](pointers_references.md) | pointers vs references, null/dangling/wild, const×pointer matrix, function pointers, pass by address, nullptr_t overloads |
 | [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
+| [allocators.md](allocators.md) | bump vs stack vs general-purpose (by what "free" means), address alignment with headers, std::align, placement new in/reinterpret_cast out, std::byte, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
 
@@ -31,7 +32,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 - ADL (friend found only by) → expressions (operator overloading)
 - aggregate rules → initialization_deduction
 - alignment / alignof / alignas → memory_layout (data), bits_punning (casts)
+- alignment in allocators (align the address not the size; user-address-first with headers; round-up sentence; std::align) → allocators
 - aliasing (strict) rule + audit checklist → bits_punning
+- allocator taxonomy: bump/arena (reset only) vs stack (pop top only) vs general-purpose (free anything, needs metadata) → allocators
 - Anki-priority repeat miss: auto& keeps const → initialization_deduction
 - anonymous namespace / internal linkage → build_linkage
 - argv[argc] == 0 guarantee (null-terminated argv) → pointers_references
@@ -39,6 +42,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - ASCII anchors ('A'=65, 'a'=97, '0'=48) → types_conversions
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
+- bump allocator (no headers, no per-pointer free; "Bump Memory Allocator" problem is a mislabeled stack allocator) → allocators
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
 - bool (boolalpha, cin failure, non-0/1 byte UB) → types_conversions
@@ -103,6 +107,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - loop counters (signed! unsigned >= 0 bug) → control_flow
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
+- magic number / canary in allocator headers (constant tag, double-free detection, address-dependent strengthening, bitmap for exactness) → allocators
 - macro scope (none) → build_linkage
 - max/min tie-breaking (first arg) + const& return dangling → pointers_references
 - monadic optional ops and_then/transform/or_else, nested-optional trap → error_handling
@@ -114,6 +119,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - memory segments (code/data/BSS/heap/stack) → memory_layout
 - memory leaks: pointers vs pointees → functions_scope_lambdas traps
 - most vexing parse → initialization_deduction
+- placement new (construct in raw storage; in via new, out via reinterpret_cast; no delete) → allocators
+- pointer validation on free (uintptr_t range check, alignment, magic, null is a no-op) → allocators
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
@@ -165,6 +172,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
 - SSO (small string optimization; data() inside the object) → memory_layout
+- std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators
+- std::byte (raw-memory type, bitwise ops only, aliasing exemption, byte-stride pointer) → allocators
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
@@ -175,6 +184,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
 - unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
+- unique_ptr<std::byte[]> as buffer owner (24-byte allocator, no ownership flag) → allocators
 - uninitialized reads → initialization_deduction, ub_catalog
 - unsigned wrap (arithmetic + conversion) → types_conversions
 - while / do-while / for (full loop notes) → control_flow
@@ -212,6 +222,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Operator overloading (intro) | expressions | (pending) |
 | if / switch / loops (learncpp 4.10, 8.5-8.6, 8.8-8.10 — read 01/09) | control_flow | (pending) |
 | Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | &x+1 vs x+1 ok |
+| Dev problem: Bump Memory Allocator (07/09) | allocators | solved with guidance; 1 hidden-test fail on Deallocate(nullptr) |
 
 ## Quizzes
 
