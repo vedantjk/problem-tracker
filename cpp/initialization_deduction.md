@@ -1,5 +1,7 @@
 # Initialization & Type Deduction
 
+For the meanings of lvalue, xvalue, and prvalue, and how they affect reference binding and moving, see [value categories](value_categories.md).
+
 ## Objects, variables, and initialization
 
 An object occupies storage and has a type and lifetime. A variable is introduced by a declaration of an object or reference; not every object has a name, and a reference is not itself an object. An identifier is a name used in the program.
@@ -30,7 +32,9 @@ A functional conversion expression requires the appropriate type spelling. `unsi
 
 ## Aggregates and designated initializers
 
-In C++20/23, aggregates include arrays and classes satisfying restrictions such as no user-declared or inherited constructors, no private or protected direct non-static data members, no virtual functions, and no virtual, private, or protected base classes. Default member initializers are permitted; aggregate rules have changed across language versions.
+An aggregate is an array or a class whose elements or members can be initialized directly from a list. A simple data-only struct such as `Point` below is a common example.
+
+In C++20/23, an aggregate class cannot have user-declared or inherited constructors or virtual functions. Its direct non-static data members must be public: these are members declared in the class itself that belong to each object, rather than shared static members or inherited members. Its base classes cannot be virtual, private, or protected. Default member initializers are permitted; aggregate rules have changed across language versions.
 
 C++20 designated initialization names direct non-static members of an aggregate in declaration order. Members may be skipped; omitted members use their default member initializer when present, or the applicable empty-initialization rules. A missing reference member still needs a valid binding.
 
@@ -84,7 +88,9 @@ auto&& forwarded = source;     // const std::string&: source is an lvalue.
 
 An `auto&&` declaration in this deduction context is a forwarding reference. Lvalue initializers produce an lvalue reference after reference collapsing; rvalues generally produce an rvalue reference. A named rvalue-reference variable is itself an lvalue expression when used by name.
 
-The order in which auto drops things explains a result that surprises people. Given `const std::string& getConstRef();`, plain `auto r{ getConstRef() };` deduces `std::string`, not `const std::string`. The const on a reference is low-level, and low-level const is normally kept, but the reference is dropped first, and once the reference is gone that const is qualifying the object itself, which makes it top-level, and top-level const is dropped. Reapply what is wanted explicitly: `const auto` gives `const std::string`, `auto&` gives `const std::string&` because the reference keeps the const it needs to bind, and `const auto&` says the same thing and is the recommended spelling because it is explicit. The keyword `constexpr` is not part of a type and is never deduced; a `constexpr auto` declaration must say so itself.
+Given `const std::string& getConstRef();`, `auto r{getConstRef()};` creates a separate `std::string`. Plain `auto` deduces a value type, so `r` is neither a reference nor const. Use `auto&` or `const auto&` to keep a read-only reference to the original string, or `const auto` for a const copy. Here, `const auto&` makes the read-only intent explicit.
+
+The keyword `constexpr` is not part of a type and is never deduced; a `constexpr auto` declaration must say so itself.
 
 For pointers, plain auto keeps the pointer type and the pointee's const qualification. `auto*` additionally requires a pointer-compatible initializer. `const auto p = getPtr();` makes the pointer object const; `const auto* p = getPtr();` makes access to the pointee const. With `auto*` the position of const matters in the same way as for a written-out pointer type: `const auto*` qualifies the pointee, `auto* const` qualifies the pointer, and `const auto* const` qualifies both. Writing `const auto const` is invalid because it applies const to the same thing twice.
 

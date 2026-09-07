@@ -4,7 +4,7 @@
 
 `sizeof` measures an object's representation in C++ bytes, including padding. A byte has at least eight bits, and `sizeof(char)` is always one. The minimum widths of char, short, int, long, and long long are 8, 16, 16, 32, and 64 bits respectively. Complete objects have nonzero size, although empty base and potentially overlapping member subobjects have special rules.
 
-On a typical x86-64 Linux LP64 target, int is four bytes, long and long long are eight, and ordinary object pointers are eight. Float is commonly four bytes, double eight, and long double sixteen bytes of storage. Bool and char commonly occupy one byte; wchar_t is commonly four, char16_t two, and char32_t four. These are target observations. For example, 64-bit Windows normally uses a four-byte long.
+On a typical x86-64 Linux target using LP64, int is four bytes, long and long long are eight, and ordinary object pointers are eight. LP64 names a data model in which long integers and pointers are 64 bits, while int remains 32 bits. Float is commonly four bytes, double eight, and long double sixteen bytes of storage. Bool and char commonly occupy one byte; wchar_t is commonly four, char16_t two, and char32_t four. These are target observations. For example, 64-bit Windows normally uses a four-byte long.
 
 ## Alignment and padding
 
@@ -15,10 +15,14 @@ struct S { char a; double b; char c; };
 // Assuming alignof(double) == 8 and sizeof(double) == 8:
 // a starts at 0, b at 8, and c at 16. A typical sizeof(S) is 24.
 struct R { double b; char a; char c; };
-// Under the same ABI, the reordered struct commonly occupies 16 bytes.
+// Under the same platform layout rules, this struct commonly occupies 16 bytes.
 ```
 
-Calculate offsets in declaration order and then round the total to the object's required alignment. Do not just add member sizes and guess the padding. Explicit alignment, inheritance, and ABI-specific rules can change the calculation. Use `alignof`, `alignas`, `sizeof`, and, for suitable standard-layout types, `offsetof` to inspect the result. Tools such as `pahole` help inspect real layouts.
+Calculate offsets in declaration order and then round the total to the object's required alignment. Do not just add member sizes and guess the padding. The application binary interface (ABI) is the platform's set of rules for binary layout and function calls. Explicit alignment, inheritance, and ABI rules can change the calculation.
+
+`sizeof(S)` gives the total storage size, and `alignof(S)` gives the alignment required for an object of type `S`. The declaration keyword `alignas` requests alignment, for example `alignas(64) char buffer[64];`. It cannot weaken the type's existing alignment requirement.
+
+For a standard-layout type such as the simple struct `S` above, `offsetof(S, b)` from `<cstddef>` gives member `b`'s byte offset from the start. Standard-layout is a language category with restrictions on members and inheritance that make certain layout operations well-defined; do not assume every class qualifies. Tools such as `pahole` can also inspect the layout produced by a particular build.
 
 Reordering members can reduce holes and improve how many objects fit into a cache line. It can also change an ABI or serialized representation. Cache-line size is target-dependent; 64 bytes is common. False sharing depends on where independently written data lands, not just the total struct size.
 

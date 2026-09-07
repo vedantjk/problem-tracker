@@ -25,9 +25,19 @@ Some rules change by language version. C++20 defined additional integer conversi
 
 ## Uninitialized reads in C++26
 
-Through C++23, an ordinary read of an indeterminate int has undefined behavior. C++26's model distinguishes indeterminate values from erroneous values depending on the storage and declarations involved. Dynamic storage generally begins with indeterminate bytes, while ordinary automatic storage can begin with erroneous bytes; special declarations and limited character/byte operations add qualifications.
+An ordinary local declaration such as `int x;` leaves `x` uninitialized. Allocating an integer with `new int` also leaves its value uninitialized. Through C++23, an ordinary read of either uninitialized integer has undefined behavior.
 
-Producing an indeterminate value in an ordinary evaluation can still have undefined behavior. Producing an erroneous value can have erroneous behavior. Therefore “C++26 makes all uninitialized reads erroneous instead of undefined” is too broad. Initialize objects before reading their values. See the [current indeterminate/erroneous-value rules](https://eel.is/c++draft/basic.indet).
+C++26 distinguishes these storage cases. Ordinary local variables have automatic storage, whose bytes can begin with erroneous values. Storage obtained with `new` is dynamic storage, whose bytes generally begin with indeterminate values. These are two different classifications of uninitialized data, not usable initial values.
+
+```cpp
+int local;
+int* allocated = new int;
+// In C++26, evaluating local's value here has erroneous behavior.
+// Evaluating *allocated's value here has undefined behavior.
+delete allocated; // Deallocation does not read the uninitialized integer.
+```
+
+Special declarations and a few permitted operations on character and byte types add qualifications. For an ordinary integer read, however, an indeterminate value still leads to undefined behavior, while an erroneous value leads to erroneous behavior. C++26 therefore does not make all uninitialized reads erroneous instead of undefined, and neither classification makes these reads safe. Initialize objects before reading their values. See the [current indeterminate/erroneous-value rules](https://eel.is/c++draft/basic.indet).
 
 ## Catalog of common violations
 

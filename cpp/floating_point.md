@@ -2,9 +2,11 @@
 
 ## Representation and precision
 
-Floating point represents a number using a sign, a significand, and an exponent. The exponent provides a large range, while the finite significand limits precision. Many decimal fractions, including 0.1, have an infinite binary expansion and must be rounded.
+Floating point represents a number using a sign, a significand, and an exponent, much like scientific notation. For example, `6.5` in decimal is `110.1` in binary, which can be written as `1.101 × 2²`. Here the significand is the binary number `1.101`, which carries the significant digits, and the exponent is 2, which sets the power of two that multiplies it. The exponent provides a large range, while the finite number of significand bits limits precision. Many decimal fractions, including 0.1, have an infinite binary expansion and must be rounded.
 
-On common IEEE-754 systems, `float` is binary32 and occupies four bytes, while `double` is binary64 and occupies eight. Binary32 has one sign bit, eight exponent bits with bias 127, and 23 stored fraction bits. A normal value has an implicit leading one, giving 24 bits of significand precision. Binary64 has 53 bits of precision. These correspond roughly to seven and sixteen significant decimal digits.
+On common IEEE-754 systems, `float` is binary32 and occupies four bytes, while `double` is binary64 and occupies eight. Binary32 has one sign bit, eight exponent bits, and 23 stored fraction bits. Its exponent uses a bias of 127: the stored exponent is the actual exponent plus 127. For `6.5`, the actual exponent is 2, so the stored exponent is 129. This offset allows the exponent field to represent both negative and positive exponents, with special field values reserved for the cases discussed below.
+
+A normal value uses a binary significand written with one nonzero digit before the point, as in `1.101`. That first digit must be one, so the format does not store it. This implicit leading one plus the 23 stored fraction bits gives 24 bits of significand precision. Binary64 has 53 bits of precision. These correspond roughly to seven and sixteen significant decimal digits.
 
 C++ does not require these exact formats. `long double` is particularly platform-dependent: it may match `double`, use an 80-bit value stored in a larger slot, or use another format. Check `std::numeric_limits<T>` and the target's documentation before relying on a layout.
 
@@ -12,7 +14,7 @@ Floating literals such as `1.0` have type `double`; `1.0f` has type `float`. On 
 
 ## Encoding a value
 
-For an IEEE binary32 value, first express the magnitude in binary, then normalize it as `1.fraction * 2^exponent`. Store the exponent with its bias, omit the implicit leading one, and round the remaining fraction to the available bits. For 123.456, the normalized exponent is six, so the stored exponent is 133.
+For a normal IEEE binary32 value, first express the magnitude in binary, then normalize it as `1.fraction * 2^exponent`. Store the exponent with its bias, omit the implicit leading one, and round the remaining fraction to the available bits. For 123.456, the normalized exponent is six, so the stored exponent is 133.
 
 The usual default rounding mode is round to nearest, with ties going to the representable result whose least significant significand bit is even. Rounding can occur after each operation, so algebraically equivalent expressions can produce different floating-point results.
 

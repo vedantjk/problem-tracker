@@ -1,5 +1,7 @@
 # Expressions: Sequencing, Parsing & Operators
 
+For the meanings of lvalue, xvalue, and prvalue, and how they affect reference binding and moving, see [value categories](value_categories.md).
+
 ## Precedence and sequencing answer different questions
 
 Precedence and associativity determine how an expression groups. Sequencing determines which evaluations must happen before others. Parentheses can change grouping, but they do not generally impose an evaluation order.
@@ -48,7 +50,9 @@ When both branches are same-type lvalues, the conditional result can itself be a
 
 An overloaded operator must involve a class or enumeration type. Overloading cannot change precedence, associativity, or the number of operands. Operators such as `?:`, `sizeof`, `::`, `.`, `.*`, and `typeid` cannot be overloaded, nor can cast syntax.
 
-Operators `=`, `[]`, `()`, and `->` have member-only forms. Symmetric binary operations often fit non-member functions so conversions can apply to either operand. Use a friend when access to private state is needed. An in-class friend definition remains a non-member function and, in the usual hidden-friend pattern, is found through argument-dependent lookup.
+Operators `=`, `[]`, `()`, and `->` have member-only forms. Symmetric binary operations often fit non-member functions so conversions can apply to either operand. Use a friend when access to private state is needed.
+
+A friend function defined inside a class is still a non-member function. In an expression such as `a + b`, the compiler also searches for operators associated with the operand types; this is called argument-dependent lookup. That lets it find a friend operator defined inside their class, even when ordinary name lookup would not find it. This is often called the hidden-friend pattern.
 
 Arithmetic operators conventionally return a new value. Compound assignment conventionally returns `T&`, and `operator+` can reuse `operator+=`. In C++20, `<=>` supplies ordering support; equality still needs attention. A defaulted comparison setup can provide the usual family of comparisons, but writing a custom `<=>` alone does not automatically define `==`.
 

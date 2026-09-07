@@ -1,5 +1,7 @@
 # Pointers & References
 
+For the meanings of lvalue, xvalue, and prvalue, and how they affect reference binding and moving, see [value categories](value_categories.md).
+
 ## Pointers and references
 
 A pointer is an object whose value can identify an object or function, a position one past an object, or a null pointer. A reference is an alias for another entity and is not itself an object. A pointer variable can be reassigned; a reference must be initialized and cannot later be rebound.
@@ -68,13 +70,46 @@ void reset_caller(int*& p) { p = nullptr; }    // The caller's pointer changes.
 
 A reference to a pointer, `int*&`, is valid. A pointer to a reference, `int&*`, is not. Ordinary address-taking also cannot take the address of a literal such as `&5`.
 
-For read-only string input, `std::string_view` by value often avoids constructing a temporary string for a literal. The view does not own its characters and need not be null-terminated. Do not retain it beyond the source's lifetime.
+The cost of passing a parameter includes both creating the parameter and accessing it inside the function. Small values are often inexpensive to copy and can be kept in registers. References avoid copying the referred object, but the compiler may need to account for aliases: other names or pointers that reach the same object. A reference does not necessarily add a memory read on every use, because the compiler can often optimize the access.
 
-Two costs decide between passing by value and by reference. The first is the copy itself, which scales with the object's size and with any setup work such as allocation. The second is access: a value parameter can sit in a register, while a reference parameter is an indirection, so every use first reads the reference and then the object. The compiler can also optimize a value parameter more freely, because it knows nothing else aliases it, whereas two reference parameters might refer to the same object and force conservative code. This is why the rule of thumb is fundamental types by value and class types by `const T&`, and why some class types still go by value: enumerations, views and spans such as `std::string_view` and `std::span`, iterators, `std::reference_wrapper`, and small value types such as `std::pair`, `std::optional`, and `std::expected` when their payload is cheap. Some types must go by reference regardless of size: anything the function modifies, non-copyable types such as `std::ostream`, ownership types such as `std::unique_ptr` and `std::shared_ptr` unless ownership is meant to transfer, and polymorphic types, because passing by value would slice them.
+For a cheap independent input, pass by value. For a large existing object that the function only reads, a const reference usually avoids an unnecessary copy. Small class objects, such as a string view or an iterator, can also be cheap values; the fact that a type is a class does not determine the right parameter form.
 
-Between `std::string_view` by value and `const std::string&`, the view wins in every direction but one. A `std::string` argument converts to a view cheaply and binds to the reference cheaply. A view argument copies into a view parameter cheaply, but binding it to `const std::string&` constructs a temporary `std::string`, which is an allocation. A literal or C-style string converts to a view cheaply and to a temporary `std::string` expensively. The view also lets the caller pass a substring without copying. The exception is a function that must forward to something requiring a `std::string` or a null-terminated C string, where `const std::string&` avoids constructing that string twice.
+```cpp
+int square(int value);                       // Receives its own small value.
+void inspect(const LargeRecord& record);     // Borrows an existing record.
+void rename(Record& record);                 // May modify the caller's record.
+```
 
-Prefer return values, including named result structs, when a function computes outputs. Copy elision often removes transfer costs, but return values are not universally free. Output parameters can still be appropriate for in-place modification, buffer reuse, or established APIs. The objections to them are practical: the caller must declare the result variables before the call, nothing at the call site shows that `getSinCos(deg, s, c)` overwrites `s` and `c`, and a temporary cannot be passed because a non-const reference will not bind to it. Passing by address instead, so the call reads `f(&x)`, at least makes the modification visible at the call site, at the cost of allowing a bare pointer to be passed with no such signal and requiring a null check inside. The two cases where a non-const reference parameter is the right choice are an in/out parameter that the function reads and then modifies in place, which is clearer than `foo = modify(foo)` and avoids a copy, and an output that is so expensive to construct that returning it by value would be measurable in performance-critical code. Outside those, return the value. Choose a clear null-handling contract for pointer parameters: reject null, report it, or give it a documented meaning. An assertion disappears in many release builds, so it cannot implement required runtime validation by itself.
+Ownership is a separate decision from copying cost. Passing a `std::unique_ptr<T>` by value accepts ownership; taking `T&` or `const T&` borrows the object. Passing a `std::shared_ptr<T>` by value gives the function a share of ownership. When a function only uses the object, borrowing the object usually states that intent more directly. Some types also need references for their behavior: a stream such as `std::ostream` cannot be copied, and copying a derived object into a base-class value loses the derived portion, which is called slicing.
+
+```cpp
+void consume(std::unique_ptr<Record> record); // Takes sole ownership.
+void inspect(const Record& record);          // Borrows without ownership.
+void retain(std::shared_ptr<Record> record); // Receives shared ownership.
+```
+
+For read-only string input, a `std::string_view` parameter accepts an existing string, another view, or a string literal without copying the characters. It can also describe a substring. A `const std::string&` parameter binds cheaply to an existing string, but a literal requires a temporary string, and a view requires an explicit conversion to a string. Constructing that string copies characters and may allocate; short strings can fit inside the string object itself. Prefer the string reference when the function specifically needs a string object or its null-terminated storage. A view's characters need not end with a null character. The view does not own those characters, so do not retain it beyond their lifetime.
+
+```cpp
+void print_text(std::string_view text);
+void needs_string(const std::string& text);
+
+std::string_view part = "example";
+print_text(part);                   // Copies the view, not the characters.
+needs_string(std::string{part});    // Explicitly constructs a string.
+```
+
+When a function computes a result, a return value usually makes the call easier to understand. A named result struct can carry several related outputs. Copy elision can remove a copy or move of the result, though creating the result itself still has a cost.
+
+```cpp
+struct SinCos { double sine; double cosine; };
+SinCos getSinCos(double degrees);
+// The caller can write: SinCos result = getSinCos(45.0);
+```
+
+An output parameter can still be useful for reusing an existing buffer or working with an established API. An input/output parameter is appropriate when the function reads an existing object and changes it in place. With a non-const reference parameter, a call such as `update(record)` does not itself show that the object changes, so the function name and contract matter. A pointer spelling such as `update(&record)` shows address-taking, but does not by itself promise modification.
+
+Choose a clear null-handling contract for pointer parameters: reject null, report it, or give it a documented meaning. An assertion disappears in many release builds, so it cannot implement required runtime validation by itself.
 
 ## Function pointers and nullptr
 
@@ -192,7 +227,7 @@ void getSinCos(double deg, double& sinOut, double& cosOut);  // out-param style:
 
 A pointer is an object I can reassign, and it can represent no target using null. A reference is an alias that I bind during initialization and cannot rebind. Assigning through a reference changes the referred object. Both require me to ensure that the target remains alive before I use it.
 
-On safety, the honest framing is an asymmetry of failure modes rather than a guarantee. A reference is valid at the moment it is created because it had to bind to something, so its main failure mode is outliving its referent. A pointer shares that dangling risk and adds several more: it can be uninitialized, null when dereferenced, or moved out of bounds by arithmetic. That is what "references are safer" actually means.
+A reference expresses a required object and must be initialized, which rules out some mistakes that a pointer permits. It does not prove validity: I can still create a reference through an invalid pointer or keep one after its object dies. Pointers also need care with initialization, null values, and arithmetic. Neither form manages the target's lifetime by itself.
 
 ### Does a const reference mean the object cannot change?
 

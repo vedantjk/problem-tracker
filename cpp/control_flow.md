@@ -109,7 +109,9 @@ For index-based reverse iteration, a sufficiently wide signed index is straightf
 
 Break leaves the innermost enclosing loop or switch. Continue targets the innermost enclosing loop, even if a switch is nested inside it. Return leaves the entire function, including all enclosing loops. C++ has no labeled break; extracting work into a function can make an early return a clear way to leave nested loops.
 
-Through C++23, a nonterminating loop without the required observable or progress operations can violate the forward-progress rules. C++26 makes a specific exception for trivial infinite loops, such as eligible empty constant-true loops. This is not a blanket permission for every computational loop that never terminates. See [P2809R3](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2809r3.html).
+Forward-progress rules constrain programs that run indefinitely without performing certain operations. Input/output, access through a volatile expression, and atomic or synchronization operations are examples of operations that count. Through C++23, an empty `while (true) {}` performs none of them, so the compiler need not preserve it as an ordinary endless wait.
+
+C++26 makes a specific exception for trivial infinite loops, including that empty constant-true loop. This is not a blanket permission for every computational loop that never terminates. See [P2809R3](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2024/p2809r3.html).
 
 ## Program termination and cleanup
 
@@ -239,7 +241,7 @@ There is a crucial cleanup difference. Returning from main destroys its automati
 
 ### Is an empty infinite loop always undefined behavior?
 
-That answer depends on the language version and exact loop. C++26 permits eligible trivial infinite loops, while other nonterminating loops still need to respect forward-progress rules. I would state the version rather than use an unconditional rule.
+It depends on the language version and exact loop. Through C++23, an empty `while (true) {}` does no work that satisfies the forward-progress rules. C++26 specifically permits this kind of trivial infinite loop. That exception does not cover every loop that runs forever, so I would check both the version and the loop body.
 
 ### Are temporary ranges always safe in range-based for?
 

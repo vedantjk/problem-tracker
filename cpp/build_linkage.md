@@ -19,7 +19,9 @@ Forward declarations let code refer to an entity before its definition, includin
 The One Definition Rule (ODR) has two useful levels:
 
 - A translation unit cannot contain multiple definitions of the same definable item.
-- Across translation units, certain entities, such as classes, templates, and eligible inline functions and variables, can have multiple definitions under strict conditions. The definitions must use the same tokens, and relevant name lookup must agree. A non-inline function or variable that is odr-used normally needs one definition in the program.
+- Across translation units, certain entities, such as classes, templates, and eligible inline functions and variables, can have multiple definitions under strict conditions. Several source files commonly receive these definitions by including the same header. The definitions must use the same sequence of tokens, meaning the individual names, keywords, operators, and other pieces of source text. Names inside the definitions generally need to refer to the same entities as well.
+
+Calling an ordinary non-inline function is a common case that requires one definition somewhere in the program. The formal term for a use that requires an entity's definition is odr-use. A non-inline function or variable that is odr-used normally needs exactly one definition in the program; the detailed odr-use rules cover more than function calls.
 
 Cross-file ODR violations can be ill-formed with no diagnostic required. A successful link therefore does not establish that the definitions are consistent.
 

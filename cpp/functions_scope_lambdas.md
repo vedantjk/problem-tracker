@@ -77,7 +77,17 @@ The first lambda updates its stored copy. The second updates the external ammo v
 
 Capture initializers run when the lambda expression is evaluated. Init-capture, such as `[p = std::move(owner)]`, can transfer an object into the closure. `[this]` captures the pointer; `[*this]` copies the object in C++17 and later. Implicit capture of this through `[=]` was deprecated in C++20.
 
-A capture default (`[=]` or `[&]`) comes first. Explicit captures must follow the allowed combinations, and duplicate captures are invalid. Globals and static locals do not need ordinary captures. Whether a local constexpr variable needs capture depends on how it is used, particularly whether it is odr-used.
+A capture default (`[=]` or `[&]`) comes first. Explicit captures must follow the allowed combinations, and duplicate captures are invalid. Globals and static locals do not need ordinary captures.
+
+Some uses of a local `constexpr` variable need only its compile-time value and do not require capture. Uses that need the actual object, such as taking its address in the example below, require capture; the formal term for such a use is odr-use.
+
+```cpp
+constexpr int limit = 10;
+auto value = [] { return limit; };         // Uses the constant value without capture.
+auto address = [&limit] { return &limit; }; // Needs the actual local object.
+```
+
+The reference-capturing lambda and any pointer it returns must not be used to access `limit` after that local object's lifetime ends.
 
 A captureless closure is commonly one byte, a captured int commonly adds int-sized storage, and a reference capture often uses a pointer. The standard leaves reference-capture representation unspecified, so treat measured closure sizes as implementation observations. See the [lambda capture rules](https://timsong-cpp.github.io/cppwp/n4950/expr.prim.lambda.capture).
 

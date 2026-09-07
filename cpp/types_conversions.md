@@ -6,7 +6,7 @@ Signed arithmetic overflow has undefined behavior. Examples include `INT_MAX + 1
 
 Unsigned arithmetic is performed modulo 2 raised to the number of value bits. For an eight-bit unsigned type, converting 280 produces 24. Subtracting one from unsigned zero produces that type's maximum value. This is useful for bit patterns, but it can hide mistakes such as subtracting one from an empty container's size.
 
-An integral conversion is a different operation from arithmetic overflow. Since C++20, an out-of-range integer conversion produces the destination value congruent to the source modulo the destination width. Before C++20, an out-of-range conversion to a signed integer type was implementation-defined. List-initialization still rejects narrowing conversions, and an out-of-range floating-point-to-integer conversion still has undefined behavior.
+An integral conversion is a different operation from arithmetic overflow. Since C++20, conversion to an integer type of width N, other than `bool`, produces the destination value that differs from the source by a multiple of 2^N. For example, converting 255 to an eight-bit signed integer produces -1. Before C++20, an out-of-range conversion to a signed integer type was implementation-defined. List-initialization still rejects narrowing conversions, and an out-of-range floating-point-to-integer conversion still has undefined behavior.
 
 Plain `char` may be signed or unsigned. A result involving `char` therefore needs that assumption stated; do not silently assume an eight-bit signed character type.
 
@@ -109,7 +109,7 @@ The operands are promoted before subtraction. On a typical machine, int can repr
 
 ### Is signed overflow the same as converting to a smaller signed type?
 
-No. Signed arithmetic overflow has undefined behavior. An integer conversion has its own rules; since C++20, the result is congruent modulo the destination width. Braced initialization can reject that conversion as narrowing before the program runs.
+No. Signed arithmetic overflow has undefined behavior. Integer conversion follows a separate wraparound rule since C++20: for example, converting 255 to an eight-bit signed integer produces minus one. Braced initialization can reject that conversion as narrowing before the program runs.
 
 ### Why is 1u shifted by 32 invalid on a typical desktop?
 

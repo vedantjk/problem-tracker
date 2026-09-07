@@ -28,7 +28,15 @@ The width of the promoted left operand also bounds a valid shift count. Use [typ
 
 A reinterpret_cast can express a low-level conversion, but it does not check bounds, alignment, lifetime, or whether the resulting pointer can access the stored object as that type. Forming a cast and accessing through it are separate operations. Many common object-pointer casts need no runtime instruction, but “always free” is not a portable guarantee for every form of reinterpret_cast.
 
-Type-based aliasing rules let the optimizer assume certain typed accesses do not refer to the same object. Permitted access includes the object's type or a similar type, its corresponding signed or unsigned type, and char, unsigned char, or std::byte for representation access. Accesses involving aggregate members, unions, and base subobjects require the corresponding object-model reasoning; this is not a license to reinterpret every equal-sized type. See [type accessibility](https://timsong-cpp.github.io/cppwp/n4950/basic.lval).
+Two pointers alias when they refer to the same object. C++'s type-based aliasing rules let the compiler assume that many accesses through unrelated types do not refer to the same object. For example, reading a `float` through an `int*` is not permitted merely because both types occupy four bytes.
+
+```cpp
+float value = 1.0f;
+int* as_int = reinterpret_cast<int*>(&value); // The cast does not grant permission to read.
+int result = *as_int;                        // Undefined behavior: this object is a float.
+```
+
+An object can be accessed through its own type, through types that differ in certain permitted ways such as const qualification, and through its corresponding signed or unsigned type. Access through `char`, `unsigned char`, or `std::byte` can inspect the bytes that represent the object. Aggregate members, unions, and base-class objects have additional rules; sharing an address or having the same size is not enough to establish that an access is permitted. See [type accessibility](https://timsong-cpp.github.io/cppwp/n4950/basic.lval) for the exact rules, including the formal meaning of a similar type.
 
 Type identity matters more than size. Long and long long remain different types even where both occupy eight bytes. An int64_t alias is compatible with whichever underlying type it actually names on the target.
 
@@ -36,9 +44,11 @@ Type identity matters more than size. Long and long long remain different types 
 
 Alignment is independent of aliasing. Even if a type is otherwise appropriate, accessing it through an insufficiently aligned address can violate the language rules. Use alignof and suitable storage, rather than relying on hardware that happens to tolerate an unaligned load.
 
-A byte buffer is not automatically a live Header object merely because a pointer is cast to Header*. Some operations can implicitly create objects of implicit-lifetime types, but the applicability depends on the storage and operation. C++23's `std::start_lifetime_as` provides explicit facilities for suitable implicit-lifetime objects; it still has requirements and does not validate an arbitrary network message.
+Having enough bytes is different from having a C++ object whose lifetime has begun. An object's lifetime is the period in which it exists and can be used under the rules for its type. Casting a buffer address to `Header*` does not, by itself, create a `Header`.
 
-For an ITCH-style parser, check bounds, layout, byte order, alignment, lifetime, and valid field representations. Copying bytes into a suitable existing trivially copyable object can avoid typed aliasing and alignment hazards at the source. Decoding fields individually is often clearer when the wire layout differs from the host layout.
+For an ITCH-style parser, decoding fields individually is often clearer when the network message's layout differs from the host layout. Check bounds, layout, byte order, alignment, lifetime, and valid field representations. Copying bytes into a suitable existing trivially copyable object can avoid typed aliasing and alignment hazards at the source.
+
+Some storage operations can begin certain objects' lifetimes automatically. The types eligible for this are called implicit-lifetime types, and the exact permission depends on both the type and the operation. C++23's `std::start_lifetime_as` explicitly starts lifetimes for suitable objects in existing storage. It still has requirements and does not validate an arbitrary network message.
 
 Writing through a const-stripped pointer to an originally const object has undefined behavior. Casting does not change the underlying object's constness.
 

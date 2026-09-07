@@ -16,6 +16,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [types_conversions.md](types_conversions.md) | promotions, signed/unsigned, shifts, fixed-width ints, enums, bools, overload ranks |
 | [floating_point.md](floating_point.md) | IEEE-754, numeric_limits, float traps |
 | [initialization_deduction.md](initialization_deduction.md) | init forms, narrowing, designated init, vexing parse, auto/auto&/auto&&, static init phases, constinit, thread_local |
+| [value_categories.md](value_categories.md) | identity, lvalue/xvalue/prvalue, glvalue/rvalue diagram, reference binding, std::move, reference collapsing, forwarding references |
 | [expressions.md](expressions.md) | sequencing, maximal munch, comma/ternary, ++/--, operator overloading |
 | [control_flow.md](control_flow.md) | if/else, early return, switch (labels, fallthrough, [[fallthrough]], case scoping), while/do-while/for, break/continue, halts (exit/abort/terminate) |
 | [memory_layout.md](memory_layout.md) | sizeof, padding/alignment, vptr, virtual bases, EBO, reference storage, memory segments / stack vs heap |
@@ -24,8 +25,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [pointers_references.md](pointers_references.md) | pointers vs references, null/dangling/wild, const×pointer matrix, function pointers, pass by address, nullptr_t overloads |
 | [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
-| [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references; later: move ctors, std::move, unique_ptr/shared_ptr/weak_ptr |
-| [allocators.md](allocators.md) | bump vs stack vs general-purpose (by what "free" means), address alignment with headers, std::align, placement new in/reinterpret_cast out, std::byte, 24-byte ownership, pointer validation on free |
+| [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references, unique_ptr move example, std::move versus the move operation, shared_ptr/weak_ptr overview |
+| [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
 
@@ -35,7 +36,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - alignment / alignof / alignas → memory_layout (data), bits_punning (casts)
 - alignment in allocators (align the address not the size; user-address-first with headers; round-up sentence; std::align) → allocators
 - aliasing (strict) rule + audit checklist → bits_punning
-- allocator taxonomy: bump/arena (reset only) vs stack (pop top only) vs general-purpose (free anything, needs metadata) → allocators
+- allocator taxonomy: bump (bulk reclamation) vs stack (pop top only) vs general-purpose (reuse freed blocks) → allocators
 - Anki-priority repeat miss: auto& keeps const → initialization_deduction
 - anonymous namespace / internal linkage → build_linkage
 - argv[argc] == 0 guarantee (null-terminated argv) → pointers_references
@@ -44,7 +45,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
 - auto_ptr (copy-as-move, pass-by-value steals, delete not delete[], deprecated C++11 / removed C++17) → smart_pointers_move
-- bump allocator (no headers, no per-pointer free; "Bump Memory Allocator" problem is a mislabeled stack allocator) → allocators
+- bump allocator (cursor allocation; optional headers and deallocation without individual space reclamation) → allocators
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
 - bool (boolalpha, cin failure, non-0/1 byte UB) → types_conversions
@@ -90,6 +91,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - fold expressions (quiz miss context) → README quiz table
 - for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
+- forwarding references / std::forward / reference collapsing → value_categories
 - forward progress rule (including the C++26 trivial-loop exception) → control_flow, ub_catalog
 - function pointers (syntax, decay, overload disambiguation, no void* conversion) → pointers_references
 - function try blocks (ctor init-list catches, implicit rethrow) → error_handling
@@ -106,6 +108,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - keywords & special identifiers → build_linkage
 - lambdas (captures, mutable, sizes, passing, generic, constexpr) → functions_scope_lambdas
 - lifetime extension (eligible temporary bindings; does not renew through a reference return) → initialization_deduction, pointers_references
+- lvalue / xvalue / prvalue and glvalue / rvalue diagram → value_categories
 - lvalue references (no reseat, binding rules, conversion-temporary trap) → pointers_references
 - loop counters (signed! unsigned >= 0 bug) → control_flow
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
@@ -122,8 +125,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - memory segments (code/data/BSS/heap/stack) → memory_layout
 - memory leaks: pointers vs pointees → functions_scope_lambdas traps
 - most vexing parse → initialization_deduction
-- placement new (construct in raw storage; in via new, out via reinterpret_cast; no delete) → allocators
-- pointer validation on free (uintptr_t range check, alignment, magic, null is a no-op) → allocators
+- placement new (construct in existing storage; keep its returned pointer; buffer owner releases storage) → allocators
+- pointer validation on free (uintptr_t explained, range/alignment/magic checks, null contract, exactness limits) → allocators
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
@@ -174,11 +177,12 @@ For a missed question, make an Anki card with the question on the front and a sh
 - static local in generic lambda (per-instantiation) → functions_scope_lambdas
 - static members (not in sizeof) → memory_layout
 - std::function costs / bad_function_call → functions_scope_lambdas
+- std::move (expression cast versus actual move; named rvalue references) → value_categories, smart_pointers_move
 - string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
 - SSO (small string optimization; data() inside the object) → memory_layout
 - std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators
-- std::byte (raw-memory type, bitwise ops only, aliasing exemption, byte-stride pointer) → allocators
+- std::byte (raw-memory type, bitwise operations, representation access, byte-stride pointer) → allocators
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
@@ -189,7 +193,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
 - unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
-- unique_ptr<std::byte[]> as buffer owner (24-byte allocator, no ownership flag) → allocators
+- unique_ptr<std::byte[]> as buffer owner (verify 24-byte layout; matching delete[]; no ownership flag) → allocators
 - uninitialized reads → initialization_deduction, ub_catalog
 - unsigned wrap (arithmetic + conversion) → types_conversions
 - while / do-while / for (full loop notes) → control_flow

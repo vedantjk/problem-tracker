@@ -1,162 +1,204 @@
 # Allocators
 
-## What "bump allocator" actually means
+## What a bump allocator does
 
-A bump allocator, also called an arena or linear allocator, owns one fixed buffer and a single cursor. Allocating means checking that the request fits in the space after the cursor, handing back the address at the cursor, and moving the cursor forward by the requested size plus any alignment padding. That is the whole design, and it is why bump allocation is the fastest allocation there is: a compare and an add, with no locks, no bookkeeping, and no per-allocation metadata.
+A bump allocator hands out memory by advancing a cursor through a buffer. The cursor records where the next allocation can begin. Each request skips any alignment padding, checks that enough space remains, and moves the cursor past the returned block. It is fast because it does not search previously freed blocks for a suitable hole.
 
-The defining property is that there is no per-pointer free. The allocator writes nothing down about individual allocations, so it could not find them again even if it wanted to. The only release operation is a reset, which moves the cursor back to zero and invalidates everything at once. This works when every allocation shares one lifetime: everything created during one frame, one request, one compiler pass, or one parse of a message. When the unit of work ends, the arena is reset. If the program needs to free objects individually, a bump allocator is the wrong tool.
+A simple fixed-buffer implementation needs a base address, a capacity, and a cursor. Individual deallocation does not reclaim space in this design. A reset makes the whole buffer available again, so the caller must finish using its objects before resetting. This works well for allocations used during one frame, one request, or one parsing operation. Objects can have different lifetimes even though their storage is reclaimed together; any required object destruction is a separate responsibility.
 
-If an interviewer asks for a bump allocator, the answer has a buffer, a cursor, an allocate that aligns and bumps, a reset, and possibly a remaining-bytes query. It has no headers and no deallocate that takes a pointer. Reaching for headers and magic numbers in that situation is answering a different question.
+An allocator can still expose a deallocation function that does nothing or records that a block is no longer live. For example, the standard library's `std::pmr::monotonic_buffer_resource` has a deallocation operation with no effect. The presence of that function does not make it a stack allocator. See the [standard's monotonic resource contract](https://eel.is/c++draft/mem.res.monotonic.buffer).
 
-## The three designs, by what "free" means
+## The three designs, by how space is reclaimed
 
-The clean way to place any allocator problem is to ask what freeing means in it.
+A **bump allocator** advances through unused storage and normally reclaims it in bulk. A minimal implementation needs no header for each allocation, but a particular interface may add headers for validation or diagnostics.
 
-A **bump or arena allocator** has no per-pointer free. Reset is the only release. It needs no metadata beyond the cursor.
+A **stack allocator** can reclaim the most recent live allocation first. This is last-in, first-out order, often shortened to LIFO. It restores the cursor to its position before that allocation, including any padding. A header can record the previous cursor, or the caller can supply a saved position. Moving the cursor backward over another live allocation would allow later requests to overwrite it.
 
-A **stack allocator** adds one rule: a pointer can be freed only if it is the most recent allocation still live. Freeing the top pops the cursor back to where that allocation began. Freeing anything else either is an error or marks the block dead without reclaiming it. This still needs no metadata beyond the cursor if the caller supplies the size, or a small header if it does not.
+A **general-purpose allocator** can reclaim blocks in arbitrary order and reuse the resulting gaps. It needs bookkeeping to locate available space. First-fit searches for the first suitable gap, best-fit chooses a suitable gap with minimal excess space, and segregated free lists group available blocks by size. The bookkeeping need not live in a header directly before every block. General-purpose allocation functions such as `malloc` typically use designs from this family.
 
-A **general-purpose allocator**, whether first-fit, best-fit, or a segregated free list, allows freeing any block at any time. That requires per-block metadata so freed holes can be found and reused later, and it pays for that in header bytes, fragmentation, and search time. This is what `malloc` and `new` are.
+The getcracked exercise adds a `ChunkHeader` with a size and magic tag to bump allocation. Its stated `Deallocate` requirement is to zero those fields; that does not require reclaiming the block or rewinding the cursor. Headers help implement that validation contract. If a solution also reclaims space, it must specify and correctly implement an additional policy, such as popping only the latest allocation or tracking reusable gaps.
 
-The getcracked "Bump Memory Allocator" problem is a mislabeled member of the second family with the scaffolding of the third. It calls itself bump, but it hands you a `Deallocate(std::byte*)` to implement and a 16-byte `ChunkHeader` with a size and a magic tag. Headers only pay for themselves when the allocator intends to find and reuse holes, which is a first-fit design. In a true bump allocator the header would be pure waste, 16 bytes on a 3-byte request. The problem is still worth doing because it exercises placement new, alignment arithmetic, ownership inside a size budget, and pointer validation, but the label is wrong and it is worth saying so out loud before writing anything.
+## Alignment: align the returned address
 
-## Alignment: align the returned address, not the size
+Alignment describes where an object may begin. On the ordinary address model used in this exercise, an 8-byte-aligned address is divisible by eight. `alignof(T)` gives the alignment required by type `T`, in bytes; `sizeof(T)` gives its storage size. A header can therefore have a size of 16 bytes and an alignment of eight bytes.
 
-Alignment is a property of the address the caller receives. A request for 32-byte alignment means the returned pointer must be a multiple of 32. Rounding the *size* up to a multiple of 32 does not achieve that; it only makes chunk lengths multiples of 32, which is a different and mostly useless property. The reference solution to the getcracked problem makes exactly this mistake and hands back an address at offset 16 for a 64-byte-aligned request.
+The cursor does not have to be aligned after an allocation. Suppose the buffer begins at an 8-byte-aligned address. A 16-byte header followed by a 3-byte payload ends at offset 19. The next allocation can skip five bytes, put its header at offset 24, and put its payload at offset 40. The unused bytes are padding.
 
-When each allocation carries a header before the payload, decide the payload address first and derive the header from it. Compute the earliest address that leaves room for a header after the cursor, round that address up to the alignment, and place the header immediately before it. If the alignment used is never smaller than the header's own alignment, the header lands correctly aligned for free, because any multiple of 8, 16, 32, or 64 is a multiple of 8, and subtracting 16 from a multiple of 8 keeps it a multiple of 8.
+```text
+Offsets within an initially 8-byte-aligned buffer:
+0             16   19      24             40   43
+| header      |data| pad   | header       |data|
+```
 
-The rounding itself has a sentence worth memorizing instead of a formula: to round up to a multiple of `a`, add `a - 1` and then round down. Rounding down is integer division followed by multiplication, so the readable form is `((x + a - 1) / a) * a`. For a power of two, rounding down is clearing the low bits, which gives the bit form `(x + a - 1) & ~(a - 1)`. Rounding 19 up to a multiple of 8 gives 24, and rounding 24 gives 24, which is the property adding `a - 1` rather than `a` provides.
+For a header immediately before the payload, first find the earliest possible payload address: the current cursor plus the header size. Align that address, then place the header immediately before it. Use an alignment at least as strict as both the requested alignment and the header's alignment. For power-of-two alignments, taking the larger value does this. The header also ends up aligned because its size is a multiple of its own alignment.
 
-The standard library also provides this as `std::align` in `<memory>`. It takes the alignment, the size, a `void*` reference, and a space reference. It moves the pointer forward to the next aligned address if the size still fits, shrinks `space` by the padding it skipped, and returns the aligned pointer, or `nullptr` if the request cannot fit. It does not subtract the size; that remains the caller's job. Using `std::align` removes both the rounding formula and the fit check from the code.
+Rounding only the requested size is insufficient unless the starting address is already suitably aligned. For example, an offset of 16 from a 64-byte-aligned base is still misaligned for a 64-byte request, regardless of the block's length.
 
-When the buffer is a member array, give the array itself an alignment, for example `alignas(std::max_align_t) std::byte buf_[Capacity]`. A plain `std::byte` array has alignment one, so wherever the allocator object lands, its first byte may sit at an odd address and even the first allocation would need padding. Aligning the array makes offset zero a valid start for any default-aligned request. Note also that `std::align` subtracts only the padding from the space it is given, never the size, so after the call the cursor becomes the aligned offset plus the size, which can be written as `Capacity - remaining + size` when `remaining` is the space variable that was passed in.
+To round a numeric address `x` up to a multiple of positive `a`, one formula is `((x + a - 1) / a) * a`. For a power of two, the equivalent bit formula is `(x + a - 1) & ~(a - 1)`. Both require guarding against overflow in the addition. Rounding 19 up to a multiple of eight gives 24; rounding 24 leaves it unchanged. The library function below avoids writing this arithmetic yourself.
 
-Padding lost to alignment is internal fragmentation. It is bounded by `align - 1` bytes per allocation and is the accepted price of constant-time allocation with no bookkeeping. A bump allocator never looks back at the gap, because looking back would require the metadata it deliberately does not keep.
+## What std::align changes
+
+`std::align`, from `<memory>`, finds an aligned start within a supplied region. It does not allocate memory. It receives an alignment, a requested size, a pointer variable, and a variable containing the available byte count. On success, it moves the pointer past the padding and subtracts only that padding from the byte count. The requested payload size is still included in the remaining count. If there is no fit, it returns `nullptr` and leaves both variables unchanged. See the [std::align contract](https://eel.is/c++draft/ptr.align).
+
+The pointer variable has type `void*`, which holds an address without naming an object type. This lets the function work with raw storage for any type. The pointer and byte count are passed by reference so the function can update the caller's variables.
+
+This sketch assumes a valid buffer, `used <= capacity`, and a nonzero power-of-two alignment. It leaves space for a header before asking the library to find the payload:
+
+```cpp
+const size_t headerSize = sizeof(ChunkHeader);
+size_t available = capacity - used;
+if (available < headerSize) throw std::bad_alloc{};
+
+void* candidate = memory + used + headerSize;
+size_t space = available - headerSize;
+size_t effectiveAlignment = std::max(alignment, alignof(ChunkHeader));
+if (!std::align(effectiveAlignment, requestedSize, candidate, space))
+    throw std::bad_alloc{};
+
+auto* payload = static_cast<std::byte*>(candidate);
+size_t padding = (available - headerSize) - space;
+// Construct the header here; update used only after allocation succeeds.
+used += padding + headerSize + requestedSize;
+```
+
+The first check ensures that subtracting the header size cannot underflow. `std::align` then checks whether padding and payload fit in the remaining region. Conceptually, the consumed space is still just `padding + header size + requested size`. `std::bad_alloc{}` constructs an exception object using braces; `std::bad_alloc()` would also work here.
+
+For a member buffer, `alignas(std::max_align_t) std::byte buffer[Capacity];` requests suitable alignment for types with fundamental alignment. `alignas` applies an alignment requirement to a declaration. This can avoid initial padding for those requests, but a header or a stricter requested alignment can still require padding. The unused gap before an allocation is called internal fragmentation; aligning one address skips at most `alignment - 1` bytes.
 
 ## Constructing objects in raw storage
 
-Storage for an allocator is best typed as `std::byte`, the C++17 type from `<cstddef>` that means "raw memory, not a number and not a character." It is one byte in size, supports only bitwise operators and explicit conversion through `std::to_integer`, and shares the aliasing exemption of `char` and `unsigned char`, so a `std::byte*` may inspect the bytes of any object. Pointer arithmetic on `std::byte*` moves one byte per step, which makes it the natural cursor type.
+`std::byte`, from `<cstddef>` since C++17, represents a byte of raw storage. It supports bitwise operations rather than ordinary integer arithmetic; `std::to_integer<int>(b)` explicitly obtains an integer from a byte value. A `std::byte*` advances one byte per pointer step and may inspect an object's underlying bytes, which makes it useful for allocator buffers.
 
-Placing an object into raw storage is a job for placement new: `new (address) T{ args }` constructs a `T` at the given address without allocating anything. Ordinary `new` does two jobs, acquire storage and construct; placement new does only the second, because the storage already exists. It lives in `<new>`. Nothing is deleted afterwards, because nothing was allocated; if the type had a non-trivial destructor it would be invoked by hand as `p->~T()`. This is exactly what `std::vector` does when it constructs an element inside its reserved block.
+Placement new constructs an object at an address whose storage already exists. The spelling `::new (address) T{arguments}` uses the global placement form from `<new>`. Here is a complete local example:
 
-Finding the object again later is a job for a cast. `reinterpret_cast<T*>(address)` says "read the bytes here as a `T`," which is legitimate precisely because placement new put a `T` there. The cast creates nothing and touches no memory. The two operations divide the work: placement new on the way in, `reinterpret_cast` on the way out. A C-style cast would compile but hides which conversion is happening, and `static_cast` refuses because `std::byte*` and `T*` are unrelated types. Going through `void*` with `static_cast` is the other standards-blessed spelling. Copying the header out with `std::memcpy` into a local, inspecting it, and copying it back avoids forming a typed pointer into the buffer at all, which sidesteps any aliasing question at the cost of more ceremony; for a trivially copyable header either approach is fine, and most allocator code uses the cast.
+```cpp
+#include <cstddef>
+#include <new>
+
+struct Header { std::size_t size; };
+alignas(Header) std::byte storage[sizeof(Header)];
+auto* header = ::new (static_cast<void*>(storage)) Header{3};
+// header points to the Header just constructed inside storage.
+std::size_t requested = header->size;  // 3
+```
+
+The placement expression returns a typed pointer, so keeping that pointer avoids an extra cast. It does not allocate the backing storage: do not call ordinary `delete` on `header`. If the constructed object needs destruction, destroy it before reusing or releasing its storage. For a class type, an explicit destructor call can be written `header->~Header()`. This simple header has a trivial destructor and needs no cleanup. The owner of a dynamically allocated backing buffer still releases that buffer later; the local array above ends with its scope.
+
+If only a byte address is available later, `reinterpret_cast<ChunkHeader*>(headerAddress)` can recover a pointer to a live, suitably aligned header at that address. The cast creates a pointer; it neither reads memory nor constructs an object. Accessing `pointer->Size` is the separate read. Casting an arbitrary address does not prove that a header is there.
+
+For a trivially copyable header, copying its bytes into a local header with `std::memcpy` is another useful approach. It avoids accessing the source through a typed header pointer, but still requires an in-bounds, readable byte region and valid representations for the fields. Checking a random candidate header needs those safeguards before inspecting its magic tag.
 
 ## Ownership inside a size budget
 
-An allocator that owns its buffer needs exactly three words of state: the base pointer, the capacity, and the cursor. That is 24 bytes on a 64-bit target. The clean spelling of ownership is `std::unique_ptr<std::byte[]>`, which is the size of a raw pointer and calls `delete[]` automatically, so there is no hand-written destructor to forget. A constructor that receives already-allocated memory simply adopts the pointer into the same `unique_ptr`.
+A simple owning implementation stores the buffer pointer, capacity, and cursor. On the exercise's usual 64-bit target, an eight-byte pointer and two eight-byte `size_t` fields total 24 bytes. This is a target layout assumption, not a guarantee for every C++ platform.
 
-The trap in a 24-byte budget is an ownership flag. A `bool owns_memory` pads the class to 32 bytes. When the specification says the class is the sole owner in every construction path, the flag is unnecessary and the destructor can always release. A `static_assert(sizeof(Allocator) == 24)` under the class turns the budget into something the compiler enforces.
+`std::unique_ptr<std::byte[]>` can own a buffer created by `new std::byte[capacity]` and automatically call `delete[]` when destroyed. With its default deleter it is commonly pointer-sized, but verify the actual allocator size with `static_assert(sizeof(Allocator) <= 24)`. See the [unique_ptr ownership and deleter rules](https://eel.is/c++draft/unique.ptr).
+
+If both constructors transfer sole ownership to the allocator, an ownership flag is unnecessary. Adding a `bool` would commonly increase this layout to 32 bytes because of padding. Adopting an external pointer into the same `unique_ptr` is valid only if that memory can be released with the matching `delete[]`. Ownership alone does not tell us whether the buffer originally came from `new[]`, `malloc`, or some other source.
 
 ## Validating a pointer on free
 
-When a free function must reject pointers it does not manage, the cheap tier of checks is a null check, a range check, an alignment check, and a magic tag in the header. Converting both pointers to `std::uintptr_t` before comparing makes the range check plain integer arithmetic; comparing raw pointers from different arrays with `<` is unspecified. Check `address < begin` before computing `address - begin` so the unsigned subtraction cannot wrap.
+A custom deallocation function must follow its own contract. `delete` and `std::free` accept null as a no-op, and doing the same is a useful convention for this exercise. Other pointers need validation before the function reads or writes the supposed header.
 
-The magic value is a constant shared by every header. It is not a per-chunk identity; it is a tag meaning "written by the allocator and currently live," the same idea as a stack canary or the magic bytes at the front of an ELF file. Zeroing it on free makes a second free fail the check, so one constant serves as a double-free detector. A pointer into the middle of a live chunk whose user data happens to contain the magic value is the gap this tier cannot close. Adding a sanity check that the header's recorded size does not extend past the cursor tightens it further at no cost.
+`std::uintptr_t`, from `<cstdint>` on platforms that provide it, is an unsigned integer type that can hold a converted pointer value. It lets this exercise work with addresses as numbers. That conversion does not read the pointed-to object. Numeric ordering and arithmetic here assume the ordinary address representation of the target platform.
 
-Exact validation requires metadata. A bitmap of chunk starts carved from the top of the buffer, one bit per 8-byte granule, makes the check exact and O(1) while keeping the class at 24 bytes, for about 1.5 percent of capacity. Making the magic depend on the address, for example `HeaderMagicId ^ uintptr_t(address)`, makes accidental matches essentially impossible with zero extra memory; glibc's safe-linking and tcache key use this idea. Walking the chunk chain from the base is exact but linear and needs the padded size stored somewhere. The interview framing is that exact validation needs a side table or a chain walk, a bump allocator's whole value is having neither, so a canary plus range and alignment checks is the right trade, strengthened with an address-dependent tag if needed.
+```cpp
+const auto address = reinterpret_cast<std::uintptr_t>(bytes);
+const auto begin = reinterpret_cast<std::uintptr_t>(memory);
+if (address < begin) throw std::bad_alloc{};
+const auto offset = address - begin;
+```
 
-Production allocators mostly trust the caller, because freeing a wrong pointer is already undefined behavior. glibc checks alignment and size sanity and catches double frees, but does not prove the pointer is a chunk start. Those checks are defense in depth, not a contract.
+If the buffer starts at address 1000 and `bytes` represents address 1024, the offset is 24. Check the lower bound before subtracting so unsigned arithmetic cannot wrap. Then check that a complete header fits before that offset, that the offset does not exceed the used region, and that the header address has the required alignment. These checks avoid relying on ordered comparisons between pointers to unrelated arrays.
 
-A free function should accept `nullptr` as a no-op. That is the contract of `delete` and of `free`, and it exists so cleanup code does not need a branch on every pointer.
+The magic field is a known marker stored in each live allocation's header. It is shared by all headers, rather than uniquely identifying one block. Zeroing it on deallocation lets a later check reject a repeated free in a design that does not reuse that storage. Also check that the recorded size fits before the current cursor.
+
+These checks catch common mistakes but do not prove that a pointer is an allocation start. Payload bytes might happen to look like a valid header. Making the marker depend on the address can reduce accidental matches, but it still is not exact validation and may conflict with a required fixed magic value.
+
+Exact validation needs trustworthy records of live allocation starts. One option is a bitmap: a bit for each possible aligned start, set when allocated and cleared when freed. At one bit per eight bytes of buffer, the bitmap alone costs about 1.6 percent of capacity, plus rounding. Another option is walking recorded allocations, which takes time proportional to the number visited and must account for padding. These are additional designs, not guarantees supplied by the magic check.
 
 ## Errors and pitfalls
 
-The reference solution to the getcracked problem is a useful catalogue of mistakes, each of which passes the hidden tests.
+Check the total space consumed before writing a header or payload. On the exercise's 64-bit layout, a request rounded to 96 bytes plus a 16-byte header cannot fit in a 100-byte buffer. Avoid unchecked additions and unsigned subtraction; subtract each component only after checking that it fits.
 
-Its capacity check compares the padded request against the space left but forgets the 16-byte header, which is added to the used count only afterwards. A 100-byte buffer accepts an 80-byte request that rounds to 96 and writes bytes 0 through 111. The fix is to include header and padding in the check before writing anything, which `std::align` does naturally when the space handed to it already excludes the header.
+Zeroing a header does not make its storage reusable. Decreasing a bump cursor when freeing a middle block can make the next allocation overwrite a later live block. Reclaiming a top block must restore the cursor from before its padding, so storing only its requested size may be insufficient.
 
-Its free decrements the used count for any chunk, and the used count doubles as the bump cursor. Freeing a chunk in the middle moves the cursor back over live data, and the next allocation overwrites a live chunk. Only the most recent allocation can be popped safely, which is the stack-allocator rule.
+Validate that alignment is nonzero and a power of two before calling `std::align`. Rounding a request of three up to four does not preserve divisibility by three, so silently choosing the next power of two is not a general fix for an invalid request.
 
-Its alignment rounds the size, not the address, so requests above 16 bytes of alignment are silently misaligned. It also over-rounds a size that is already a multiple of the alignment, because it adds a full `align` instead of `align - 1`.
-
-It placement-news a 24-byte `Chunk` rather than the 16-byte `ChunkHeader`, so the `Memory` pointer field is written into the first 8 bytes of the payload it is about to hand out. Nothing reads it back, so it is harmless, but only the header belongs in the buffer.
+Construct only the header in the reserved header area. Constructing a 24-byte `Chunk` where only 16 bytes were reserved for `ChunkHeader` writes into the payload and can exceed the buffer for a small request. The extra pointer field is not needed there.
 
 ## Additional syntax examples
 
-These are independent sketches, not one program.
+These are independent sketches, not one program. The size comments describe the exercise's usual 64-bit target.
 
 ```cpp
-// Storage and ownership in 24 bytes.
-std::unique_ptr<std::byte[]> base_;   // 8: owns the buffer, delete[] automatic
-size_t cap_;                          // 8
-size_t cur_{ 0 };                     // 8: offset of the first unused byte
-static_assert(sizeof(Allocator) == 24);
+// Three members for ownership and cursor bookkeeping.
+std::unique_ptr<std::byte[]> base_;  // Commonly 8 bytes with the default deleter.
+size_t capacity_;                  // 8 bytes on this target.
+size_t used_{0};                    // 8 bytes on this target.
+// Place this check after the complete Allocator class definition.
+static_assert(sizeof(Allocator) <= 24);
 
-// Round up to a multiple of a. Say it: add a - 1, then round down.
-size_t roundUp(size_t x, size_t a) { return ((x + a - 1) / a) * a; }
-// Power-of-two form: (x + a - 1) & ~(a - 1)
+// Check the requested alignment before calling std::align.
+if (alignment == 0 || (alignment & (alignment - 1)) != 0)
+    throw std::bad_alloc{};
 
-// std::align: moves p to the next aligned address if size fits, shrinks space by the padding.
-void*  p     = base_.get() + cur_ + sizeof(ChunkHeader);
-size_t space = cap_ - cur_ - sizeof(ChunkHeader);
-if (!std::align(a, size, p, space)) throw std::bad_alloc{};
-
-// In: placement new creates the header in raw bytes.
-new (bytes - sizeof(ChunkHeader)) ChunkHeader{ size, ChunkHeader::HeaderMagicId };
-
-// Out: reinterpret_cast re-finds it.
-auto* h = reinterpret_cast<ChunkHeader*>(bytes - sizeof(ChunkHeader));
-
-// Range check with integers, not pointer comparison.
-const auto addr  = reinterpret_cast<std::uintptr_t>(bytes);
-const auto begin = reinterpret_cast<std::uintptr_t>(base_.get());
-if (addr < begin) throw std::bad_alloc{};        // before subtracting
-const size_t off = addr - begin;
-
-// Stack-style pop: only if this chunk ends exactly at the cursor.
-if (off + h->Size == cur_) cur_ = off - sizeof(ChunkHeader);
+// After finding a valid aligned payload with room for the header:
+auto* header = ::new (static_cast<void*>(payload - sizeof(ChunkHeader)))
+    ChunkHeader{requestedSize, ChunkHeader::HeaderMagicId};
 ```
 
 ## Interview Q&A
 
 ### Write me a bump allocator.
 
-A bump allocator owns a fixed buffer and a cursor. Allocate rounds the cursor up to the requested alignment, checks that the size fits in what remains, returns the aligned address, and advances the cursor past the allocation. Reset moves the cursor back to zero. There is no per-pointer free, because the allocator keeps no record of individual allocations; every allocation in the arena shares one lifetime and is released together. That is what makes it two instructions per allocation and also what limits it to workloads with a common lifetime, like a frame or a request.
+I keep a buffer, its capacity, and a cursor. Each allocation finds an aligned address after the cursor, checks that the request fits, and advances past the returned block. I reclaim storage together with a reset or when the allocator is destroyed. Individual deallocation normally does not recover space, which keeps allocation simple and avoids searching for holes.
 
 ### How is a stack allocator different?
 
-A stack allocator adds a free that works only for the most recent live allocation, popping the cursor back to where that allocation began. Freeing anything else cannot reclaim space, because the cursor is the only state and moving it back over live data would corrupt it. Allocations push, frees pop, and pops only come from the top.
+It can recover the most recent allocation's space immediately. Allocations push the cursor forward, and frees pop it back in reverse order. I need to recover the previous cursor, including any alignment padding, and ensure I am not moving backward over a live allocation.
 
-### Why does the header-and-magic version not count as a bump allocator?
+### Can a bump allocator have headers and a deallocation function?
 
-Because a bump allocator's defining property is having no per-allocation metadata. A header is metadata. It only pays for itself if the allocator intends to find and reuse freed holes later, which is a first-fit or free-list design. In a header-based design freeing means marking the block, and allocating means possibly walking for a hole; that is a general-purpose allocator, not a bump allocator.
+Yes. Headers can record sizes or validate deallocation without making freed space reusable. I classify the allocator by how it allocates and reclaims storage. A function that just zeros a header still leaves the bump cursor where it was.
 
 ### How do you guarantee alignment when each allocation has a header?
 
-I decide the payload address first: the earliest address after the cursor that leaves room for a header, rounded up to the requested alignment. The header goes immediately before it. As long as I never round to less than the header's own alignment, the header is aligned automatically, because a multiple of any larger power of two is still a multiple of 8, and so is that minus 16. One rounding, both guarantees. `std::align` does the rounding and the fit check in one call.
+I leave room for the header, then align the payload address. The header goes immediately before the payload. I use an alignment that satisfies both types and include the padding, header, and requested bytes in the capacity check. `std::align` can find the aligned payload and check whether it fits in the space after reserving the header.
 
 ### How do you keep the allocator at 24 bytes?
 
-Base pointer, capacity, cursor. The base pointer is a `unique_ptr<std::byte[]>`, which is one word and handles `delete[]`. The trap is an ownership flag, which pads the class to 32; if the class is the sole owner on every path, the flag is unnecessary.
+I store only the buffer owner, capacity, and cursor, and check the class size on the target compiler. With a pointer-sized owner and eight-byte size fields, that fits in 24 bytes. Sole ownership on both construction paths means I do not need an ownership flag; I still need to use the correct way to release the supplied buffer.
 
 ### What does placement new do and why do you need it?
 
-Ordinary `new` acquires storage and then constructs; placement new skips the first step and constructs at an address I supply. I need it because the storage for the header already exists inside my buffer as raw bytes, and placement new is the operation that turns those bytes into an object. Later I find that object again with `reinterpret_cast`, which is legitimate because the object is really there.
+It constructs an object inside storage I already have. I use it to create the header in the allocator's buffer, and it returns a pointer to that header. It does not allocate another buffer, and the buffer's owner remains responsible for releasing the storage.
 
 ### How do you validate a pointer in free without a table?
 
-Null returns as a no-op. Then range and alignment checks using integer addresses, then a magic tag in the header. The tag is a constant meaning "live chunk written by this allocator," and zeroing it on free makes a double free fail the same check. Exact validation would need a side table or a chain walk, which is the metadata a bump allocator exists to avoid; if I want the canary stronger I make it address-dependent.
+I handle null according to the contract, then check the range and header alignment before inspecting the size and magic marker. That catches common invalid pointers and repeated frees, but payload data could imitate a header. If exact validation is required, I need a reliable record of allocation starts, such as a bitmap or a traversable allocation list.
 
 ### How would you support individual free calls in LIFO order on a stack allocator?
 
-The pointer being freed must be the top allocation, and freeing it moves the cursor back to where that allocation began, so the core is `offset_ = p - buf_`. What has to be added is a way to verify the pointer really is the top, because a middle free would silently corrupt everything after it. The cheapest check takes the size as well and confirms `p + size` equals the current cursor, which is the `std::allocator` and `std::pmr` convention. Keeping the last pointer handed out allows one level of pop. Writing the previous cursor as a small header before each allocation allows repeated pops at eight bytes each. Most real arenas skip per-pointer free entirely and offer mark and rewind, which is LIFO by construction, frees any number of allocations at once, and needs no validation because a mark is just an offset.
+I record the cursor position from before each allocation and enough information to verify that the block being freed is the current top. Freeing it restores that saved cursor. Checking the block's end alone does not recover padding before it. A related interface offers a saved mark and rewind; rewinding invalidates everything allocated since that mark, so the caller must respect those lifetimes.
 
 ### What happens if align is not a power of two?
 
-`std::align` requires a power of two and the behavior is undefined otherwise, so it cannot simply be passed through. If the specification guarantees a power of two, a violation is a programmer error and belongs in an assert. If the API is public, reject with `nullptr` or throw. If the API wants to be forgiving, round up to the next power of two, since a stricter alignment satisfies a looser one. Zero must be checked separately, because `align & (align - 1)` is zero for zero and `align - 1` wraps.
+I reject it before calling `std::align`, since a nonzero power of two is a precondition. In this throwing interface I can report the failure with an exception. I check zero explicitly as well as using the power-of-two bit test. I do not silently round arbitrary alignment requests because that may change their meaning.
 
 ### How does a stack allocator compare to alloca?
 
-Both hand out stack memory without the heap, and everything else differs. `alloca` carves space out of the current function's frame, so it is freed only when that function returns. It cannot be reset, cannot be shared with a callee, grows the frame on every call inside a loop, reports nothing on exhaustion, is a compiler extension rather than standard C++, and interferes with inlining. A stack allocator has a fixed compile-time capacity, an explicit lifetime tied to an object, a reset, a failure return, and can be passed by reference so many functions allocate from one arena. `alloca` is scoped to a frame and uncontrollable; a stack allocator is scoped to an object and explicit.
+`alloca` obtains storage from the current function's stack frame, and that storage lasts until the function returns. It is a compiler extension, and repeated calls in a loop keep consuming stack space. A stack allocator describes a last-in, first-out reclamation policy; its backing buffer could be local or dynamically allocated. An allocator object can expose explicit capacity checks and reclamation operations. A buffer stored on the call stack does not, by itself, imply a LIFO allocator policy.
 
 ### What is the purpose of std::max_align_t as the default alignment?
 
-`std::max_align_t` is a type whose alignment is the strictest any fundamental type needs, sixteen on x86-64. Defaulting to `alignof(std::max_align_t)` means a caller who does not specify gets memory suitable for any standard type, which is the same promise `malloc` and `new` make. Callers name an alignment only for over-aligned requests such as a cache line or a SIMD vector. It is also the right alignment for the buffer itself, so a default request at offset zero never needs padding. The related constant `__STDCPP_DEFAULT_NEW_ALIGNMENT__` is what `operator new` guarantees and is the same sixteen on this platform.
+Its alignment covers types with fundamental alignment requirements, making it a useful default for a general raw-storage buffer. Types with extended alignment can require more, so callers must request that stronger alignment. The numeric value is platform-dependent. `__STDCPP_DEFAULT_NEW_ALIGNMENT__` describes the alignment guaranteed by ordinary allocation with `operator new`; it is a related guarantee, not a universal synonym for `alignof(std::max_align_t)`.
 
 ## Practice history
 
+Editorial clarification: the entries below preserve the original session observations. The presence of headers or a deallocation function does not establish the allocator category. Use the reclamation rules explained above; the earlier “mislabeled” conclusion is superseded. The recorded hidden-test result is an observation about that exercise, not a universal contract for custom allocators.
+
 ### getcracked problems
 
-- [x] Bump Memory Allocator — 07/09 — solved with heavy guidance; first submission failed one hidden test because `Deallocate(nullptr)` threw instead of returning. Lessons: null free is a no-op by contract; the problem is a mislabeled stack allocator with first-fit scaffolding; align the address, not the size; `std::align` replaces the round-up formula; `unique_ptr<std::byte[]>` is the ownership spelling. Final solution verified under ASan and UBSan. **Rule to remember: if asked for a bump allocator, no headers, no per-pointer free, just cursor and reset.**
-- [x] Stack Allocator (template `Capacity`, buffer on the stack) — 07/09 — solved; first version used `unique_ptr` (heap, violates the no-`new` rule) and had `&`/`!=` precedence wrong in the power-of-two check, both caught before submit. Final: `alignas(std::max_align_t) std::byte buf_[Capacity]`, `std::align`, cursor update `Capacity - remaining + size`, reset is `offset_ = 0`. Lessons: `std::align` subtracts the padding from space, not the size; align the buffer itself so the first allocation never pads; this one is the genuine bump allocator, the previous problem was not.
+- [x] Bump Memory Allocator — 07/09 — solved with heavy guidance; first submission failed one hidden test because `Deallocate(nullptr)` threw instead of returning. Lessons: null free is a no-op by contract; align the address, not the size; `std::align` replaces the round-up formula; `unique_ptr<std::byte[]>` is the ownership spelling. Final solution verified under ASan and UBSan. Original session conclusion, since refined: the exercise looked like a mislabeled stack allocator because it had headers and a `Deallocate`; the taxonomy section above explains why those do not change the category. **Rule to remember: if asked for a bump allocator, the core is a cursor and a reset. Do not add per-allocation headers or reclamation logic unless the interface requires them; if a deallocate function is required, make it a no-op or validation-only, and say so.**
+- [x] Stack Allocator (template `Capacity`, buffer on the stack) — 07/09 — solved; first version used `unique_ptr` (heap, violates the no-`new` rule) and had `&`/`!=` precedence wrong in the power-of-two check, both caught before submit. Final: `alignas(std::max_align_t) std::byte buf_[Capacity]`, `std::align`, cursor update `Capacity - remaining + size`, reset is `offset_ = 0`. Lessons: `std::align` subtracts the padding from space, not the size; align the buffer itself so the first allocation never pads; this one is the minimal bump allocator with no headers and reset-only reclamation, the previous problem was the same allocation model with a validation header added.

@@ -118,7 +118,7 @@ If no handler is found, terminate is called. Whether unwinding occurs first is i
 
 ## Cost model and choosing an error channel
 
-On common table-driven exception ABIs, metadata describes handlers and cleanup, and a throw searches for a handler before unwinding. “Zero-cost exceptions” describes the absence of an explicit exception test after each successful call; code size, optimization constraints, register use, and instruction-cache effects can still cost something on the success path.
+Many implementations store tables that tell the runtime where exception handlers are and which objects need cleanup. When an exception is thrown, the runtime uses those tables to find a handler and unwind the stack. This avoids an explicit exception check after each successful call, which is the basis of the phrase “zero-cost exceptions.” Code size, optimization constraints, register use, and instruction-cache effects can still cost something on the success path.
 
 Throwing often involves exception-object storage, runtime searches, and cleanup, with costs that depend on the implementation and workload. There is no portable fixed microsecond cost. Expected uses ordinary branches and returns, but its payloads and error construction can allocate or perform other expensive work.
 
@@ -233,7 +233,7 @@ The language permits a potentially throwing destructor, but it is usually a poor
 
 ### Are exceptions free when nothing is thrown?
 
-Table-driven implementations avoid an explicit failure branch after every call, which is the basis of the zero-cost name. Metadata, code layout, and optimization effects can still matter. I measure the relevant workload and do not treat the phrase as a guarantee of no cost.
+Many implementations use stored tables to find handlers and cleanup code when an exception is thrown. That avoids an explicit exception check after every successful call, which is where the zero-cost name comes from. The tables take space, and code layout and optimization effects can still matter. I measure the relevant workload rather than assuming there is no cost.
 
 ### Does expected make a function noexcept?
 
