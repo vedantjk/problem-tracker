@@ -184,6 +184,8 @@ void getSinCos(double deg, double& sinOut, double& cosOut);  // out-param style:
 
 A pointer is an object I can reassign, and it can represent no target using null. A reference is an alias that I bind during initialization and cannot rebind. Assigning through a reference changes the referred object. Both require me to ensure that the target remains alive before I use it.
 
+On safety, the honest framing is an asymmetry of failure modes rather than a guarantee. A reference is valid at the moment it is created because it had to bind to something, so its main failure mode is outliving its referent. A pointer shares that dangling risk and adds several more: it can be uninitialized, null when dereferenced, or moved out of bounds by arithmetic. That is what "references are safer" actually means.
+
 ### Does a const reference mean the object cannot change?
 
 It only prevents modification through that reference. If the object itself is non-const, another alias can modify it and I will see the change. Also, a binding that performs a conversion can refer to a temporary copy instead of the original object.
