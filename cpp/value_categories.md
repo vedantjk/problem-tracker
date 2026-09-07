@@ -203,3 +203,9 @@ A forwarding reference uses deduction to accept both lvalues and rvalues, as wit
 ### What is the reference-collapsing rule?
 
 If either combined layer is an lvalue reference, the result is an lvalue reference. Only an rvalue reference combined with another rvalue reference remains an rvalue reference. The combination happens indirectly through templates or aliases.
+
+## Practice history
+
+### Questions (getcracked)
+
+- [ ] Value category table (`auto&& x1 = a; … int&& y = 42;`, classify `a`, `x1`–`x5`, `32`, `MakeString()`, `y`) — 07/09 — MISSED: classified the initializer expressions instead of the named variables. Expected `llllllppl`: every named variable is an lvalue regardless of declared type, including those declared `std::string&&` and `int&&`; only the literal `32` and the by-value call `MakeString()` are prvalues. Read the question: "expression" in the table means the name in the left column, not what initialized it. Platform's own table has one error: `auto&& x1 = a` deduces `std::string&`, not `std::string&&`, by reference collapsing from an lvalue. Anki: "Variable declared `std::string&& x = std::move(a);` — value category of the expression `x`?" / "lvalue. A name is always an lvalue; the declared reference type says what it can bind to, not what its uses are."
