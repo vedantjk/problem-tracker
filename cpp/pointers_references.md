@@ -40,7 +40,7 @@ s = 42;                      // converted still refers to the temporary int(3).
 
 By contrast, a const reference bound directly to an int aliases that int. Another non-const alias can modify the object, and the change is visible through the const reference. Const access is a restriction on that access path.
 
-Initializing `int& r2 = r1;` creates another reference to the same int; it does not create a reference object that refers to a reference object. `std::reference_wrapper` provides a reassignable wrapper when rebinding behavior is needed. A reference declared `constexpr` needs a constant-expression initializer; static-storage referents are the usual straightforward case. Constant evaluation has additional context-sensitive rules, so this is not a general storage-duration test for every possible reference use.
+Initializing `int& r2 = r1;` creates another reference to the same int; it does not create a reference object that refers to a reference object. The spelling `int&&` is not a reference to a reference either; since C++11 it declares an rvalue reference, a different kind of reference that binds to temporaries, so there is no syntax for a reference to a reference because the language has no such thing. `std::reference_wrapper` provides a reassignable wrapper when rebinding behavior is needed. A reference declared `constexpr` needs a constant-expression initializer; static-storage referents are the usual straightforward case. Constant evaluation has additional context-sensitive rules, so this is not a general storage-duration test for every possible reference use.
 
 ## Const pointers
 
