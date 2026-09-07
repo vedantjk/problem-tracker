@@ -57,6 +57,8 @@ The const qualification of the pointer and the pointee are independent:
 
 A pointer to const may refer to a non-const object. The reverse implicit conversion is forbidden because it would permit modification of a const object. A const pointer must have an initializer.
 
+Const applied to a type alias qualifies the whole aliased type, not a syntactic piece of it. With `using int_ptr = int*;`, the declaration `const int_ptr foo` means `int* const foo`, a const pointer to int, because the alias stands for the complete type `int*` and the const is top-level on that. It does not mean `const int* foo`. The same holds for `typedef`. Reading const-with-alias as textual substitution is the trap; an alias is a type, and const on a pointer type consts the pointer. This was missed on the 29/08 baseline quiz.
+
 ## Passing values, references, and pointers
 
 Pass small, inexpensive values by value. Passing a large or expensive object by `const T&` avoids making a parameter copy when it binds directly. A temporary conversion can still be needed. “At most two pointer widths with inexpensive copy semantics” is a useful heuristic for value parameters, not a language rule.
@@ -265,5 +267,6 @@ The entries below preserve the original practice record. Use the explanations ab
 
 - [x] &x + 1 vs x + 1 (array at 0, sizeof(int)=4) — 02/09 — ok (20, 4). Note gc's own explanation said "size of the pointer" for op two; correct reasoning is size of the POINTEE.
 - [x] In one out the other (int& + const int& aliasing same var) — 02/09 — ok (prints 1).
+- [ ] East to West (`const int_ptr foo` vs `const int* bar`) — 07/09 — result not reported. `foo` is `int* const` (const on an alias is top-level on the whole aliased type), `bar` is `const int*`. Same fact as the 29/08 quiz miss "const alias = top-level const".
 - [ ] **MISSED 02/09: I'm moving in.** (unique_ptr by-value param) — answered 1342; A dies with the PARAM at end of x, not with p1 at end of main. Reason: tracked lifetime by where the object was created, not by who currently owns the pointer.
   - **Anki**: front: "`x(unique_ptr<A> ptr)` called with `std::move(p1)` — when does ~A run?" back: "When ptr (the param) is destroyed at x's return — ownership moved in; p1 is null and its dtor is a no-op. By-value unique_ptr param = sink; const& = borrow (then A dies with p1)."
