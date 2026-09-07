@@ -1,64 +1,109 @@
 # Initialization & Type Deduction
 
-## Objects, variables, init forms
-- Object = storage holding a value; variable = named object; identifier = the name.
-- Initialization (at creation, ctor) ≠ assignment (later, operator=). Same `=`, different mechanism.
-- Forms: `int a = 5;` copy-init · `int a(5);` direct · `int a{5};` direct-list (**prefer**) · `int a{};` value-init → 0 · `int a;` default-init.
-- Default-init: automatic/heap scalar → indeterminate (reading = UB); static/namespace storage → zero first; class types run default ctor. `struct S{int a; std::string b;}; S s;` in a function: `a` garbage, `b` empty.
-- List-init forbids narrowing, checked on the VALUE for constant expressions: `int x{4L}` ok, `unsigned u{-1}` CE, `int y{4.5}` CE, `int z{dbl_var}` CE regardless of contents.
-- Most vexing parse: whatever can be a function declaration, is. `std::string s();`, `Double d(MyInt(i));`. Fix: `{}` or extra parens. Direct-list-init of a temporary needs a one-word type: `unsigned int{5}` CE, `int{5}` fine (alias multi-word types).
+## Objects, variables, and initialization
 
-## Static-storage init phases + constinit (cppstories storage-init, read 01/09)
-- Non-local static/thread objects initialize in phases: **static initialization** first — either **constant-init** (value computable at compile time → baked into the data segment) or **zero-init** (everything else zeroed → BSS; pointers = nullptr) — then **dynamic initialization** at runtime before main for whatever couldn't be done at compile time (ctor calls, non-constexpr expressions).
-- This is *why* "static storage → zero first" in the default-init rule above: statics are always at least zero-initialized before anything else runs.
-- **Static init order fiasco** (→ functions_scope_lambdas): *dynamic* init order across translation units is unspecified — a global in TU1 whose initializer reads a dynamically-initialized global in TU2 may see it pre-init (zeroed). Constant-initialized globals are immune (done at compile time). Fixes: Meyers singleton (function-local static, lazy + thread-safe since C++11), or make the dependency constant-init.
-- **const vs constexpr vs constinit (C++20)** on globals:
-  - `const`: immutable, but init may still be dynamic (runtime). Gives internal linkage on non-extern globals.
-  - `constexpr`: forces constant-init AND immutable.
-  - `constinit`: forces constant-init (CE if the initializer isn't a constant expression) but stays **mutable** — "diagnose the fiasco away without giving up mutation". constexpr = constinit + const, roughly.
-- **thread_local**: one object per thread, initialized when the thread starts (or lazily for function-locals, like static locals), destroyed at thread exit. `static thread_local` at namespace scope ≡ `thread_local` (static is implied). Uses: per-thread RNG, per-thread counters/scratch. Cost note: TLS access goes through a segment register (fs on x86-64 Linux) — cheap but not free.
-- Linkage footnote: C++20 modules add **module linkage** to the none/internal/external trio.
+An object occupies storage and has a type and lifetime. A variable is introduced by a declaration of an object or reference; not every object has a name, and a reference is not itself an object. An identifier is a name used in the program.
 
-## const nuances beyond the basics (learncpp 5.1, read 02/09)
-- **`const` return-by-value is a pessimization, not just clutter**: `const std::string getName()` makes the returned temporary a *const rvalue* — it can't bind to `std::string&&`, so `std::string s = getName();` calls the COPY ctor instead of move. Fundamental types: const silently ignored. Class types: you just banned moving from your own return value.
-- **Top-level const on a value parameter is not part of the signature**: `void f(int)` and `void f(const int)` declare the SAME function (defining both = redefinition CE, not an overload). Legal idiom: declare `void f(int);` in the header, define `void f(const int x)` in the .cpp — const-local discipline without interface noise.
-- **cv vocabulary** (standardese): `const` + `volatile` are the only two type qualifiers; types are **cv-unqualified** (`int`) or **cv-qualified** (`const int`). volatile = "may change outside the program" (MMIO/signal handlers), NEVER thread synchronization; C++20 deprecated volatile compound assignment (`v += 1`), C++23 un-deprecated the bitwise ones (`|=`, `&=`, `^=`).
+Initialization establishes an object's initial state. Assignment changes an existing object. Although both can use `=`, `std::string s = "hello";` initializes a string, while a later `s = "goodbye";` assigns to it. For class types, construction and assignment can call different functions.
 
-## Aggregates & designated initializers (C++20)
-- Aggregate = array, or class with: no private/protected non-static members, no user-declared ctors, no virtual/private/protected bases, no virtual functions (default member initializers OK since C++14).
-- `T o{.a = 1, .b{2}}`: aggregates only, non-static members, declaration order, may skip (skipped → default member init, else value-init), no positional mix, no duplicates, no nesting (C-only).
+| Example | Meaning |
+|---|---|
+| `int a = 5;` | This uses copy-initialization. |
+| `int a(5);` | This uses direct-initialization. |
+| `int a{5};` | This uses direct-list-initialization. |
+| `int a{};` | The empty initializer gives this scalar the value zero. |
+| `int a;` | This uses default-initialization, which does not initialize an automatic scalar's value. |
 
-## auto deduction — ask "what type makes this binding legal and exact?"
-For `const std::string& src`:
-- `auto x = src` → `std::string` — VALUE: copies; sheds ref and top-level const (your copy, yours to mutate).
-- `auto& x = src` → `const std::string&` — binds as-is; **const STAYS** or the binding would be illegal. ("drops const" is ONLY about the by-value form.)
-- `const auto& x = src` → same, and also binds temporaries (lifetime-extension).
-- `auto&& x = src` → `const std::string&` — forwarding: lvalue collapses to lvalue-ref; rvalue → rvalue-ref.
-- String literals: `auto s = "hi"` → `const char*` never std::string; `"s"s` / `"sv"sv` from std::literals fix it.
-- Braces: `auto x = {1,2}` → initializer_list; `auto x{5}` → int; `auto x{1,2}` → CE.
-- **Top-level vs low-level const vocabulary (learncpp 12.14, 02/09)** — the cleaner model behind all of the above:
-  - Top-level const = const on the object itself (`const int x`, `int* const p`). Low-level const = const on what's *accessed through* a ref/pointer (`const int&`, `const int*`).
-  - Deduction **drops references and top-level const; keeps low-level const; never drops pointers**.
-  - The twice-missed case restated: `auto x = getConstRef()` — dropping the ref *promotes* the low-level const to top-level, which then ALSO drops → plain `std::string`. `auto&` keeps the ref, so the const stays low-level and survives.
-- **`auto*` vs `auto` for pointers**: same deduced type when the initializer IS a pointer, but `auto*` is a compile-time assertion (non-pointer initializer = CE) and re-applies pointer-ness explicitly. const placement works like a normal declaration: `const auto* p` = ptr-to-const, `auto* const p` = const ptr, `const auto* const` = both. Gotcha: `const auto p{ getPtr() };` makes the POINTER const (top-level), not the pointee.
-- Best practice: re-state `&`, `const`, `*` even when deduction would supply them — intent over inference.
-- `operator void()` never used by casts: `(void)x`, `static_cast<void>(x)` just discard; only `x.operator void()` calls it.
+A local `int a;` must be assigned a value before an ordinary read. Through C++23, reading such an indeterminate `int` has undefined behavior. C++26 distinguishes erroneous and indeterminate values; it does not make uninitialized reads acceptable. See the [behavior catalog](ub_catalog.md).
 
-## Compile errors vs UB
-- CE: narrowing list-init; designated out-of-order/mixed/nested/duplicate/static-member; `auto x{1,2}`; `auto x;`; plain `auto&` to a temporary.
-- UB: reading default-initialized automatic scalar; `const auto&`/`auto&&` into a member of a dead temporary through a function return (the compiling version dangles — plain `auto&` would have been CE).
-- Vexing parse: not an error — compiles as a declaration; the CE arrives later at `w.foo()`.
+Default-initializing a class invokes its default constructor. This does not necessarily initialize every scalar member. In `struct S { int a; std::string b; };`, a local `S s;` gives `b` an empty string but leaves `a` uninitialized. A scalar with static storage duration receives static initialization even without an explicit initializer.
 
-## Questions (getcracked)
-- [x] Schrödinger's Initializer — 29/08 — ok
-- [x] The designated representative. — 29/08 — ok
-- [x] Forgot one? — 29/08 — ok
+## Braces, narrowing, and the most vexing parse
 
-## Quiz log (Claude)
-- 30/08 MISS + 31/08 REPEAT MISS: `auto& b = f()` where f returns `const T&` — said `T&` both times. auto& keeps const; deduction never produces an illegal binding. **Twice-missed: drill this.**
-- 31/08: bit_cast sizes + `auto&`/`const auto&` temporary pair (Q11) — all ok.
+List-initialization rejects narrowing conversions. `int x{4.5};` is invalid even if truncation would be intentional. Some conversions from constant expressions are permitted when the actual value fits, such as `int x{4L};` on a target where four is representable. A nonconstant `double` cannot be list-initialized into an `int` merely because its current value happens to be integral.
 
-## Syntax anchors
+Braces are useful, but their constructor-selection rules matter. `std::vector<int> a(10, 1);` creates ten elements containing one, whereas `std::vector<int> b{10, 1};` creates two elements. A matching initializer-list constructor receives preference.
+
+If a declaration can be parsed as a function declaration, it is parsed that way. `std::string s();` declares a function instead of constructing an empty string. This is the most vexing parse; `std::string s{};` makes the object intent clear. The same issue arises with forms such as `Double d(MyInt(i));`.
+
+A functional conversion expression requires the appropriate type spelling. `unsigned int{5}` is not valid expression syntax; use a type alias such as `using UInt = unsigned int;` followed by `UInt{5}`, or use `static_cast<unsigned int>(5)`.
+
+## Aggregates and designated initializers
+
+In C++20/23, aggregates include arrays and classes satisfying restrictions such as no user-declared or inherited constructors, no private or protected direct non-static data members, no virtual functions, and no virtual, private, or protected base classes. Default member initializers are permitted; aggregate rules have changed across language versions.
+
+C++20 designated initialization names direct non-static members of an aggregate in declaration order. Members may be skipped; omitted members use their default member initializer when present, or the applicable empty-initialization rules. A missing reference member still needs a valid binding.
+
+```cpp
+struct Point { double x = 0; double y = 0; };
+Point p{.y = 3};              // x keeps its default value, zero.
+// Point q{.y = 3, .x = 2};   // Compile error in C++20/23: wrong order.
+```
+
+In C++20/23, do not mix positional and designated clauses, repeat a designator, designate a static member, or use C-style nested designators. Both `.x = 2` and `.x{2}` can supply a member initializer. These are the version-specific [C++23 initialization rules](https://timsong-cpp.github.io/cppwp/n4950/dcl.init).
+
+## Static initialization, constinit, and thread_local
+
+Static initialization occurs before dynamic initialization. It consists of constant initialization when the requirements are met, or zero-initialization otherwise. Constant initialization is often represented directly in the executable's data, while zero-initialized storage often uses BSS; section placement is an implementation detail.
+
+Dynamic initialization performs remaining initialization work. Non-local dynamic initialization often happens before `main`, but the language permits deferred initialization in some cases. Avoid a global initializer that depends on another translation unit's dynamically initialized object being ready. This is the static initialization order problem.
+
+A function-local static can initialize on first use, and its initialization is thread-safe since C++11. That guarantee does not make later writes to the object thread-safe. Another solution is to make the dependency constant-initialized.
+
+For suitable static or thread-storage variables, the qualifiers express different intentions:
+
+- `const` prevents ordinary modification, but does not require constant initialization.
+- `constexpr` requires constant-expression initialization and makes an object const.
+- `constinit`, introduced in C++20, requires static initialization and diagnoses an unsuitable initializer. It does not itself make the object const, and it cannot be used for an ordinary automatic local.
+
+A `thread_local` variable has a separate instance for each thread, with thread storage duration. Initialized instances are destroyed at thread exit. Initialization timing depends on whether the variable is local or non-local and on the permitted implementation choices. At namespace scope, adding `static` changes linkage; `static thread_local` is not simply equivalent to `thread_local`.
+
+Thread-local storage is useful for per-thread counters, random-number generators, and scratch buffers. Its access cost depends on the platform and TLS model; an x86-64 Linux implementation may use the `fs` segment register.
+
+## const, volatile, and return values
+
+Top-level const qualifies the object itself, as in `int* const p`. Low-level const describes the accessed object, as in `const int* p`. A read-only pointer or reference does not make the underlying object immutable through all aliases.
+
+Top-level const on a by-value parameter is not part of the function type. `void f(int);` and `void f(const int);` declare the same function. The definition can use const to prevent changing its local parameter without changing the public signature.
+
+Avoid const-qualified class return values in ordinary value-returning APIs because they can block moves in contexts that need them. However, `const std::string getName(); std::string s = getName();` does not inherently force a copy in C++17 and later: same-type prvalue initialization can construct `s` directly. Assignment to an existing string is a useful contrasting case, since a const result cannot bind to the usual move-assignment parameter.
+
+`const` and `volatile` are the cv-qualifiers. Volatile access is relevant to some hardware and signal-related interfaces, but does not supply atomicity or thread synchronization. Some volatile operations were deprecated in C++20, with later revisions adjusting parts of that set. Use atomics and synchronization primitives for shared mutable state.
+
+## auto deduction
+
+For plain `auto`, deduction normally removes references and top-level const because a new value is being initialized. With `auto&`, the declaration asks for a reference and preserves the source's const qualification. In these examples, the source is a string:
+
+```cpp
+const std::string source = "hello";
+auto copy = source;            // std::string: a separate, mutable value.
+auto& alias = source;          // const std::string&: a reference to source.
+const auto& view = source;     // const std::string&: a read-only reference.
+auto&& forwarded = source;     // const std::string&: source is an lvalue.
+```
+
+An `auto&&` declaration in this deduction context is a forwarding reference. Lvalue initializers produce an lvalue reference after reference collapsing; rvalues generally produce an rvalue reference. A named rvalue-reference variable is itself an lvalue expression when used by name.
+
+For pointers, plain auto keeps the pointer type and the pointee's const qualification. `auto*` additionally requires a pointer-compatible initializer. `const auto p = getPtr();` makes the pointer object const; `const auto* p = getPtr();` makes access to the pointee const.
+
+`auto s = "hi";` deduces `const char*` after array-to-pointer conversion. The `s` and `sv` literal suffixes from `std::literals` select `std::string` and `std::string_view`. With braces, `auto x = {1, 2};` deduces an initializer list, `auto x{5};` deduces int, and `auto x{1, 2};` is invalid.
+
+## Reference binding and lifetime
+
+A local `const T&` or `T&&` can extend a temporary's lifetime when the lifetime-extension rules apply. Binding a new reference to an existing reference does not extend the lifetime again. A temporary passed to a reference parameter normally survives only to the end of the full expression containing the call.
+
+Returning a reference to that temporary does not extend it further. This is why a returned reference can dangle even when the receiving variable is `const auto&`. See [pointers and references](pointers_references.md) for examples and exceptions.
+
+An unusual syntax detail is that casting an object to void discards its value; it does not invoke a user-defined `operator void()`. That conversion function can still be called explicitly by name.
+
+## Errors and pitfalls
+
+Distinguish an invalid binding from a valid binding that later dangles. A plain `auto&` cannot bind to an ordinary temporary. A `const auto&` may bind successfully, but whether the referred object stays alive depends on how that object was obtained. Likewise, distinguish a function declaration produced by the vexing parse from the later error caused by trying to use it as an object.
+
+## Additional syntax examples
+
+These are independent syntax sketches, including deliberately invalid examples marked `CE` (compile error). They are not one compilable program.
+
 ```cpp
 int a = 5;   // copy-init
 int b(5);    // direct-init
@@ -107,9 +152,9 @@ const auto  p5{ getPtr() };  // std::string* const — const lands on the POINTE
 
 // ---- storage-init (cppstories) ----
 // the three init pathways for globals:
-double z = 100.0;   // constant-init: baked into data segment at compile time
-int x;              // zero-init: BSS, guaranteed 0 (local `int x;` would be garbage!)
-Value v{ 42 };      // dynamic-init: ctor runs at startup, before main
+double z = 100.0;   // Constant initialization; executable section placement is implementation-specific.
+int x;              // Zero-initialized to 0; commonly placed in BSS. A local int x; is uninitialized.
+Value v{ 42 };      // The constructor determines whether constant or dynamic initialization applies.
 
 // static init order fiasco, minimal repro:
 // b.cpp
@@ -118,7 +163,8 @@ Point center = createPoint(100, 200);          // dynamic-init
 // a.cpp
 extern Point center;
 Point offset = { center.x + 100, center.y + 200 };  // reads center — may still be ZEROED
-// link order decides; offset = {100,200} or {200,400}. Fix: Meyers singleton / constant-init.
+// Cross-file dynamic initialization can depend on build/runtime choices; do not rely on link order.
+// Use initialization on first use or establish constant initialization instead.
 
 // constinit vs constexpr (C++20):
 constinit std::pair<int, double> global { 42, 42.2 };  // compile-time init, MUTABLE
@@ -134,7 +180,8 @@ struct Value {
 };
 thread_local Value tls{ 42 };
 void foo() { tls.v = 100; }        // touches THIS thread's copy
-// { std::jthread w1{foo}, w2{foo}; }  → two Value(42)/~Value(42) pairs + main's
+// Each worker that initializes tls gets its own instance and destructor at thread exit.
+// Main has an initialized instance only if the applicable initialization rules cause it to be initialized.
 
 // static local: lazy init (first call), persists across calls
 int counter_up() { static int counter = 0; return ++counter; }
@@ -142,16 +189,51 @@ int counter_up() { static int counter = 0; return ++counter; }
 
 // ---- const nuances (learncpp 5.1) ----
 const std::string getName() { return "alex"; }
-std::string s = getName();   // COPY, not move: const rvalue won't bind to string&&
+std::string s = getName();   // C++17+: direct prvalue construction; this does not force a copy.
+s = getName();               // Assignment to an existing string: const blocks the usual move assignment.
 
 void f(int);                 // header
 void f(const int x) { }      // .cpp — SAME function; top-level const not in signature
 // void f(int x) {} + void f(const int x) {}  → redefinition CE, not overload
 ```
 
-## Traps / interview one-liners
-- "Prefer {}: no narrowing, no vexing parse, {} alone = zero not garbage."
-- "`vector<int> v(10,1)` = ten 1s; `v{10,1}` = two elements — initializer_list ctor wins with braces."
-- "auto = copy without const; auto& = reference WITH const. The type you wrote is never the full story."
-- "Uninitialized local read is UB, not 'random value'."
-- "Designated init reads like named args and survives field additions."
+## Interview Q&A
+
+### How is initialization different from assignment?
+
+Initialization establishes the initial state of a new object. Assignment operates on an object that already exists. For a class, initialization can call a constructor, while assignment can call an assignment operator. The presence of an equals sign alone does not tell me which is happening.
+
+### Does auto always drop const?
+
+No. Plain auto normally creates a value and drops top-level const. Auto with a reference preserves the const qualification needed for a valid binding. If the source is a const string, auto gives me a string copy, while auto-reference gives me a const string reference.
+
+### What does constinit add beyond const and constexpr?
+
+Const does not guarantee static initialization. Constexpr requires constant-expression initialization and makes an object const. Constinit requires static initialization for a suitable static or thread-storage variable while allowing later mutation unless I also specify const.
+
+### Why can braces change the meaning of vector initialization?
+
+List-initialization gives preference to an applicable initializer-list constructor. Parentheses with ten and one create ten copies of one, but braces with ten and one create two elements. I choose the syntax based on the constructor semantics I need.
+
+### Does returning const by value always force a copy?
+
+No. In C++17 and later, initializing a new object from a same-type prvalue can construct it directly. Const can still block moving in other contexts, such as assignment to an existing object, so I generally avoid const class return values.
+
+### When does a const reference extend a temporary's lifetime?
+
+It can extend the lifetime in eligible initialization expressions, such as a local const reference initialized from a temporary. It does not renew a lifetime through another reference or a function returning a reference. I trace the original temporary and the full expression in which it was created.
+
+## Practice history
+
+The entries below preserve the original practice record. Use the explanations above for the current rules and qualifications.
+
+### Questions (getcracked)
+
+- [x] Schrödinger's Initializer — 29/08 — ok
+- [x] The designated representative. — 29/08 — ok
+- [x] Forgot one? — 29/08 — ok
+
+### Quiz log (Claude)
+
+- 30/08 MISS + 31/08 REPEAT MISS: `auto& b = f()` where f returns `const T&` — said `T&` both times. auto& keeps const; deduction never produces an illegal binding. **Twice-missed: drill this.**
+- 31/08: bit_cast sizes + `auto&`/`const auto&` temporary pair (Q11) — all ok.

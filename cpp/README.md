@@ -1,9 +1,15 @@
 # C++ Notes — Concept Index
 
-Notes organized by **concept** (not by getcracked tree node). Each file: Core model · Questions/Quiz misses · Compile-errors-vs-UB · Syntax anchors · Traps.
-Missed questions → Anki card (front = question, back = the one-line reason).
+These notes are organized by concept. Each topic explains the material in full sentences, places small examples beside the relevant explanation, and ends with interview Q&A and the original practice history. Read the notes to learn the topic; use the Q&A afterward to practise explaining it aloud.
+
+The default baseline is C++20/23 unless a section names another version. C++26 changes are labeled separately. Concrete sizes and performance observations describe a stated platform or a typical implementation, rather than universal language guarantees. CE means a compile-time diagnostic is required, UB means undefined behavior, and NDR means no diagnostic is required.
+
+The additional syntax examples are independent sketches, including deliberately invalid cases. They are not intended to compile as one program. Practice logs preserve earlier answers and observations; corrections in the concept notes take precedence over historical shorthand.
+
+For a missed question, make an Anki card with the question on the front and a short explanation of the mechanism on the back. The card supplements the notes rather than replacing their coverage.
 
 ## Files
+
 | File | Owns |
 |---|---|
 | [build_linkage.md](build_linkage.md) | build pipeline, ODR, inline, preprocessor/macros, headers, identifiers, namespaces |
@@ -20,6 +26,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 
 ## Where is...? (every concept, A-Z)
+
 - ABI / RAX:RDX struct return → functions_scope_lambdas
 - ADL (friend found only by) → expressions (operator overloading)
 - aggregate rules → initialization_deduction
@@ -44,7 +51,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - char arithmetic & promotion → types_conversions
 - comma operator (precedence, return a,b) → expressions
 - comments don't nest / #if 0 → build_linkage
-- const return-by-value blocks move (const rvalue ≠ T&&) → initialization_deduction
+- const return-by-value can block moves (distinguish direct prvalue construction) → initialization_deduction
 - const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction
 - const vs constexpr vs constinit (globals) → initialization_deduction
 - cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
@@ -53,10 +60,10 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
 - const × pointer matrix (ptr-to-const vs const-ptr, right-to-left) → pointers_references
 - const ref = read-only view not immutability (aliasing writes visible) → pointers_references
-- dangling pointer (deref UB; using the VALUE = impl-defined) → pointers_references
+- dangling pointer (distinguish ended lifetime from released storage) → pointers_references
 - data races → ub_catalog (pointer)
 - default args don't apply through function pointers → pointers_references
-- default-init vs value-init (garbage vs zero) → initialization_deduction
+- default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
 - early return → control_flow
@@ -76,7 +83,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - fold expressions (quiz miss context) → README quiz table
 - for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
-- forward progress rule (side-effect-free infinite loop UB) → control_flow, ub_catalog
+- forward progress rule (including the C++26 trivial-loop exception) → control_flow, ub_catalog
 - function pointers (syntax, decay, overload disambiguation, no void* conversion) → pointers_references
 - function try blocks (ctor init-list catches, implicit rethrow) → error_handling
 - halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
@@ -88,10 +95,10 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - infinite loops (while(true) idiom, semicolon null-body, unsigned counter wrap) → control_flow
 - inline (ODR meaning, requirements, why not everything) → build_linkage
 - integral promotion (sub-int → signed int) → types_conversions
-- jump table (why switch is integral-only) → control_flow
-- keywords (92) & special identifiers → build_linkage
+- jump table (one possible switch implementation) → control_flow
+- keywords & special identifiers → build_linkage
 - lambdas (captures, mutable, sizes, passing, generic, constexpr) → functions_scope_lambdas
-- lifetime extension (const&/&& on temporaries; doesn't chain; direct-binding only, never through a return) → initialization_deduction, pointers_references
+- lifetime extension (eligible temporary bindings; does not renew through a reference return) → initialization_deduction, pointers_references
 - lvalue references (no reseat, binding rules, conversion-temporary trap) → pointers_references
 - loop counters (signed! unsigned >= 0 bug) → control_flow
 - linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
@@ -113,7 +120,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
 - cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
 - nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t (prvalue, not a pointer type) → pointers_references
-- noexcept destructors (default since C++11; throwing dtor → terminate) → error_handling
+- destructor exception specifications (implicit noexcept and termination cases) → error_handling
 - nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
 - optional (std::optional, all of it) → error_handling
 - numeric_limits quartet → floating_point
@@ -139,7 +146,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
 - rethrow (bare throw vs throw e slicing) → error_handling
-- return by reference / address (safe cases, static-local aliasing, max(a,b)=7) → pointers_references
+- return by reference / address (lifetime conditions, static-local aliasing, assignment through T&) → pointers_references
 - RVO / NRVO / -fno-elide-constructors → functions_scope_lambdas
 - scope vs duration vs lifetime → functions_scope_lambdas
 - sequencing (C++14 vs C++17 table) → expressions
@@ -176,6 +183,7 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 - vptr → memory_layout
 
 ## getcracked node → file map
+
 | Node | File | Q result |
 |---|---|---|
 | Steps to C++ Dev / IDE / Comments & Printing | build_linkage | no questions |
@@ -206,18 +214,47 @@ Missed questions → Anki card (front = question, back = the one-line reason).
 | Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | &x+1 vs x+1 ok |
 
 ## Quizzes
+
 | Date | Quiz | Score | Time | Percentile | Notes |
 |---|---|---|---|---|---|
 | 29/08/2026 | Beginner C++ (getcracked) | 11/20 | 18:11 | top 9.7% of 248 ("Cracked") | Baseline, cold. 2 coding Qs skipped. Missed: full-specialization member def (no `template<>`), fold `sum(2,0.5,..)` is double (arith conversions per `+`), macro double-eval `121`, `delete` on `malloc`, `const alias` = top-level const (`int* const`), `class A; struct A{}` same entity. Priority: Templates, Pointers/const, new/delete, Classes. Retake after tree. |
 | 31/08/2026 | Claude notes quiz #1 (11 Q) | 8 clean | ~30m | — | MISSED: SQUARE(2+3)=11 (macro paste), auto& keeps const (REPEAT). Precision dings: padding offsets map, 1<<31=INT_MIN, NRVO vs guaranteed elision. |
 | 01/09/2026 | Claude quiz #2 (10 Q, day's material + exceptions) | 8.5/10 | ~30m | — | HALVES: catch(...)-first is CE not catch-everything; uncaught→unwind impl-defined (dtors not guaranteed); switch decl-vs-init terminology + "garbage" for UB (REPEAT). Clean: ctor-throw member destruction, exit cleanup order, segments, access tiers, and_then retest, slicing rethrow, constinit. |
 
-## Template (per concept file)
-```
+## Template for each concept file
+
+```markdown
 # <Concept>
-## Core model
-## Questions (getcracked) / Quiz log
-## Compile errors vs UB
-## Syntax anchors
-## Traps / interview one-liners
+
+## <First concept or mechanism>
+
+Explain what it is, how it works, and why it matters in full sentences.
+Place a small example beside the explanation and walk through its result.
+
+## <Related concepts and practical choices>
+
+Cover the topic independently of which interview questions are included.
+Keep important caveats near the rule, and label version or ABI assumptions.
+
+## Errors and pitfalls
+
+Distinguish invalid programs, undefined behavior, permitted variation,
+and ordinary logical errors. Explain why each example belongs there.
+
+## Additional syntax examples
+
+Keep useful independent syntax sketches, clearly marking invalid cases.
+
+## Interview Q&A
+
+### <Question>
+
+Give a natural spoken answer with the reasoning and practical consequence.
+Include follow-up questions where they help reinforce the topic.
+
+## Practice history
+
+Preserve dated quizzes, missed questions, and Anki reminders here.
 ```
+
+The concept index and quiz tables are navigation and history, so their compact labels are intentional.

@@ -1,113 +1,115 @@
 # Pointers & References
 
-(learncpp 12.3-12.15, 20.1 — read 02/09)
+## Pointers and references
 
-## Core model
-- A pointer is an OBJECT holding an address; a reference is a NAME for an object (not an object itself — though a reference *member* costs pointer storage, → memory_layout). Consequences: pointers reseat/null/uninitialized-exist, references must bind at birth and never reseat.
-- `&` is three operators by context: type suffix = lvalue reference, unary = address-of, binary = bitwise AND. `*` likewise: type suffix = pointer, unary = dereference, binary = multiply.
-- `*(&x)` round-trips; dereference yields an **lvalue** (assignable through it).
-- Pointer size = address width (8B on x86-64), independent of pointee type. Multiple declarations need per-name stars: `int* p1, p2;` — p2 is an `int` (the reason "east const" people write `int *p`).
-- **Invariant to maintain**: a pointer holds the address of a valid object OR nullptr. Value-init (`int* p{};`) gives null; uninitialized = wild (garbage address).
-- Pointer → bool: null → false, everything else → true (`if (ptr)`).
-- **Dangling pointer nuance**: *dereferencing* a dangling pointer is UB, but merely *using its value* (copying it, `p == q`) after the pointee dies is **implementation-defined**, not UB — the standard only guarantees assigning a new value (e.g. `p = nullptr;`) is safe. So even `if (dangling)` is off the well-defined map.
-- Destruction does NOT null your pointers — dangling detection is entirely on you; there's no way to distinguish a valid pointer from a dangling one at runtime.
+A pointer is an object whose value can identify an object or function, a position one past an object, or a null pointer. A reference is an alias for another entity and is not itself an object. A pointer variable can be reassigned; a reference must be initialized and cannot later be rebound.
 
-## Lvalue references (12.3-12.6)
-- Must initialize; no reseating — `ref = y` writes y's VALUE into the referent, it never rebinds. Reseating needs `std::reference_wrapper`.
-- Non-const `T&` binds only to *modifiable lvalues* of matching type: no const objects, no rvalues, and no different-type lvalues either (conversion yields an rvalue → rejected).
-- `int& r2{ r1 }` is NOT a reference-to-reference — r1 evaluates to its referent, r2 just aliases the same object. `int&&` was free syntax, repurposed for rvalue refs in C++11.
-- Reference and referent have independent lifetimes; referent dying first = dangling (access UB). References aren't objects — often compiled away entirely.
-- **`const T&` binds to everything**: modifiable lvalues (read-only view), const lvalues, and rvalues (with lifetime extension).
-- **Conversion-on-binding trap**: binding `const int& r` to a `short s` (or `5.0`) creates a TEMPORARY int from the converted value and binds to *that*. Later writes to `s` are invisible through `r` — you're watching a snapshot, not the object. Same-type binding aliases; cross-type binding copies.
-- **Lifetime extension**: a temporary DIRECTLY bound to a const local reference lives as long as the reference. Only direct binding — not through a function return (→ max/min dangling trap below), and it doesn't chain.
-- **constexpr references** can only bind to static-storage objects (globals/static locals) — an automatic variable's address isn't a compile-time constant.
+For an ordinary object pointer, dereferencing a valid pointer yields an lvalue referring to its pointee. Thus `*(&x)` refers to `x`. The symbols depend on context: `&` can declare a reference, take an address, or perform bitwise AND; `*` can declare a pointer, dereference one, or multiply.
 
-## Pass by reference (12.5-12.6) & in/out params (12.13)
-- `T&` param: no copy, callee writes visible; accepts modifiable lvalues ONLY (`f(5)` CE, `f(constVar)` CE) — which is why non-const ref params are rare.
-- `const T&` param: no copy + accepts everything incl. literals. Default for class types.
-- **Cheap-to-copy rule**: pass by value when `sizeof(T) <= 2 * sizeof(void*)` (≤16B on x86-64) AND no setup cost (no allocation/ctor work). Fundamentals + small trivial structs by value; class types by const&; unsure → const&.
-- Strings: **prefer `std::string_view` by value** (C++17+) — handles string/string_view/C-string args cheaply; `const std::string&` is only cheap for std::string args (a C-string literal argument constructs a whole temporary std::string). Caveat: string_view not guaranteed null-terminated.
-- **Out params** (non-const ref/pointer, "Out" suffix, rightmost): discouraged — caller must pre-declare, call site hides which args get written, no temporaries. Prefer return values (RVO makes them free); non-const ref only for in-out params or perf-critical giant objects. Pass-by-address at least makes mutation visible at the call site (`&i`) at the cost of null handling.
+```cpp
+int x = 5, y = 6;
+int* p = &x;
+int& r = x;
+p = &y;                      // p now points to y.
+r = y;                       // This assigns 6 to x; r still refers to x.
+```
 
-## const × pointer matrix
-Read right-to-left; const-left-of-* = pointee, const-right-of-* = pointer:
+Declare each pointer with its own star: `int* p1, p2;` declares one pointer and one int. Ordinary object pointers commonly occupy eight bytes on x86-64 platforms, regardless of the pointed-to type, but this is not a universal C++ layout guarantee.
 
-| Declaration | reseat? | write through? |
+## Null, uninitialized, and dangling pointers
+
+Value-initializing `int* p{};` produces a null pointer. A local `int* p;` without an initializer must be assigned before its value is used. A null check distinguishes null from non-null; it does not prove that the pointee is alive or accessible.
+
+A pointer becomes dangling when it no longer identifies a live object that can be accessed as intended. Destroying an object does not reset every pointer to it. There is no general validity test available from a raw pointer alone; track ownership and lifetime instead.
+
+There is a subtle distinction between an object's lifetime ending and its storage being released. After storage duration ends, indirection through an invalid pointer has undefined behavior, while other uses of that invalid pointer value can have implementation-defined behavior. If storage still exists but the object's lifetime has ended, separate restricted-use rules apply. Avoid the blanket claim that every operation on every dangling pointer has the same classification. See [pointer validity](https://eel.is/c++draft/basic.compound) and [object lifetime](https://timsong-cpp.github.io/cppwp/n4950/basic.life).
+
+## Lvalue references and const views
+
+An ordinary non-const `T&` requires a compatible lvalue. It cannot bind directly to a const T or to an ordinary T temporary. Compatibility can include a derived-to-base binding, so “exactly the same type” is too restrictive.
+
+A `const T&` accepts a wider range of initializers, including compatible lvalues and suitable temporaries. Some bindings perform a conversion and refer to a new temporary instead of the original object:
+
+```cpp
+short s = 3;
+const int& converted = s;
+s = 42;                      // converted still refers to the temporary int(3).
+```
+
+By contrast, a const reference bound directly to an int aliases that int. Another non-const alias can modify the object, and the change is visible through the const reference. Const access is a restriction on that access path.
+
+Initializing `int& r2 = r1;` creates another reference to the same int; it does not create a reference object that refers to a reference object. `std::reference_wrapper` provides a reassignable wrapper when rebinding behavior is needed. A reference declared `constexpr` needs a constant-expression initializer; static-storage referents are the usual straightforward case. Constant evaluation has additional context-sensitive rules, so this is not a general storage-duration test for every possible reference use.
+
+## Const pointers
+
+The const qualification of the pointer and the pointee are independent:
+
+| Declaration | Can the pointer be reassigned? | Can this pointer modify the pointee? |
 |---|---|---|
-| `int* p` | yes | yes |
-| `const int* p` (ptr-to-const) | yes | no |
-| `int* const p` (const ptr) | no — must init | yes |
-| `const int* const p` | no | no |
+| `int* p` | Yes. | Yes, if the pointee is otherwise modifiable. |
+| `const int* p` | Yes. | No. |
+| `int* const p` | No. | Yes, if the pointee is otherwise modifiable. |
+| `const int* const p` | No. | No. |
 
-- `const int x; int* p{&x};` = CE (would launder away const). The reverse is fine: `const int*` may point at a non-const object (view-only through that pointer).
+A pointer to const may refer to a non-const object. The reverse implicit conversion is forbidden because it would permit modification of a const object. A const pointer must have an initializer.
 
-## Function pointers (learncpp 20.1)
-- Syntax: `int (*fcnPtr)(int);` — parens mandatory (`int* fcnPtr(int)` declares a function returning int*). Const version: `int (*const fcnPtr)(int)`.
-- **Function-to-pointer decay**: a function name without parens implicitly converts to a pointer — `&foo` and `foo` both work as initializers (mirror of array decay). Exception: an *overloaded* name needs the target type to disambiguate (init a typed pointer, or `static_cast<void(*)(int)>(foo)`).
-- Calling: `(*fcnPtr)(5)` explicit or `fcnPtr(5)` implicit — identical. Null fp call = UB, check first.
-- **Default arguments do NOT apply through a function pointer.** Defaults are call-site sugar resolved at compile time against the *declaration*; through a pointer the call resolves at runtime, so `fcnPtr()` on `void f(int x = 0)` is a CE (signature is `void(*)(int)`). Flip side: you can *use* this to pick an overload that defaults would otherwise make ambiguous.
-- Function pointers do NOT implicitly convert to `void*` (object-pointer world and function-pointer world are formally separate; POSIX `dlsym` forces the cast anyway — conditionally-supported).
-- **`std::cout << foo` prints `1`** (gc, 02/09): the name decays to a function pointer; there's no `operator<<` for function pointers, and *because* function pointers don't convert to `void*` (the overload that prints data-pointer addresses), the only viable conversion is → bool. Non-null → `1` (`true` under boolalpha). clang warns `-Wpointer-bool-conversion` ("will always evaluate to true"). Printing the actual address needs `reinterpret_cast<void*>(&foo)` (conditionally-supported).
-- Ergonomics ladder: raw fp → `using ValidateFn = bool(*)(int,int);` → `std::function<bool(int,int)>` (type-erased, costs — → functions_scope_lambdas) → `auto fp{&foo};`.
-- Callback anchor: `void selectionSort(int* arr, int size, bool (*cmp)(int,int));`.
+## Passing values, references, and pointers
 
-## Pass by address (12.10-12.11)
-- Ladder: pass-by-value copies the object; pass-by-reference binds; pass-by-address copies an 8-byte pointer. "Pass by reference when you can, pass by address when you must."
-- Address-taking needs an lvalue: `f(&5)` CE. const-ref beats const-ptr partly *because* it also takes rvalues/temporaries.
-- Param const style: `const int* ptr` yes; `int* const ptr` in a signature = noise (top-level const on params isn't part of the signature anyway, → initialization_deduction).
-- Null-handling pattern: `assert(ptr);` (document + debug-trap) AND `if (!ptr) return;` (production) — assert is not a substitute for the check.
-- Optional out/in-param via `const int* id = nullptr` works but **overloading is better** (no null-deref risk, literals work); today: `std::optional` for optional *values* (→ error_handling), pointer only when you need to *mutate* an optional target.
-- **Reseating the caller's pointer needs `int*& refptr`** (reference to pointer). `int&*` is CE — "no pointers to references" (references aren't objects). Plain `int* ptr2` param: `ptr2 = nullptr;` changes only the copy.
-- **What nullptr actually is**: a prvalue of type `std::nullptr_t` — NOT a pointer type itself. It's a "null pointer constant" that implicitly converts to any pointer type (and pointer-to-member type). That's why it's overload-safe where 0/NULL aren't.
-- **0 / NULL / nullptr in overload resolution**: `print(0)` → `print(int)`; `print(NULL)` → impl-defined mess (may be int, may be ambiguous); `print(nullptr)` → `print(int*)` reliably. nullptr's type is `std::nullptr_t` — you can overload on it: `void print(std::nullptr_t)`. But a *pointer variable holding nullptr* still calls `print(int*)` — **overloading matches on types, not values**.
-- Unifying view: references compile to pointers, pass-by-address copies an address — mechanically "C++ passes everything by value"; the semantics differ at the language level.
+Pass small, inexpensive values by value. Passing a large or expensive object by `const T&` avoids making a parameter copy when it binds directly. A temporary conversion can still be needed. “At most two pointer widths with inexpensive copy semantics” is a useful heuristic for value parameters, not a language rule.
 
-## const references & aliasing (gc "In one out the other", 02/09)
-- `void bar(int& a, const int& b)` called as `bar(c, c)`: both alias `c`. `a = 1` writes c; printing `b` shows **1**. A const reference is a **read-only view, not a promise of immutability** — the object can still change through another name. (Same root as the SROA/aliasing note in memory_layout: the compiler can't cache a load through `const T&` across writes it can't prove independent.)
-- Flip side: if `c` were `const int`, the call is a CE — `int&` can't bind to a const object (no mutable view of a constant).
-- **std::max/std::min tie-breaking**: both return the FIRST argument when equal (`max(a,b)` = `b < a ? a : b` — equal → a... spelled as "if equivalent, returns a" on cppreference). So `const int& mx = std::max(x, x); x = 11;` → mx reads 11 (it aliases x).
-- Adjacent trap (not in gc's Q): `const int& r = std::max(a, b + 1);` — the `b + 1` temporary materializes for the call, max returns a `const&` *into an argument*, and lifetime extension does NOT apply through a function return → dangling after the full expression.
+Use `T&` for a required existing object that the function may modify. Use a pointer when optional presence or pointer-specific behavior is part of the interface. A pointer parameter itself is passed by value: reassigning that local pointer does not reassign the caller's pointer. C++ also has genuine reference parameters at the language level; do not describe all parameter passing as pass-by-value merely because an ABI may implement references using addresses.
 
-## Return by reference / address (12.12)
-- Rule: the returned object must outlive the function. Ref to a plain local = dangling (compilers catch only trivial cases).
-- **Lifetime extension does not cross a function return** (the general rule behind the max trap above): direct binding extends, bounced-through-a-return binding doesn't.
-- Safe returns: (a) a reference PARAMETER (`return (a < b) ? a : b;` — both live in the caller); (b) a static local — but non-const static + returned ref = shared mutable state across every caller (`getNextId()` aliasing surprise), avoid; (c) a member of an object outliving the call (the real-world case: `obj.getName()`).
-- Rvalue-argument nuance: an rvalue bound to a `const&` param lives to the end of the FULL EXPRESSION containing the call — `std::cout << foo("temp")` fine; saving the returned ref past the statement dangles.
-- Assigning a returned reference to a value variable COPIES (`const int id{ getNextId() };` — independent). Dangling only bites when you *keep it as a reference*.
-- Non-const ref return makes the call an lvalue: `max(a, b) = 7;` assigns through — the mechanism behind `v[i] = x` (operator[] returns T&).
-- Return by address: same lifetime rules + nullptr as "no object"; caller must null-check. Prefer reference unless no-object is real (today: std::optional/expected for values, → error_handling).
+```cpp
+void reset_copy(int* p) { p = nullptr; }       // Only the local copy changes.
+void reset_caller(int*& p) { p = nullptr; }    // The caller's pointer changes.
+```
 
-## Pointer arithmetic & array decay (gc, 02/09)
-- `int x[5]` at address 0, `sizeof(int)==4`:
-  - `&x + 1` → **20**. `&x` has type `int(*)[5]` — pointer to the WHOLE array; +1 steps one whole array (`sizeof(int[5])` = 20).
-  - `x + 1` → **4**. `x` decays to `int*`; +1 steps one **pointee** (`sizeof(int)` = 4).
-- Rule: `p + n` advances `n * sizeof(*p)` — size of the *pointed-to type*, never "size of the pointer" (gc's explanation misspoke here: pointer size is 8 on x86-64 and irrelevant to the stride).
-- Same fact underlies `sizeof(x)` = 20 vs `sizeof(x+0)` = 8, and the `(&x)[1]` end-of-array idiom.
+A reference to a pointer, `int*&`, is valid. A pointer to a reference, `int&*`, is not. Ordinary address-taking also cannot take the address of a literal such as `&5`.
 
-## argv is null-terminated (gc, 02/09)
-- The standard guarantees **`argv[argc] == 0`** — not UB, explicitly specified ([basic.start.main]). argv acts like a null-terminated array, same shape as a C-string: walk `for (char** p = argv; *p; ++p)` with no count.
-- Why it exists: lets argv pass directly to APIs expecting null-terminated arrays (`execv(path, argv)`); portability history (some old compilers didn't set it — one more reason it's now nailed down in the standard).
-- Practice: use argc; keep the terminator fact in the back pocket.
+For read-only string input, `std::string_view` by value often avoids constructing a temporary string for a literal. The view does not own its characters and need not be null-terminated. Do not retain it beyond the source's lifetime.
 
-## unique_ptr ownership mechanics (gc "I'm moving in.", 02/09)
-- The owned object dies when the unique_ptr **currently holding the non-null pointer** dies — never "where it was created".
-- By-value `unique_ptr<A>` parameter = ownership **sink**: `x(std::move(p1))` move-constructs the param, p1 becomes null (guaranteed, → ub_catalog moved-from). Param is a local of x → destroyed at x's return → A deleted THERE. `~unique_ptr` on null = no-op, so p1's dtor at end of main prints nothing.
-- gc's "1324" snippet: 1 (ctor) · 3 (body) · **2 (param dies at end of x)** · 4. The wrong answer 1342 assumes ownership stayed with p1.
-- Signature flips the story: `x(const unique_ptr<A>&)` = borrow, no transfer → 1342 (A dies at end of main). Signature IS the ownership contract.
-- Nuance beyond gc: WHEN a parameter is destroyed is **implementation-defined** — end of function body (gcc/clang) or end of the caller's full expression (MSVC) [expr.call]. Both are before `<< 4`, so 1324 is robust here, but don't claim "at function return" as a standard guarantee.
+Prefer return values, including named result structs, when a function computes outputs. Copy elision often removes transfer costs, but return values are not universally free. Output parameters can still be appropriate for in-place modification, buffer reuse, or established APIs. Choose a clear null-handling contract for pointer parameters: reject null, report it, or give it a documented meaning. An assertion disappears in many release builds, so it cannot implement required runtime validation by itself.
 
-## Compile errors vs UB vs impl-defined
-- CE: `int* p{5}` (literal address); `int* p{&constInt}`; `int&*` (pointer to reference); `f(&5)`; calling through fp with missing "default" arg; overloaded-name decay without target type.
-- UB: dereferencing wild/null/dangling; calling a null function pointer.
-- Impl-defined: using (not dereferencing) a dangling pointer's value; what NULL expands to.
+## Function pointers and nullptr
 
-## Questions (getcracked) / Quiz log
-- [x] &x + 1 vs x + 1 (array at 0, sizeof(int)=4) — 02/09 — ok (20, 4). Note gc's own explanation said "size of the pointer" for op two; correct reasoning is size of the POINTEE.
-- [x] In one out the other (int& + const int& aliasing same var) — 02/09 — ok (prints 1).
-- [ ] **MISSED 02/09: I'm moving in.** (unique_ptr by-value param) — answered 1342; A dies with the PARAM at end of x, not with p1 at end of main. Reason: tracked lifetime by where the object was created, not by who currently owns the pointer.
-  - **Anki**: front: "`x(unique_ptr<A> ptr)` called with `std::move(p1)` — when does ~A run?" back: "When ptr (the param) is destroyed at x's return — ownership moved in; p1 is null and its dtor is a no-op. By-value unique_ptr param = sink; const& = borrow (then A dies with p1)."
+`int (*fp)(int)` declares a pointer to a function taking int and returning int. The parentheses distinguish it from a function returning a pointer. A function name usually converts to a function pointer; both `foo` and `&foo` can initialize it. An overloaded name needs enough target-type information to select an overload.
 
-## Syntax anchors
+Call a valid function pointer as `fp(5)` or `(*fp)(5)`. Calling a null function pointer has undefined behavior. Default arguments belong to declarations at the call site and are not part of a function pointer's type. A pointer to `void f(int = 0)` still requires one argument when called through the pointer.
+
+Function pointers do not have a standard implicit conversion to `void*`. Streaming a non-null function pointer therefore commonly selects the bool overload and prints `1`, or `true` with `boolalpha`. Converting it to an object pointer for address printing is conditionally supported, not universally portable. A `using` alias can make callback signatures easier to read; see [lambdas and callable wrappers](functions_scope_lambdas.md) for alternatives.
+
+`nullptr` is a prvalue of type `std::nullptr_t`, which is not a pointer type. It converts to null pointer and null member-pointer values. Given `print(int)` and `print(int*)`, `print(0)` selects the int overload and `print(nullptr)` selects the pointer overload. `NULL` is an implementation-defined null pointer constant and can produce surprising overload resolution. An overload taking `std::nullptr_t` accepts expressions of that type, including variables of that type; an `int*` containing null still has type `int*`.
+
+## Returning references and extending lifetimes
+
+A returned reference or pointer is usable only while its referent remains valid. Returning an ordinary local object's address or reference leaves the caller with a dangling result. Returning a reference parameter or a member can be safe, but only if the original argument or containing object lives long enough. A static local outlives the call, though exposing mutable static state creates sharing concerns.
+
+Eligible reference initialization can extend a temporary's lifetime, but returning a reference to an argument does not extend that argument again. A temporary passed to a reference parameter normally dies at the end of the full expression containing the call. Copying a value from the returned reference before then can be safe; copying from an already dangling reference is not.
+
+The two-argument `std::min` and `std::max` return a const reference and choose the first argument on ties. In `const int& r = std::max(a, b + 1);`, r dangles after the statement if the temporary is selected. If a value is wanted, storing the result by value avoids retaining that reference.
+
+A non-const reference return permits assignment through the call expression, as with a container's `operator[]`. This is useful only when the lifetime and mutation contract are clear.
+
+## Array decay and pointer arithmetic
+
+An array often converts to a pointer to its first element, but taking the address of the array produces a pointer to the entire array. For `int x[5]`, `x + 1` advances one int, whereas `&x + 1` advances one array of five ints. Assuming four-byte ints, these correspond to offsets of four and twenty bytes from the start. The conceptual offset zero in a quiz is not a real object at the null address.
+
+Pointer arithmetic follows the pointed-to type, not the pointer's own size. It must also remain within the permitted array range, including the one-past position. The one-past pointer can be formed but cannot be dereferenced to access an element. `sizeof(x)` measures the full array, while `sizeof(x + 0)` measures a pointer.
+
+For main's argument array, `argv[argc]` is guaranteed to be null. This allows terminator-based traversal, although `argc` is usually the clearest bound.
+
+## unique_ptr and ownership transfer
+
+A `std::unique_ptr<T>` owns its current pointee. Moving it into a by-value parameter transfers ownership to that parameter and leaves the source empty. The pointee is destroyed if that owner is destroyed without releasing or transferring it first. Its original creation scope does not determine its destruction time.
+
+Parameter destruction timing is implementation-defined: it can occur when the function exits or at the end of the enclosing full expression. If the ownership-taking call is one statement and the next print is another statement, the owned object has been destroyed before the next print. Do not use that reasoning for a later insertion in the same full expression without considering the timing rule. See [parameter destruction](https://timsong-cpp.github.io/cppwp/n4950/expr.call).
+
+Taking `const std::unique_ptr<T>&` does not transfer ownership. If the function only needs the pointee, `T&` or `const T&` often expresses borrowing more directly without coupling the API to an ownership wrapper.
+
+## Additional syntax examples
+
+These are independent syntax sketches, including deliberately invalid examples marked `CE` (compile error). They are not one compilable program.
+
 ```cpp
 int x{5};
 int* ptr{ &x };     // & = address-of
@@ -129,7 +131,7 @@ void selectionSort(int* arr, int size, CmpFn cmp);
 auto fp2{ &foo };
 
 void f(int x = 0);
-int (*fpd)(int){ f };  // fpd() CE — defaults don't travel through pointers
+void (*fpd)(int){ f };  // fpd() CE — defaults don't travel through pointers
 
 void nullify(int*& refptr) { refptr = nullptr; }  // reseats caller's ptr
 // int&* — CE: no pointer to reference
@@ -138,15 +140,15 @@ void print(int) ; void print(int*);
 print(0);        // int
 print(NULL);     // impl-defined / possibly ambiguous
 print(nullptr);  // int*
-void print(std::nullptr_t);  // catches literal nullptr only —
+void print(std::nullptr_t);  // Accepts std::nullptr_t expressions;
 int* pv{nullptr}; print(pv); // still int* (types, not values)
 
 void safe(const int* ptr) { assert(ptr); if (!ptr) return; /* use *ptr */ }
 
-int x[5]{0,1,2,3,4};       // at addr 0, sizeof(int)==4:
-// &x + 1  → 20   (int(*)[5]: strides sizeof(int[5]))
-// x  + 1  → 4    (decayed int*: strides sizeof(int))
-// sizeof(x) == 20, sizeof(x + 0) == 8
+int x[5]{0,1,2,3,4};       // Offsets from the array start, assuming sizeof(int)==4:
+// &x + 1 advances 20 bytes   (int(*)[5]: strides sizeof(int[5]))
+// x  + 1 advances 4 bytes    (decayed int*: strides sizeof(int))
+// sizeof(x) == 20; sizeof(x + 0) is typically 8 on x86-64.
 
 void hello();
 std::cout << hello;        // 1 — fp→bool (no void* conversion for fps)
@@ -176,21 +178,47 @@ maxRef(v1, v2) = 7;             // call is an lvalue: writes the bigger one
 void getSinCos(double deg, double& sinOut, double& cosOut);  // out-param style: avoid
 ```
 
-## Traps / interview one-liners
-- "A pointer should hold a valid address or nullptr — the whole discipline in one sentence."
-- "Dereferencing a dangling pointer is UB; even reading its value is only implementation-defined."
-- "const left of star protects the pointee, right of star freezes the pointer."
-- "Default args don't travel through function pointers — they're compile-time call-site sugar."
-- "0 is an int, NULL is a mystery, nullptr is a pointer. Overload on nullptr_t if you must catch it."
-- "Reseat a caller's pointer with int*&; int&* doesn't exist because references aren't objects."
-- "Mechanically everything is pass-by-value — sometimes the value is an address."
-- "&x + 1 jumps the array, x + 1 jumps an element — pointer arithmetic strides by pointee size."
-- "cout << functionName prints 1: no void* conversion for function pointers, so bool wins."
-- "argv[argc] is guaranteed null — argv is a null-terminated array by the standard."
-- "A const reference is a read-only window, not a frozen object — another alias can still write."
-- "std::max/min return the first argument on ties — and returning const& means feeding them a temporary can dangle."
-- "Assigning to a reference writes the referent; references never reseat."
-- "Cross-type const-ref binding copies into a temporary — you alias the snapshot, not the variable."
-- "Lifetime extension is direct-binding only: it never survives a function return and never chains."
-- "Cheap to copy = fits in two pointers and no ctor work; otherwise const&. Strings: string_view by value."
-- "Out-params hide writes at the call site; return values are free (RVO). Reach for T& params last."
+## Interview Q&A
+
+### How do pointers and references differ?
+
+A pointer is an object I can reassign, and it can represent no target using null. A reference is an alias that I bind during initialization and cannot rebind. Assigning through a reference changes the referred object. Both require me to ensure that the target remains alive before I use it.
+
+### Does a const reference mean the object cannot change?
+
+It only prevents modification through that reference. If the object itself is non-const, another alias can modify it and I will see the change. Also, a binding that performs a conversion can refer to a temporary copy instead of the original object.
+
+### When would you pass a pointer instead of a reference?
+
+I use a pointer when absence is meaningful or the API needs pointer-specific behavior. A reference usually expresses a required object more clearly. For a small cheap value, passing by value may be simpler than either option. I make ownership and lifetime expectations explicit in all three cases.
+
+### Why does changing a pointer parameter not change my pointer?
+
+The parameter is a copy of the pointer value. Writing through it can change the shared pointee, but assigning a new address changes only that local copy. To reassign the caller's pointer, the function needs a reference to the pointer or another explicit output mechanism.
+
+### What is special about nullptr?
+
+It has its own type, std::nullptr_t, and converts to null pointer values without behaving like an ordinary integer argument. That avoids the common overload problem with zero or NULL. A pointer variable holding null still participates in overload resolution according to its pointer type.
+
+### Why do x + 1 and &x + 1 advance different distances for an array?
+
+In the first expression, x decays to a pointer to an element. In the second, taking the address preserves the whole array type as the pointee. Adding one advances by one pointed-to object, so the first advances an element and the second advances the entire array.
+
+### When is an object destroyed after moving its unique_ptr into a function?
+
+Ownership has moved to the function's parameter, so I track that owner next. If it keeps ownership until destruction, destroying the parameter deletes the object. The parameter may be destroyed at function exit or at the end of the full expression, and the original pointer is empty after the move.
+
+### Can returning a const reference keep a temporary alive?
+
+Returning the reference does not extend the temporary's lifetime again. If it was an argument temporary, it normally expires at the end of the full expression containing the call. I can consume it while it is alive, but retaining the returned reference can leave it dangling.
+
+## Practice history
+
+The entries below preserve the original practice record. Use the explanations above for the current rules and qualifications. In particular, “at function return” in the old ownership card must be qualified: parameter destruction may occur at function exit or at the end of the full expression. The original quiz snippet must be checked before claiming a fixed print order within one full expression.
+
+### Questions (getcracked) / Quiz log
+
+- [x] &x + 1 vs x + 1 (array at 0, sizeof(int)=4) — 02/09 — ok (20, 4). Note gc's own explanation said "size of the pointer" for op two; correct reasoning is size of the POINTEE.
+- [x] In one out the other (int& + const int& aliasing same var) — 02/09 — ok (prints 1).
+- [ ] **MISSED 02/09: I'm moving in.** (unique_ptr by-value param) — answered 1342; A dies with the PARAM at end of x, not with p1 at end of main. Reason: tracked lifetime by where the object was created, not by who currently owns the pointer.
+  - **Anki**: front: "`x(unique_ptr<A> ptr)` called with `std::move(p1)` — when does ~A run?" back: "When ptr (the param) is destroyed at x's return — ownership moved in; p1 is null and its dtor is a no-op. By-value unique_ptr param = sink; const& = borrow (then A dies with p1)."

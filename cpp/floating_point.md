@@ -1,33 +1,69 @@
 # Floating Point Types
 
-## Core model
-- float (4B, IEEE single), double (8B, IEEE double), long double (8/12/16B; x87 80-bit on Linux). Literals are double by default; `f` suffix for float.
-- IEEE single layout: 1 sign + 8 exponent (bias 127) + 23 significand bits with an implicit leading 1 (normals only). Worked 123.456: fraction .456 → 0111010010111100011..., normalize 1.f × 2^6, exponent 133 = 10000101, round significand to 23 bits.
-- Default rounding: round-to-nearest-EVEN (ties go to the even bit, not always up).
-- Reserved exponents: all-0 → ±0 and subnormals (no hidden 1, gradual underflow); all-1 → ±Inf (frac 0) / NaN (frac ≠ 0).
-- Precision: float ~7 sig decimal digits (24-bit significand), double ~16 (53-bit). float can't represent all int32; double can.
-- cout defaults: precision 6, drops ".0"; std::setprecision to change.
-- Range: float ~±3.4e38, double ~±1.8e308.
+## Representation and precision
 
-## Questions (getcracked)
-- [ ] A very small value — 30/08 — MISSED: answered denorm_min; condition "x + 1.0 > 1.0" defines epsilon(). Smallest-positive (denorm_min 4.9e-324) vs smallest-that-moves-1.0 (epsilon 2.2e-16) — read the condition, not the headline. (Platform's own explanation conflates them too; epsilon is the gap at 1.0, denorm_min is the smallest positive double.)
+Floating point represents a number using a sign, a significand, and an exponent. The exponent provides a large range, while the finite significand limits precision. Many decimal fractions, including 0.1, have an infinite binary expansion and must be rounded.
 
-## Quiz log (Claude)
-- 30/08: exchange price representation (×10^4 ITCH, venue-dependent scales, tick size ≠ representation) — ok.
-- 31/08: numeric_limits quartet — 4/4, prior miss reversed.
+On common IEEE-754 systems, `float` is binary32 and occupies four bytes, while `double` is binary64 and occupies eight. Binary32 has one sign bit, eight exponent bits with bias 127, and 23 stored fraction bits. A normal value has an implicit leading one, giving 24 bits of significand precision. Binary64 has 53 bits of precision. These correspond roughly to seven and sixteen significant decimal digits.
 
-## UB vs implementation-defined vs defined-but-surprising
-UB:
-- Out-of-range float→integral conversion at runtime: `double d=1e20; int x = d;` — NOT a wrap like integral→integral; genuinely UB.
+C++ does not require these exact formats. `long double` is particularly platform-dependent: it may match `double`, use an 80-bit value stored in a larger slot, or use another format. Check `std::numeric_limits<T>` and the target's documentation before relying on a layout.
 
-Implementation-defined:
-- `sizeof(long double)` (8/12/16); whether `char` in the exponent examples is signed.
+Floating literals such as `1.0` have type `double`; `1.0f` has type `float`. On an IEEE binary32 target, all integers through 2^24 are exactly representable, but not every larger integer is. Binary64 can exactly represent every 32-bit integer.
 
-Defined but surprising:
-- `0.1 + 0.2 != 0.3`; `nan != nan` (true); `+0.0 == -0.0` (true) yet `1/+0.0 != 1/-0.0`; float loses integers above 2^24.
-- `-ffast-math` trades all the IEEE guarantees away — NaN checks may be deleted.
+## Encoding a value
 
-## Syntax anchors
+For an IEEE binary32 value, first express the magnitude in binary, then normalize it as `1.fraction * 2^exponent`. Store the exponent with its bias, omit the implicit leading one, and round the remaining fraction to the available bits. For 123.456, the normalized exponent is six, so the stored exponent is 133.
+
+The usual default rounding mode is round to nearest, with ties going to the representable result whose least significant significand bit is even. Rounding can occur after each operation, so algebraically equivalent expressions can produce different floating-point results.
+
+## Zeros, subnormals, infinity, and NaN
+
+In IEEE formats, an all-zero exponent encodes zero or a subnormal value. Subnormals do not have the implicit leading one and provide gradual underflow with decreasing precision near zero. An all-one exponent encodes infinity when the fraction is zero, or a NaN when it is nonzero.
+
+Positive and negative zero compare equal, but their signs can affect later operations. Under IEEE division semantics, dividing positive one by them produces positive or negative infinity. A NaN compares unequal to every value, including itself; use `std::isnan` to test for it.
+
+Compiler options such as `-ffast-math` permit assumptions that can change behavior involving NaNs, infinities, signed zero, and reassociation. Treat those options as changes to the numerical contract, rather than a universally safe speed improvement.
+
+## numeric_limits: range is different from spacing
+
+For a typical IEEE `double`, the following functions answer different questions:
+
+| Function | Meaning | Approximate value |
+|---|---|---|
+| `min()` | This is the smallest positive normal value. | 2.2 × 10^-308 |
+| `denorm_min()` | This is the smallest positive subnormal when subnormals are supported. | 4.9 × 10^-324 |
+| `epsilon()` | This is the gap from one to the next representable value above one. | 2.2 × 10^-16 |
+| `lowest()` | This is the most negative finite value. | -1.8 × 10^308 |
+
+For integer types, `min()` instead gives the most negative representable value. `lowest()` provides a consistent name for the lower finite bound.
+
+Do not define epsilon as the smallest representable `x` for which rounded `1.0 + x > 1.0`. Under round-to-nearest, values just above half an epsilon can already round the sum upward. Epsilon describes representable spacing at one, not that addition threshold.
+
+## Comparisons and practical choices
+
+Exact equality is appropriate when exact equality is the intended condition, such as comparing values assigned from the same representable constant. For approximate numerical results, choose a tolerance based on the problem's error budget. A common approach combines an absolute tolerance near zero with a relative tolerance at larger magnitudes. Machine epsilon alone is not a universal application tolerance.
+
+```cpp
+// For finite inputs, with tolerances chosen for the application:
+bool close(double a, double b, double abs_tol, double rel_tol)
+{
+    return std::abs(a - b) <=
+           std::max(abs_tol, rel_tol * std::max(std::abs(a), std::abs(b)));
+}
+```
+
+For prices that must follow a specified decimal scale, fixed-point integers can preserve that representation exactly. The Slipstream/lob notes use a scale of 10^4; the correct scale depends on the venue or format. Representation scale and permitted tick size are separate concepts. Fixed point still needs overflow and rounding rules.
+
+Stream output normally starts with precision six and can hide stored precision. Use `std::setprecision` deliberately; `max_digits10` is useful when a decimal representation must round-trip to the same floating value.
+
+## Errors and pitfalls
+
+Converting a floating value to an integer truncates its fractional part. If the truncated result cannot be represented by the destination type, the conversion has undefined behavior. It does not use the wrap rule for integer-to-integer conversions. Validate range before converting values from external or numerical input.
+
+## Additional syntax examples
+
+These are independent syntax sketches, including deliberately invalid examples marked `CE` (compile error). They are not one compilable program.
+
 ```cpp
 // IEEE-754 single: 1 sign | 8 exp (bias 127) | 23 frac (+hidden 1)
 // 123.456f:
@@ -39,13 +75,41 @@ Defined but surprising:
 
 std::numeric_limits<double>::min();        // 2.2e-308  smallest NORMAL
 std::numeric_limits<double>::denorm_min(); // 4.9e-324  smallest positive
-std::numeric_limits<double>::epsilon();    // 2.2e-16   gap at 1.0 (x+1.0 > 1.0)
+std::numeric_limits<double>::epsilon();    // 2.2e-16   gap from 1.0 to the next representable value
 std::numeric_limits<double>::lowest();     // -1.8e308  most negative
 ```
 
-## Traps / interview one-liners
-- "0.1 is infinite in binary → 0.1+0.2 != 0.3; compare with epsilon relative to magnitude, never ==."
-- "min() = smallest normal (2.2e-308), denorm_min() = smallest positive (4.9e-324), epsilon() = gap at 1.0 (2.2e-16), lowest() = most negative. Integer min() is most-negative — the inconsistency lowest() fixes."
-- "NaN != NaN — the only self-unequal value; use std::isnan."
-- "Float loses integers above 2^24 — why finance uses fixed-point ints, not float, for prices (my Slipstream/lob use ×10^4 ticks)."
-- "Signed zero exists: +0.0 == -0.0 but 1/+0.0 = +Inf, 1/-0.0 = -Inf."
+## Interview Q&A
+
+### Why does 0.1 plus 0.2 often differ from 0.3?
+
+Those decimal fractions cannot all be represented exactly in binary floating point. Their stored values and the addition result are rounded, so the result can differ from the stored representation of 0.3. For approximate calculations I choose a tolerance based on the required numerical accuracy.
+
+### What is machine epsilon?
+
+It is the gap between one and the next representable value above one. It describes precision near one, not the smallest positive floating-point value. The spacing changes with magnitude, which is why using epsilon as a fixed tolerance everywhere is usually inappropriate.
+
+### How are min, denorm_min, and lowest different?
+
+For a floating type, min gives the smallest positive normal value. Denorm_min reaches further toward zero when subnormals are supported. Lowest gives the most negative finite value. They describe range, while epsilon describes spacing near one.
+
+### Would you always avoid equality for floating-point values?
+
+No. Equality is useful when exact equality is what the program needs. When I compare independently calculated approximations, I use an error tolerance appropriate to the calculation, usually accounting for both magnitude and behavior near zero.
+
+### Why might you store prices as integers?
+
+If the format specifies a decimal scale, I can store the scaled integer exactly and avoid binary rounding of the price representation. I still need to choose the scale from the format, check overflow, and define how calculations round.
+
+## Practice history
+
+The entries below preserve the original practice record. Correction to the old quiz shorthand: epsilon is the spacing above one, not the smallest representable x that makes rounded 1.0 + x exceed one. Under round-to-nearest, values just above half epsilon can do that. Numerical constants here assume IEEE binary64.
+
+### Questions (getcracked)
+
+- [ ] A very small value — 30/08 — MISSED: answered denorm_min; condition "x + 1.0 > 1.0" defines epsilon(). Smallest-positive (denorm_min 4.9e-324) vs smallest-that-moves-1.0 (epsilon 2.2e-16) — read the condition, not the headline. (Platform's own explanation conflates them too; epsilon is the gap at 1.0, denorm_min is the smallest positive double.)
+
+### Quiz log (Claude)
+
+- 30/08: exchange price representation (×10^4 ITCH, venue-dependent scales, tick size ≠ representation) — ok.
+- 31/08: numeric_limits quartet — 4/4, prior miss reversed.

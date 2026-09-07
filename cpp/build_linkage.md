@@ -1,49 +1,77 @@
 # Build Pipeline, Linkage & the Preprocessor
 
 ## Build pipeline
-- **preprocessor** (handles `#include`/`#define`, strips comments, ensures trailing newline, emits a translation unit) → **compiler** (TU → object file `.o`, unresolved references) → **linker** (all `.o` + std lib → executable).
-- Translation phases: map source chars → splice lines → lex → preprocess → string literal encoding → concatenate adjacent literals → compile → instantiate templates → link.
-- Compile error = language rule broken inside one TU. Linker error = compiler accepted a declaration, definition missing ("undefined reference") or found twice ("multiple definition").
-- Every program has exactly one `int main()`: implicit `return 0`, can't be called from code, not always first to run (global initializers run before it; cross-TU order unspecified → static initialization order fiasco).
-- Status codes: `0` / `EXIT_SUCCESS` / `EXIT_FAILURE` (<cstdlib>), returned to the OS.
 
-## Declarations, definitions, ODR
-- Declaration = identifier + type exists. Definition = declaration that implements/instantiates. Every definition is a declaration.
-- Forward declaration `int add(int, int);` — param names optional, may differ from definition. Real purpose: definition lives in another TU.
-- Signature = name + parameter types (NOT return type); return type alone can't overload.
-- ODR: (1) one definition per TU per scope → CE; (2) one per program for non-inline functions/variables → link error; (3) types/templates/inline may repeat across TUs iff identical → violation is ill-formed NDR, linker silently picks one (worst failure mode).
-- `inline` today = "multiple definitions allowed" (ODR rule 3), NOT a speed hint (-O2 inlines regardless). Definition must be visible in every using TU, once per TU, all identical. Why not inline everything: recompile cascade (every includer) + N compiles of the body.
+A typical C++ build has three main stages. The preprocessor handles directives such as `#include` and `#define`. The compiler translates each resulting translation unit into an object file. The linker combines object files and libraries, resolves references between them, and produces the executable.
 
-## Preprocessor
-- Macros: textual paste, NO scope (`#define` inside a function = top-of-file-from-here-down), no cross-file leak unless #included. SCREAMING_CASE to avoid collisions.
-- Function-like macros paste args verbatim: `foo(a++, b++)` double-evaluates b (→ 121 quiz Q); `#define SQUARE(x) x * x` then `SQUARE(2+3)` = 2+3*2+3 = **11** (no parens added, ever). Armor: `((x)*(x))`; real fix: constexpr function.
-- Conditional compilation: `#ifdef` / `#ifndef` / `#if 0` (the way to disable code containing `/* */`).
-- Header guards `#ifndef X_H/#define X_H/#endif`: dedupe within one TU (ODR rule 1). Do NOTHING across TUs — non-inline definition in a guarded header still hits "multiple definition"; fix with `inline` or extern-declare + define in one .cpp.
-- `#pragma once`: non-standard, universally supported, mainstream. Fails only on duplicated header files at two paths; classic guards survive that.
-- Standard headers never break: guarded + contain only declarations/types/templates/inline.
+A translation unit is roughly a source file together with the contents included into it, after preprocessing. An object file can contain compiled code and references to functions or variables whose definitions will be supplied during linking.
 
-## Keywords & identifiers
-- 92 keywords (C++23); `override final import module` are special identifiers, not keywords.
-- Identifiers: letters/digits/underscore, no leading digit, case-sensitive, not a keyword.
-- Reserved (ill-formed NDR, compiles silently): `__` anywhere, `_X` (underscore+upper) anywhere, `_x` at global scope.
+The standard describes finer translation phases: character processing, line splicing, tokenization, preprocessing, string-literal processing and concatenation, translation, template instantiation, and linking. These are a language model; a toolchain does not need a separate executable for every phase.
 
-## Namespaces
-- Declarations/definitions only; no executable statements at namespace scope.
-- Alias: `namespace Active = Foo::Goo;`. Anonymous namespace = internal linkage (C++ file-`static`).
-- Two `using namespace` pulling the same name → CE at the USE, not the using.
+A compiler diagnostic usually concerns a language rule within a translation unit. An “undefined reference” from a linker usually means a needed definition was not supplied. Multiple definitions can also be diagnosed by the linker, although not every violation requires a diagnostic.
 
-## Compile vs link vs NDR (examples)
-- CE: undeclared `x = 5;`; `void main()`; calling `main()`; two definitions in one TU; overload on return type only; `int class = 5;`.
-- Link: `int foo();` used, never defined → undefined reference. `int x = 1;` in two .cpp → multiple definition.
-- NDR: `inline int f(){return 1;}` vs `{return 2;}` in two TUs; reserved identifiers.
+## Declarations, definitions, and the One Definition Rule
 
-## Quiz log
-- 29/08 oral (7 Q): missed build stages (forgot preprocessor + object files), "copy assignment" vs copy-initialization, comment nesting (neither `//` nor `/* */` nests — `#if 0` for blocks).
-- 30/08 getcracked "Bodyguard" — ok.
-- 31/08 Claude quiz: MISSED `SQUARE(2+3)` = 11 — assumed the preprocessor parenthesizes; it pastes. Sibling of the double-eval trap.
-- 31/08 Claude quiz: inline-identical-across-TUs = legal (ODR 3) — ok.
+A declaration introduces or redeclares an entity and its properties. A definition supplies the function body or defines the object or type. Every definition is a declaration, but a declaration such as `int add(int, int);` does not define the function.
 
-## Syntax anchors
+Forward declarations let code refer to an entity before its definition, including when the definition lives in another translation unit. Parameter names are optional in a function declaration and can differ from those in the definition. Ordinary functions cannot be overloaded solely by return type; parameter types distinguish the common overload cases.
+
+The One Definition Rule (ODR) has two useful levels:
+
+- A translation unit cannot contain multiple definitions of the same definable item.
+- Across translation units, certain entities, such as classes, templates, and eligible inline functions and variables, can have multiple definitions under strict conditions. The definitions must use the same tokens, and relevant name lookup must agree. A non-inline function or variable that is odr-used normally needs one definition in the program.
+
+Cross-file ODR violations can be ill-formed with no diagnostic required. A successful link therefore does not establish that the definitions are consistent.
+
+## inline and headers
+
+The most useful meaning of `inline` is its effect on the ODR. It allows an eligible definition to appear in multiple translation units, usually through a header. It does not force the compiler to substitute the function body at a call site, and a compiler can inline a function that lacks the keyword.
+
+Putting implementation in a header also has costs: every including translation unit processes it, and changing it can trigger widespread recompilation. Keep ordinary declarations in headers and ordinary non-inline definitions in a source file. Templates, class definitions, and inline entities often need their definitions in headers.
+
+Header guards prevent repeated inclusion within a translation unit. They do not make an ordinary global variable definition safe across different translation units.
+
+```cpp
+// counter.h
+#ifndef COUNTER_H
+#define COUNTER_H
+extern int counter;             // This declares the shared object.
+#endif
+
+// counter.cpp
+int counter = 0;                // This defines it once.
+```
+
+An `inline int counter = 0;` definition in a header is another option in C++17 and later. `#pragma once` is widely supported but is not standard C++; its behavior depends on the toolchain's recognition of file identity.
+
+## Preprocessor and macros
+
+Macros operate on preprocessing tokens and do not obey C++ block scope. A macro defined inside a function remains defined later in the file until it is undefined or the translation unit ends. It reaches another source file only through that file's preprocessing, such as an included header.
+
+A function-like macro substitutes its arguments without adding parentheses. For example, `#define SQUARE(x) x * x` turns `SQUARE(2 + 3)` into `2 + 3 * 2 + 3`, which evaluates to 11. Writing `((x) * (x))` fixes the grouping but still evaluates an argument twice. An inline or `constexpr` function avoids that repeated evaluation.
+
+Use `#ifdef`, `#ifndef`, and `#if` for conditional compilation. Block comments do not nest, so `#if 0` is often useful for temporarily disabling a block that contains comments. Disabled text must still satisfy the preprocessing rules, including valid comment and string tokenization.
+
+## Names, namespaces, and main
+
+Identifiers are case-sensitive and cannot begin with a digit. Keywords are reserved; identifiers such as `override` and `final` have special meanings in particular contexts. The keyword set changes with the language version, so recognizing their roles is more useful than memorizing a count.
+
+Names containing a double underscore, or beginning with an underscore followed by an uppercase letter, are reserved to the implementation. Names beginning with an underscore are also reserved in the global namespace. Avoid these patterns for your own names.
+
+Namespaces contain declarations and definitions, rather than standalone executable statements. A namespace alias, such as `namespace Active = Foo::Goo;`, provides a shorter name. An anonymous namespace is a common way to keep implementation details local to a translation unit. Bringing two namespaces into scope can make a later unqualified use ambiguous; the `using` directives themselves need not be erroneous.
+
+In a hosted C++ program, `main` returns `int`. Reaching its end returns zero, and the program cannot call `main` itself. Static initialization and some dynamic initialization happen before its body starts. Cross-file initialization dependencies need particular care; see [initialization and deduction](initialization_deduction.md).
+
+Use zero or `EXIT_SUCCESS` for successful termination and `EXIT_FAILURE` for failure. `std::endl` inserts a newline and flushes the stream. Prefer `'\n'` when a flush is unnecessary; a stream flush is not a portable promise of exactly one system call.
+
+## Errors and pitfalls
+
+An undeclared name, a call to `main`, or an overload distinguished only by return type requires a diagnostic. A missing used function definition commonly produces a linker error. Conflicting inline definitions across translation units may link successfully while still violating the ODR.
+
+## Additional syntax examples
+
+These are independent syntax sketches, including deliberately invalid examples marked `CE` (compile error). They are not one compilable program.
+
 ```cpp
 #define PRINT_JOE
 #ifdef PRINT_JOE
@@ -69,11 +97,35 @@ int main() { std::cout << MY_NAME; } // works
 SQUARE(2 + 3)   // 2 + 3 * 2 + 3 = 11, not 25
 ```
 
-## Traps / interview one-liners
-- "Undefined reference is a linker error: the compiler saw a declaration and trusted you."
-- "Guards solve within-TU duplication; inline/extern solve across-TU duplication."
-- "`inline` is about linkage/ODR, not performance."
-- "Header = declarations, .cpp = definitions; inline is what lets a definition live in a header."
-- "`endl` = '\n' + flush (syscall per line in a hot loop). Use '\n'."
-- "`/* */` doesn't nest."
-- "Initialization constructs; assignment modifies. Ctor vs operator= for class types."
+## Interview Q&A
+
+### What happens when you build a C++ program?
+
+The preprocessor expands includes and macros. The compiler then compiles each translation unit into an object file, which may still refer to definitions elsewhere. The linker combines those files with libraries and resolves the references to produce the executable.
+
+### How is a declaration different from a definition?
+
+A declaration tells the compiler that an entity exists and describes it. A definition supplies the function body or defines the object or type. I can declare a function in a header and define it in a source file so other files can call it without containing its implementation.
+
+### Does inline make a function faster?
+
+It does not guarantee that. The keyword mainly lets an eligible definition appear in multiple translation units under the ODR. Whether a call is actually inlined is an optimization decision, so I would measure performance rather than infer it from the keyword.
+
+### Why do header guards not prevent multiple-definition linker errors?
+
+A guard prevents duplicate inclusion within one translation unit. Separate source files each have their own preprocessing, so each can still receive the same definition. I would use a declaration plus one source-file definition, or an appropriate inline definition.
+
+### Why prefer a function over a function-like macro?
+
+A function follows the type and scope rules and evaluates each argument once before entering the body. A macro substitutes tokens, which can change grouping or evaluate an expression multiple times. Parentheses solve the grouping issue but do not solve repeated evaluation.
+
+## Practice history
+
+The entries below preserve the original practice record. Use the explanations above for the current rules and qualifications.
+
+### Quiz log
+
+- 29/08 oral (7 Q): missed build stages (forgot preprocessor + object files), "copy assignment" vs copy-initialization, comment nesting (neither `//` nor `/* */` nests — `#if 0` for blocks).
+- 30/08 getcracked "Bodyguard" — ok.
+- 31/08 Claude quiz: MISSED `SQUARE(2+3)` = 11 — assumed the preprocessor parenthesizes; it pastes. Sibling of the double-eval trap.
+- 31/08 Claude quiz: inline-identical-across-TUs = legal (ODR 3) — ok.
