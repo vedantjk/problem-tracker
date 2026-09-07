@@ -55,6 +55,8 @@ The exact-width aliases in `<cstdint>`, such as `std::uint32_t`, exist only when
 
 On common implementations, `std::int8_t` and `std::uint8_t` alias character types, so stream insertion treats them as characters. Cast to `int` when you want a number.
 
+`sizeof(char)` is one by definition, but a byte is `CHAR_BIT` bits, from `<climits>`, and the standard through C++23 only requires at least eight; a few historical DSPs used sixteen. `std::numeric_limits<unsigned char>::digits` equals `CHAR_BIT`, while for a signed `char` it is one less because the sign bit is not a value bit. C++26 adopted the requirement that a byte is exactly eight bits, so the hedge is disappearing. The exact-width types `std::uint32_t` and friends are optional: they exist only where the platform has an integer of exactly that width with no padding bits, and code that names them fails to compile elsewhere, which is the loud failure you want. `std::uint_least32_t` and `std::uint_fast32_t` always exist and promise at least that width. For raw bytes, `std::byte` states the intent better than `std::uint8_t`, which behaves as a character type.
+
 `std::size_t` is the unsigned result type of `sizeof`. `std::ptrdiff_t` is the signed type used for pointer differences; it is not necessarily the signed counterpart of `size_t`. Prefer ordinary signed arithmetic when negative intermediate values are meaningful, and handle conversions to container sizes deliberately.
 
 ## Bools and enumerations

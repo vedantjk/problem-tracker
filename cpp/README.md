@@ -56,6 +56,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - catch matching (no conversions, derived→base, const&) / catch-all must be last → error_handling
 - braces: auto x{1,2} / initializer_list → initialization_deduction
 - char arithmetic & promotion → types_conversions
+- CHAR_BIT / byte width (≥8 through C++23, exactly 8 in C++26; digits vs CHAR_BIT; exact-width types optional, least/fast always) → types_conversions
 - circular reference / shared_ptr cycle leak (self-reference case; fix with weak_ptr one direction) → smart_pointers_move
 - comma operator (precedence, return a,b) → expressions
 - conditional operator value category (lvalue only if both branches same-type lvalues; mixed → prvalue copy, const& binds temporary not x) → expressions
