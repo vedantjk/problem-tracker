@@ -64,6 +64,31 @@ A `thread_local` variable has a separate instance for each thread, with thread s
 
 Thread-local storage is useful for per-thread counters, random-number generators, and scratch buffers. Its access cost depends on the platform and TLS model; an x86-64 Linux implementation may use the `fs` segment register.
 
+## Constant expressions and constexpr variables
+
+A constant expression is an expression the compiler can evaluate during compilation: literals, operators applied to constant operands, variables usable in constant expressions, and calls to constexpr functions with constant arguments. Input, non-const variables, calls to ordinary functions, function parameters, and operators such as `new`, `delete`, `throw`, and `typeid` disqualify an expression, because their values or effects exist only at run time.
+
+Some contexts require a constant expression, and there the compiler must evaluate it during compilation or reject the program: the initializer of a `constexpr` variable, an array bound, a non-type template argument, a `static_assert` condition, and a `case` label. Everywhere else, evaluating a constant expression early is an optimization the compiler may or may not perform under the as-if rule. `const int x{ 3 + 4 };` forces the addition at compile time because `x` is usable in constant expressions and its value must be known; `int y{ 3 + 4 };` is very likely folded but nothing requires it. Debug builds are the usual case where it is not, so that the value can be watched being computed.
+
+There is a historical wrinkle about which const variables count. A `const` variable of integral or enumeration type whose initializer is a constant expression is usable in constant expressions, so `const int a{ 5 };` can size an array or label a case. A `const` variable of any other type is not, even with a constant initializer: `const double d{ 1.2 };` cannot appear in a constant expression, and neither can a `const std::string`. The integral exception predates C++11 and was kept for compatibility; the committee deliberately did not extend it, so that `constexpr` would be the one spelling that means compile-time for every type.
+
+`constexpr` on a variable makes that promise explicit. The initializer must be a constant expression, or the program is ill-formed, and the variable is then itself usable in constant expressions whatever its type. A `constexpr` variable is implicitly const, but `constexpr` is not part of the type: `constexpr int x{ 5 };` declares an object of type `const int`, which is why `auto` never deduces `constexpr` and why a `constexpr auto` declaration must say so itself. Function parameters cannot be `constexpr`, because their values arrive at run time.
+
+```cpp
+const int a{ 5 };          // usable in constant expressions: const integral, constant initializer
+const double b{ 1.2 };     // NOT usable: const but non-integral
+constexpr double c{ 1.2 }; // usable: constexpr works for any literal type
+int n = 5;
+const int d{ n };          // NOT usable: initializer is not a constant expression
+constexpr int e{ n };      // CE: constexpr demands a constant expression
+int five() { return 5; }
+constexpr int f{ five() }; // CE: an ordinary function call is never a constant expression
+constexpr int cmax(int x, int y) { return x > y ? x : y; }
+constexpr int g{ cmax(5, 6) }; // OK: constexpr function with constant arguments
+```
+
+The rule of thumb: use `constexpr` for any constant whose initializer is a constant expression, and `const` for a constant whose value is only known at run time, such as one computed from input or from a non-constexpr call. Types that allocate, such as `std::string` and `std::vector`, generally cannot be `constexpr` variables; C++20 allows them inside a constant evaluation only if the allocation is freed before the evaluation ends, so a `constexpr std::string` at namespace scope remains ill-formed. Use `std::string_view` or `std::array` for compile-time data.
+
 ## const, volatile, and return values
 
 Top-level const qualifies the object itself, as in `int* const p`. Low-level const describes the accessed object, as in `const int* p`. A read-only pointer or reference does not make the underlying object immutable through all aliases.
@@ -264,3 +289,7 @@ The entries below preserve the original practice record. Use the explanations ab
 
 - 30/08 MISS + 31/08 REPEAT MISS: `auto& b = f()` where f returns `const T&` — said `T&` both times. auto& keeps const; deduction never produces an illegal binding. **Twice-missed: drill this.**
 - 31/08: bit_cast sizes + `auto&`/`const auto&` temporary pair (Q11) — all ok.
+
+### Reading
+
+- learncpp 5.5 Constant expressions, 5.6 Constexpr variables — read 07/09.

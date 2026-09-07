@@ -62,6 +62,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - const return-by-value can block moves (distinguish direct prvalue construction) → initialization_deduction
 - const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction
 - const vs constexpr vs constinit (globals) → initialization_deduction
+- constant expressions (what qualifies, required contexts, as-if optional folding, const-integral exception vs const double) → initialization_deduction
+- constexpr variables (must have constant initializer, implicitly const, not part of the type, any literal type, no params, string/vector limits) → initialization_deduction
 - cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
 - conversion vs promotion ranks (overloads) → types_conversions
