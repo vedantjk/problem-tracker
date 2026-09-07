@@ -115,6 +115,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - lvalue ternary / prefix++ returns lvalue → expressions
 - magic number / canary in allocator headers (constant tag, double-free detection, address-dependent strengthening, bitmap for exactness) → allocators
 - macro scope (none) → build_linkage
+- make_unique (type once, no naked new, pre-C++17 argument exception-safety hole) → smart_pointers_move
 - max/min tie-breaking (first arg) + const& return dangling → pointers_references
 - monadic optional ops and_then/transform/or_else, nested-optional trap → error_handling
 - malloc/free (size tracked by allocator, brk/sbrk/mmap, calloc/realloc) → memory_layout
@@ -199,6 +200,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
 - unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
+- unique_ptr API (get/reset/release, bool, T[], returning by value, as member → move-only + pimpl, custom deleter and size, misuses) → smart_pointers_move
 - unique_ptr<std::byte[]> as buffer owner (verify 24-byte layout; matching delete[]; no ownership flag) → allocators
 - uninitialized reads → initialization_deduction, ub_catalog
 - unsigned wrap (arithmetic + conversion) → types_conversions

@@ -188,7 +188,40 @@ A local object returned by value is treated as an rvalue in the return statement
 
 One implementation trap: writing move assignment as `std::swap(*this, other)` recurses forever, because `std::swap` is itself implemented with move construction and move assignment of the type. A class that wants swap-based assignment writes its own member swap that exchanges the members directly, then implements move assignment in terms of that.
 
+## std::unique_ptr
+
+`std::unique_ptr<T>`, from `<memory>`, is the move-only owning pointer that `auto_ptr` should have been. It holds one pointer, deletes it in its destructor, and has its copy constructor and copy assignment deleted, so the only way ownership leaves one `unique_ptr` for another is a move. After `auto second = std::move(first);` the source is guaranteed null; that is a stronger promise than the general valid-but-unspecified rule and is specific to this type. The `unique_ptr` itself lives on the stack or inside another object; allocating a `unique_ptr` dynamically defeats the purpose, because then something else has to remember to delete it.
+
+Access looks like a raw pointer. `*p` yields the object, `p->member` reaches into it, and `p` converts to `bool` in a condition, true when it owns something. Three member functions cover the rest. `p.get()` returns the raw pointer without giving up ownership, which is how the object is handed to code that only needs to look at it. `p.reset()` deletes what it owns and becomes null, or with an argument deletes what it owns and takes the new pointer. `p.release()` gives up the raw pointer and becomes null without deleting, which transfers responsibility to the caller and is the one call that can leak if the result is dropped.
+
+Prefer `std::make_unique<T>(args...)`, available since C++14, over `std::unique_ptr<T>{ new T(args...) }`. It states the type once, it never shows a naked `new`, and before C++17 it closed an exception-safety hole. In `f(std::unique_ptr<T>{ new T }, g())`, the pre-C++17 evaluation rules allowed `new T` to run, then `g()` to run and throw, before the `unique_ptr` was constructed around the raw pointer, leaking the `T`. C++17 sequenced function arguments so that cannot interleave, but `make_unique` never had the problem and remains the idiom.
+
+`std::unique_ptr<T[]>` owns an array and calls `delete[]`; `make_unique<T[]>(n)` creates one. It exists for interoperating with APIs that hand out arrays. For anything else `std::vector` or `std::array` is the better choice, since they carry their size and grow.
+
+Returning a `unique_ptr` by value is the normal way to hand ownership out of a function. The return expression is treated as an rvalue, so the caller's variable is move-constructed, or the move is elided entirely. Never return a raw pointer or a reference to the managed object from such a factory; the caller could not tell whether it owns the result.
+
+For parameters, the spelling states the contract. Taking `std::unique_ptr<T>` by value is a sink: the caller must write `std::move(p)` at the call site, which makes the transfer visible, and the callee now owns the object. Taking `T&` or `const T*` borrows: the caller passes `*p` or `p.get()`, keeps ownership, and the callee's signature does not mention smart pointers at all, so it also works with stack objects and other owners. Taking `std::unique_ptr<T>&` is rare and means the function may replace what the caller owns. Taking `const std::unique_ptr<T>&` is almost always wrong; it forces callers to have a `unique_ptr` while giving the callee nothing a `const T*` would not. See [pointers and references](pointers_references.md) for the sink-versus-borrow discussion.
+
+A `unique_ptr` member makes the enclosing class correct by default. The implicit destructor releases the resource, the implicit move operations transfer it, and copying is deleted automatically because a member is non-copyable. That is the rule of zero in practice: the class declares no special members and gets ownership right. Two consequences to know. The class becomes move-only unless a copy constructor is written that clones the resource. And if `T` is an incomplete type at the point where the class's destructor is implicitly defined, the compile fails inside `unique_ptr`'s deleter, which is why the pimpl idiom declares the destructor in the header and defines it in the source file where `T` is complete.
+
+The second template parameter is the deleter, defaulting to `std::default_delete<T>`, which calls `delete`. A custom deleter lets `unique_ptr` own anything with a release function: a `FILE*` closed with `fclose`, memory from `malloc` freed with `free`, a handle from a C library. A stateless deleter such as a lambda or a functor with no members adds no size, so the `unique_ptr` stays pointer-sized. A function-pointer deleter is stored, so it doubles the size to two words. Prefer the functor.
+
+```cpp
+struct FileCloser { void operator()(FILE* f) const { if (f) std::fclose(f); } };
+std::unique_ptr<FILE, FileCloser> file{ std::fopen("log.txt", "r") };   // still 8 bytes
+
+std::unique_ptr<FILE, int(*)(FILE*)> file2{ std::fopen("x", "r"), &std::fclose }; // 16 bytes
+```
+
+The misuses all come from mixing a raw pointer with the owner. Constructing two `unique_ptr`s from the same raw pointer produces a double delete. Deleting the raw pointer yourself while a `unique_ptr` still owns it produces a double delete when the owner is destroyed. Keeping a raw copy of `p.get()` past the owner's lifetime produces a dangling pointer. Using `make_unique` everywhere removes the raw pointer from the picture at the moment of creation, which removes the first two entirely.
+
 ## Errors and pitfalls
+
+Constructing two `unique_ptr`s from one raw pointer, or calling `delete` on a pointer a `unique_ptr` owns, double-deletes. `make_unique` prevents both by never exposing the raw pointer.
+
+`p.release()` with the result discarded leaks. It exists to hand ownership to something that is not a `unique_ptr`; store the result.
+
+`std::unique_ptr<T>` with a function-pointer deleter is two words, not one. Use a stateless functor or lambda to keep it pointer-sized.
 
 A user-declared destructor, even an empty one, suppresses the implicit move operations. The class then copies where it would have moved, with no diagnostic. Either remove the destructor or declare the moves as `= default`.
 
@@ -236,6 +269,22 @@ If I declare or delete any of the copy constructor, copy assignment, move constr
 
 No. A local returned by value is already treated as an rvalue in the return statement, so it moves without the cast, and copy elision may remove the operation entirely. Adding std::move can prevent named return value optimization, so it is redundant at best and slower at worst.
 
+### Why prefer make_unique over unique_ptr with new?
+
+It names the type once, keeps a naked new out of the code, and before C++17 it closed an exception-safety hole: in a call with two arguments, new could run, then another argument could throw, before the unique_ptr wrapped the raw pointer, leaking it. C++17 fixed the sequencing, but make_unique never had the problem and stays the idiom.
+
+### How do you pass a unique_ptr to a function?
+
+By value when the function takes ownership, and the caller writes std::move so the transfer is visible. By T& or const T* when the function only uses the object, passing *p or p.get(), so the signature does not force callers to own through a unique_ptr. By unique_ptr& only if the function may replace what the caller owns. I avoid const unique_ptr&, which constrains the caller for no benefit.
+
+### What does a unique_ptr member do to a class?
+
+It makes the class correct by default: the implicit destructor releases the resource, the implicit moves transfer it, and copying is deleted because the member is non-copyable. The class becomes move-only unless I write a copying constructor that clones the resource. If the pointee is incomplete in the header, I declare the destructor there and define it where the type is complete, which is the pimpl pattern.
+
+### How big is a unique_ptr?
+
+One pointer with the default deleter or any stateless deleter, because an empty deleter takes no storage. A function-pointer deleter has to be stored, so that spelling is two words. I use a functor or a captureless lambda for custom deleters to keep it pointer-sized.
+
 ## Practice history
 
 ### Reading
@@ -244,3 +293,4 @@ No. A local returned by value is already treated as an rvalue in the return stat
 - learncpp 22.2 Rvalue references — read 07/09 (binding table and named-is-lvalue rule live in value_categories.md).
 - learncpp 22.3 Move constructors and move assignment — read 07/09.
 - learncpp 22.4 std::move — read 07/09.
+- learncpp 22.5 std::unique_ptr — read 07/09.
