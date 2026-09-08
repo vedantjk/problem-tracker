@@ -202,3 +202,17 @@ Editorial clarification: the entries below preserve the original session observa
 
 - [x] Bump Memory Allocator — 07/09 — solved with heavy guidance; first submission failed one hidden test because `Deallocate(nullptr)` threw instead of returning. Lessons: null free is a no-op by contract; align the address, not the size; `std::align` replaces the round-up formula; `unique_ptr<std::byte[]>` is the ownership spelling. Final solution verified under ASan and UBSan. Original session conclusion, since refined: the exercise looked like a mislabeled stack allocator because it had headers and a `Deallocate`; the taxonomy section above explains why those do not change the category. **Rule to remember: if asked for a bump allocator, the core is a cursor and a reset. Do not add per-allocation headers or reclamation logic unless the interface requires them; if a deallocate function is required, make it a no-op or validation-only, and say so.**
 - [x] Stack Allocator (template `Capacity`, buffer on the stack) — 07/09 — solved; first version used `unique_ptr` (heap, violates the no-`new` rule) and had `&`/`!=` precedence wrong in the power-of-two check, both caught before submit. Final: `alignas(std::max_align_t) std::byte buf_[Capacity]`, `std::align`, cursor update `Capacity - remaining + size`, reset is `offset_ = 0`. Lessons: `std::align` subtracts the padding from space, not the size; align the buffer itself so the first allocation never pads; this one is the minimal bump allocator with no headers and reset-only reclamation, the previous problem was the same allocation model with a validation header added.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Pointers
+- ✓ [Implement an allocator](https://getcracked.io/problem/18/implement-an-allocator) — problem
+
+### Pointers
+- ✓ [Implement malloc on the stack](https://getcracked.io/problem/158/implement-malloc-on-the-stack) — problem
+
+<!-- gc-questions:end -->

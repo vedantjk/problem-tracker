@@ -151,3 +151,41 @@ The entries below preserve the original practice record. Use the explanations ab
 - 30/08 MISSED: {char,double,char} — computed 17, forgot TAIL padding → 24. Rule: total rounds to max alignment.
 - 30/08: {short,char,int*,float} — offsets right, forgot tail pad again mid-answer (20 → 24); reorder to 16 — ok. Tail-pad reflex landed by rep 3.
 - 31/08: {char,int,char,long} = 24 — total right, internal map wrong (pad-7 before long, zero tail). Compute offsets, not a padding shopping list.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Object Sizes
+- ✓ [Satisfy me!](https://getcracked.io/question/1470) — Easy
+- ✗ [Understand lambdas, understand C++.](https://getcracked.io/question/1070) — Easy
+
+### Heap
+- ✓ [Can you treat me as an equal?](https://getcracked.io/question/1082) — Easy
+- ✗ [They're stacked.](https://getcracked.io/question/1277) — Easy
+
+### char, const char*, and string
+- ✓ [0.0_7](https://getcracked.io/question/975) — Easy
+- ✓ [Char + Char](https://getcracked.io/question/674) — Easy
+- ✓ [String placement](https://getcracked.io/question/1216) — Easy
+- ✓ [String them together.](https://getcracked.io/question/996) — Easy
+- ✓ [What's a character?](https://getcracked.io/question/847) — Easy
+- ✗ [Where did it go?](https://getcracked.io/question/757) — Easy
+- ✗ [You don't understand strings.](https://getcracked.io/question/699) — Easy
+- ✗ [Another string question?](https://getcracked.io/question/1423) — Medium
+- ✗ [Change it for me.](https://getcracked.io/question/870) — Medium
+- ✗ [GG](https://getcracked.io/question/687) — Medium
+- ✗ [More chars more problems.](https://getcracked.io/question/858) — Medium
+- ✓ [Pointers to Pointers to Pointers](https://getcracked.io/question/767) — Medium
+- ✗ [Signed Char == Unsigned Char?](https://getcracked.io/question/381) — Medium
+- ✗ [What even is a string?](https://getcracked.io/question/881) — Medium
+- ✗ [What's zero?](https://getcracked.io/question/818) — Medium
+- ○ [Implement std::string](https://getcracked.io/problem/90/implement-std-string) — problem
+
+### Small String Optimization
+- ✓ [SOO, about that object.](https://getcracked.io/question/1206) — Easy
+- ○ [Implement std::string](https://getcracked.io/problem/90/implement-std-string) — problem
+
+<!-- gc-questions:end -->

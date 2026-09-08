@@ -252,3 +252,19 @@ The entries below preserve the original practice record. Compiler-conformance ob
 | 01/09/2026 | Claude quiz #2 Q1: catch(...) listed first | HALF | Said "catches everything" — it's a CE: catch-all must be LAST ([except.handle]). Anki: "catch(...) before other handlers → ?" / "CE (vs base-before-derived: compiles, dead code)" |
 | 01/09/2026 | Claude quiz #2 Q2: uncaught exception + RAII | HALF | Got terminate; missed that unwinding is implementation-defined when uncaught → dtors NOT guaranteed (gcc/clang don't unwind). Anki: "uncaught throw — do local dtors run?" / "impl-defined; typically no (crash scene preserved)" |
 | 01/09/2026 | Claude quiz #2 Q4: switch decl/init + skipped assignment | HALF | Right case; said "can't default-init" (backwards: default-init/declaration IS allowed, initialization is the CE) + called skipped-assignment read "garbage" (it's UB — REPEAT of standing trap line) |
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### std::exception and Stack Unwinding
+- ✓ [Catch me if you can!](https://getcracked.io/question/965) — Easy
+- ✓ [Hey, catch!](https://getcracked.io/question/993) — Medium
+- ✗ [So close to unwinding.](https://getcracked.io/question/1008) — Cracked
+
+### std::optional and nullopt
+- ✗ [Divided Result](https://getcracked.io/question/2054) — Hard
+
+<!-- gc-questions:end -->

@@ -1,0 +1,5858 @@
+[
+  {
+    "id": "node-200",
+    "title": "What, Why, and When?",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-programming-languages/",
+        "title": "LearnCpp - 0.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 0.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-cplusplus/",
+        "title": "LearnCpp - 0.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 0.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1210",
+        "title": "C++ is a…",
+        "cells": [
+          "C++ is a…",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-322",
+    "title": "Steps to C++ Development",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-cpp-development/",
+        "title": "LearnCpp - 0.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 0.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=SfGuIVzE_Os",
+        "title": "The Cherno - How C++ works",
+        "cells": [
+          "Video",
+          "The Cherno - How C++ works",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-the-compiler-linker-and-libraries/",
+        "title": "LearnCpp - 0.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 0.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-323",
+    "title": "Installing your IDE",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/installing-an-integrated-development-environment-ide/",
+        "title": "LearnCpp - 0.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 0.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=1OsGXuNA5cc",
+        "title": "The Cherno - C++ on Windows",
+        "cells": [
+          "Video",
+          "The Cherno - C++ on Windows",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/compiling-your-first-program/",
+        "title": "LearnCpp - 0.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 0.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-201",
+    "title": "Comments, Whitespace, Formatting, Printing",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/comments/",
+        "title": "LearnCpp - 1.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-iostream-cout-cin-and-endl/",
+        "title": "LearnCpp - 1.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/whitespace-and-basic-formatting/",
+        "title": "LearnCpp - 1.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-202",
+    "title": "Variables, Objects, Initialization",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-objects-and-variables/",
+        "title": "LearnCpp - 1.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/",
+        "title": "LearnCpp - 1.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.sandordargo.com/blog/2021/12/22/most-vexing-parse",
+        "title": "Sandor Dargo - The most vexxing parse",
+        "cells": [
+          "Article",
+          "Sandor Dargo - The most vexxing parse",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.cppstories.com/2021/designated-init-cpp20/",
+        "title": "CppStories - Designated Initializers",
+        "cells": [
+          "Blog",
+          "CppStories - Designated Initializers",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/998",
+        "title": "Forgot one?",
+        "cells": [
+          "Forgot one?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1236",
+        "title": "Schrödinger's Initializer",
+        "cells": [
+          "Schrödinger's Initializer",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1157",
+        "title": "The designated representative.",
+        "cells": [
+          "The designated representative.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-203",
+    "title": "Keywords and Identifiers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/keywords-and-naming-identifiers/",
+        "title": "LearnCpp - 1.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-221",
+    "title": "Undefined Behavior",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/uninitialized-variables-and-undefined-behavior/",
+        "title": "LearnCpp - 1.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://devblogs.microsoft.com/oldnewthing/20240802-00/?p=110091",
+        "title": "Microsoft - Undefined Behavior",
+        "cells": [
+          "Blog",
+          "Microsoft - Undefined Behavior",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/994",
+        "title": "_global_variable",
+        "cells": [
+          "_global_variable",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-300",
+    "title": "Literals, Operators and Expressions",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-literals-and-operators/",
+        "title": "LearnCpp - 1.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-expressions/",
+        "title": "LearnCpp - 1.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.10",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/developing-your-first-program/",
+        "title": "LearnCpp - 1.11",
+        "cells": [
+          "Website",
+          "LearnCpp - 1.11",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-328",
+    "title": "The other behaviors.",
+    "items": [
+      {
+        "href": "https://64.github.io/cpp-faq/unspecified-impldefined/",
+        "title": "Cpp FAQ - Unspecified & Implementation Defined",
+        "cells": [
+          "Blog",
+          "Cpp FAQ - Unspecified & Implementation Defined",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1000",
+        "title": "++i ++i",
+        "cells": [
+          "++i ++i",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-204",
+    "title": "Declarations, Definitions, and Multiple Code Files",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/forward-declarations/",
+        "title": "LearnCpp - 2.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/programs-with-multiple-code-files/",
+        "title": "LearnCpp - 2.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-205",
+    "title": "The Preprocessor and Header Guards",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-the-preprocessor/",
+        "title": "LearnCpp - 2.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.10",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/header-files/",
+        "title": "LearnCpp - 2.11",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.11",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/header-guards/",
+        "title": "LearnCpp - 2.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.12",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1291",
+        "title": "Bodyguard",
+        "cells": [
+          "Bodyguard",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-206",
+    "title": "Functions, Parameters, Arguments and Return Values",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-functions/",
+        "title": "LearnCpp - 2.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-return-values-value-returning-functions/",
+        "title": "LearnCpp - 2.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/inline-functions-and-variables/",
+        "title": "LearnCpp - 7.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 7.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/835",
+        "title": "Once or twice?",
+        "cells": [
+          "Once or twice?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-207",
+    "title": "Scope",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-local-scope/",
+        "title": "LearnCpp - 2.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/local-variables/",
+        "title": "LearnCpp - 7.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 7.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/variable-shadowing-name-hiding/",
+        "title": "LearnCpp - 7.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 7.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/441",
+        "title": "I am the shadows.",
+        "cells": [
+          "I am the shadows.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-307",
+    "title": "Namespaces",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/naming-collisions-and-an-introduction-to-namespaces/",
+        "title": "LearnCpp - 2.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/user-defined-namespaces-and-the-scope-resolution-operator/",
+        "title": "LearnCpp - 7.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 7.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-325",
+    "title": "Anonymous Functions",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-lambdas-anonymous-functions/",
+        "title": "LearnCpp - 20.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 20.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/lambda-captures/",
+        "title": "LearnCpp - 20.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 20.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/956",
+        "title": "Between two parts.",
+        "cells": [
+          "Between two parts.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1096",
+        "title": "Overloading lambdas!",
+        "cells": [
+          "Overloading lambdas!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1012",
+        "title": "Am I missing something?",
+        "cells": [
+          "Am I missing something?",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-326",
+    "title": "The Debugging Process",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-debugging-process/",
+        "title": "LearnCpp - 3.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/a-strategy-for-debugging/",
+        "title": "LearnCpp - 3.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/basic-debugging-tactics/",
+        "title": "LearnCpp - 3.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/more-debugging-tactics/",
+        "title": "LearnCpp - 3.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-327",
+    "title": "Debugging with the IDE",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/using-an-integrated-debugger-stepping/",
+        "title": "LearnCpp - 3.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/using-an-integrated-debugger-running-and-breakpoints/",
+        "title": "LearnCpp - 3.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/using-an-integrated-debugger-watching-variables/",
+        "title": "LearnCpp - 3.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/using-an-integrated-debugger-the-call-stack/",
+        "title": "LearnCpp - 3.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 3.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-208",
+    "title": "void",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/void-functions-non-value-returning-functions/",
+        "title": "LearnCpp - 2.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 2.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/void/",
+        "title": "LearnCpp - 4.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-209",
+    "title": "Object Sizes",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/object-sizes-and-the-sizeof-operator/",
+        "title": "LearnCpp - 4.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.cprogramming.com/tutorial/size_of_class_object.html",
+        "title": "C Programming - Determining the Size of a Class Object",
+        "cells": [
+          "Website",
+          "C Programming - Determining the Size of a Class Object",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://youtu.be/iz958I8Xb2g",
+        "title": "Data Alignment in C++",
+        "cells": [
+          "Video",
+          "Data Alignment in C++",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1470",
+        "title": "Satisfy me!",
+        "cells": [
+          "Satisfy me!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1070",
+        "title": "Understand lambdas, understand C++.",
+        "cells": [
+          "Understand lambdas, understand C++.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-210",
+    "title": "Signed versus Unsigned Integers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/signed-integers/",
+        "title": "LearnCpp - 4.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/",
+        "title": "LearnCpp - 4.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/971",
+        "title": "long vs int",
+        "cells": [
+          "long vs int",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/709",
+        "title": "Signed Integer Overflow",
+        "cells": [
+          "Signed Integer Overflow",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/708",
+        "title": "Unsigned Integer Overflow",
+        "cells": [
+          "Unsigned Integer Overflow",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/788",
+        "title": "Unsigned - Unsigned",
+        "cells": [
+          "Unsigned - Unsigned",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-211",
+    "title": "Fixed Width Integers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/",
+        "title": "LearnCpp - 4.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-212",
+    "title": "Floating Point Types",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/floating-point-numbers/",
+        "title": "LearnCpp - 4.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=lUdRbZDBgEE",
+        "title": "Representation (IEEE754)",
+        "cells": [
+          "Video",
+          "Representation (IEEE754)",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://mathcenter.oxford.emory.edu/site/cs170/ieee754/",
+        "title": "Representation (IEEE754) - Additional Details",
+        "cells": [
+          "Article",
+          "Representation (IEEE754) - Additional Details",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1282",
+        "title": "a + b + c",
+        "cells": [
+          "a + b + c",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/701",
+        "title": "Floating points, you sure?",
+        "cells": [
+          "Floating points, you sure?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/796",
+        "title": "Double trouble?",
+        "cells": [
+          "Double trouble?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/700",
+        "title": "To sign or not to sign?",
+        "cells": [
+          "To sign or not to sign?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1064",
+        "title": "Whatever floats your cope.",
+        "cells": [
+          "Whatever floats your cope.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/987",
+        "title": "I don't give a flying float",
+        "cells": [
+          "I don't give a flying float",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1020",
+        "title": "A very small value",
+        "cells": [
+          "A very small value",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-213",
+    "title": "Bools",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/boolean-values/",
+        "title": "LearnCpp - 4.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-242",
+    "title": "Enumerations",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/unscoped-enumerations/",
+        "title": "LearnCpp - 13.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 13.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/scoped-enumerations-enum-classes/",
+        "title": "LearnCpp - 13.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 13.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/867",
+        "title": "Ranges of enums",
+        "cells": [
+          "Ranges of enums",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-304",
+    "title": "static_cast",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-type-conversion-and-static_cast/",
+        "title": "LearnCpp - 4.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.12",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1005",
+        "title": "Null and void.",
+        "cells": [
+          "Null and void.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1260",
+        "title": "Castaway",
+        "cells": [
+          "Castaway",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-308",
+    "title": "auto",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/type-deduction-for-objects-using-the-auto-keyword/",
+        "title": "LearnCpp - 10.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 10.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.cppstories.com/2023/initializer_list_basics/",
+        "title": "CppStories - std::initializer_list in C++ (1/2)",
+        "cells": [
+          "Blog",
+          "CppStories - std::initializer_list in C++ (1/2)",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1322",
+        "title": "2 variables 1 auto",
+        "cells": [
+          "2 variables 1 auto",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/856",
+        "title": "auto... &?",
+        "cells": [
+          "auto... &?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1273",
+        "title": "A, B, C, harder than 1, 2, 3",
+        "cells": [
+          "A, B, C, harder than 1, 2, 3",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-329",
+    "title": "Tuple",
+    "items": [
+      {
+        "href": "https://www.studyplan.dev/pro-cpp/tuple",
+        "title": "StudyPLAN Dev - Tuple and std::tuple",
+        "cells": [
+          "Blog",
+          "StudyPLAN Dev - Tuple and std::tuple",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/976",
+        "title": "I'm harboring ints.",
+        "cells": [
+          "I'm harboring ints.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-302",
+    "title": "Bitflags and std::bitset",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/bit-flags-and-bit-manipulation-via-stdbitset/",
+        "title": "LearnCpp - O.1",
+        "cells": [
+          "Website",
+          "LearnCpp - O.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1836",
+        "title": "Hidden calories",
+        "cells": [
+          "Hidden calories",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-303",
+    "title": "Bitwise Operators and Bit Masks",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/bitwise-operators/",
+        "title": "LearnCpp - O.2",
+        "cells": [
+          "Website",
+          "LearnCpp - O.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/bit-manipulation-with-bitwise-operators-and-bit-masks/",
+        "title": "LearnCpp - O.3",
+        "cells": [
+          "Website",
+          "LearnCpp - O.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1267",
+        "title": "Shifting off the edge",
+        "cells": [
+          "Shifting off the edge",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1102",
+        "title": "Down shift",
+        "cells": [
+          "Down shift",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1152",
+        "title": "Let's go the other way.",
+        "cells": [
+          "Let's go the other way.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-305",
+    "title": "reinterpret_cast and std::memcpy",
+    "items": [
+      {
+        "href": "https://bhanuprakasheagala.hashnode.dev/understanding-reinterpretcast-in-c",
+        "title": "Understanding reinterpret_cast - Basics",
+        "cells": [
+          "Article",
+          "Understanding reinterpret_cast - Basics",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-306",
+    "title": "std::bit_cast",
+    "items": [
+      {
+        "href": "https://www.w3computing.com/articles/cpp-20-std-bit_cast/",
+        "title": "Understanding std::bit_cast",
+        "cells": [
+          "Article",
+          "Understanding std::bit_cast",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-218",
+    "title": "Precedence",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/operator-precedence-and-associativity/",
+        "title": "LearnCpp - 6.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 6.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/712",
+        "title": "Shortcuts",
+        "cells": [
+          "Shortcuts",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-219",
+    "title": "Arithmetic Operators",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/arithmetic-operators/",
+        "title": "LearnCpp - 6.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 6.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/floating-point-and-integral-promotion/",
+        "title": "LearnCpp - 10.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 10.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1719",
+        "title": "Zero Division, Error Error?",
+        "cells": [
+          "Zero Division, Error Error?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/782",
+        "title": "Zero Division, Error?",
+        "cells": [
+          "Zero Division, Error?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-220",
+    "title": "Pre and Post Decrement",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/increment-decrement-operators-and-side-effects/",
+        "title": "LearnCpp - 6.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 6.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/702",
+        "title": "++ before or after?",
+        "cells": [
+          "++ before or after?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1319",
+        "title": "One after the other",
+        "cells": [
+          "One after the other",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/859",
+        "title": "Munch munch munch!",
+        "cells": [
+          "Munch munch munch!",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1101",
+        "title": "Preprocessor chicanery",
+        "cells": [
+          "Preprocessor chicanery",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-222",
+    "title": ", and ?",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-comma-operator/",
+        "title": "LearnCpp - 6.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 6.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-conditional-operator/",
+        "title": "LearnCpp - 6.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 6.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-223",
+    "title": "Relational Operators",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/relational-operators-and-floating-point-comparisons/",
+        "title": "LearnCpp - 6.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 6.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.cppstories.com/2022/safe-int-cmp-cpp20/",
+        "title": "CppStories - Safe Int Compare in C++20",
+        "cells": [
+          "Blog",
+          "CppStories - Safe Int Compare in C++20",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/715",
+        "title": "Is it converted?",
+        "cells": [
+          "Is it converted?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-321",
+    "title": "Operator Overloading",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-operator-overloading/",
+        "title": "LearnCpp - 21.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 21.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/overloading-the-arithmetic-operators-using-friend-functions/",
+        "title": "LearnCpp - 21.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 21.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/overloading-operators-using-normal-functions/",
+        "title": "LearnCpp - 21.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 21.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/736",
+        "title": "Overloading ++",
+        "cells": [
+          "Overloading ++",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-224",
+    "title": "if",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-if-statements/",
+        "title": "LearnCpp - 4.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 4.10",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/786",
+        "title": "Conditional Trap",
+        "cells": [
+          "Conditional Trap",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1245",
+        "title": "If Else... What?",
+        "cells": [
+          "If Else... What?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-225",
+    "title": "Switch and Fallthrough",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/switch-statement-basics/",
+        "title": "LearnCpp - 8.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/switch-fallthrough-and-scoping/",
+        "title": "LearnCpp - 8.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1331",
+        "title": "Case and point 1",
+        "cells": [
+          "Case and point 1",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1332",
+        "title": "Case and point 2",
+        "cells": [
+          "Case and point 2",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-226",
+    "title": "Loops I: while, do-while, for",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/",
+        "title": "LearnCpp - 8.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/do-while-statements/",
+        "title": "LearnCpp - 8.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/for-statements/",
+        "title": "LearnCpp - 8.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.10",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/819",
+        "title": "Do-while...",
+        "cells": [
+          "Do-while...",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1011",
+        "title": "How'd you read this?",
+        "cells": [
+          "How'd you read this?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-227",
+    "title": "Loops II: break and continue",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/break-and-continue/",
+        "title": "LearnCpp - 8.11",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.11",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-228",
+    "title": "Ending Early",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/halts-exiting-your-program-early/",
+        "title": "LearnCpp - 8.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 8.12",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1063",
+        "title": "3 exits",
+        "cells": [
+          "3 exits",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1015",
+        "title": "Exit the function early.",
+        "cells": [
+          "Exit the function early.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-249",
+    "title": "range-based for-loop",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/range-based-for-loops-for-each/",
+        "title": "LearnCpp - 16.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-256",
+    "title": "Recursion",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/recursion/",
+        "title": "LearnCpp - 20.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 20.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/771",
+        "title": "A Loop Without A Loop",
+        "cells": [
+          "A Loop Without A Loop",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-252",
+    "title": "Stack",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-stack-and-the-heap/",
+        "title": "LearnCpp - 20.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 20.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://amzn.to/3W3wdsC",
+        "title": "Operating Systems: Three Easy Pieces",
+        "cells": [
+          "Book",
+          "Operating Systems: Three Easy Pieces",
+          "14.1",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-253",
+    "title": "Heap",
+    "items": [
+      {
+        "href": "https://amzn.to/3W3wdsC",
+        "title": "Operating Systems: Three Easy Pieces",
+        "cells": [
+          "Book",
+          "Operating Systems: Three Easy Pieces",
+          "14.2",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://amzn.to/3W3wdsC",
+        "title": "Operating Systems: Three Easy Pieces",
+        "cells": [
+          "Book",
+          "Operating Systems: Three Easy Pieces",
+          "14.3",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://amzn.to/3W3wdsC",
+        "title": "Operating Systems: Three Easy Pieces",
+        "cells": [
+          "Book",
+          "Operating Systems: Three Easy Pieces",
+          "14.4",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1082",
+        "title": "Can you treat me as an equal?",
+        "cells": [
+          "Can you treat me as an equal?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1277",
+        "title": "They're stacked.",
+        "cells": [
+          "They're stacked.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-257",
+    "title": "Storage Durations",
+    "items": [
+      {
+        "href": "https://www.cppstories.com/2023/storage-init-cpp/",
+        "title": "Cpp Stories - Storage Duration",
+        "cells": [
+          "Blog",
+          "Cpp Stories - Storage Duration",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/995",
+        "title": "Lambda defaults",
+        "cells": [
+          "Lambda defaults",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1327",
+        "title": "That's BS!",
+        "cells": [
+          "That's BS!",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-258",
+    "title": "std::exception and Stack Unwinding",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-need-for-exceptions/",
+        "title": "LearnCpp - 27.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 27.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/basic-exception-handling/",
+        "title": "LearnCpp - 27.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 27.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/exceptions-functions-and-stack-unwinding/",
+        "title": "LearnCpp - 27.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 27.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/uncaught-exceptions-catch-all-handlers/",
+        "title": "LearnCpp - 27.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 27.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/rethrowing-exceptions/",
+        "title": "LearnCpp - 27.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 27.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-try-blocks/",
+        "title": "LearnCpp - 27.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 27.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/965",
+        "title": "Catch me if you can!",
+        "cells": [
+          "Catch me if you can!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/993",
+        "title": "Hey, catch!",
+        "cells": [
+          "Hey, catch!",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1008",
+        "title": "So close to unwinding.",
+        "cells": [
+          "So close to unwinding.",
+          "Cracked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-259",
+    "title": "std::optional and nullopt",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdoptional/",
+        "title": "LearnCpp - 12.15",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.15",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.cppstories.com/2018/05/using-optional/",
+        "title": "CppStories - Using std::optional",
+        "cells": [
+          "Blog",
+          "CppStories - Using std::optional",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/2054",
+        "title": "Divided Result",
+        "cells": [
+          "Divided Result",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-260",
+    "title": "std::expected<T, E>",
+    "items": [
+      {
+        "href": "https://www.cppstories.com/2024/expected-cpp23/",
+        "title": "Cpp Stories - Using std::expected",
+        "cells": [
+          "Blog",
+          "Cpp Stories - Using std::expected",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-239",
+    "title": "Const",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/constant-variables-named-constants/",
+        "title": "LearnCpp - 5.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 5.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/511",
+        "title": "Changing Const?",
+        "cells": [
+          "Changing Const?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-240",
+    "title": "Pointers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-pointers/",
+        "title": "LearnCpp - 12.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/null-pointers/",
+        "title": "LearnCpp - 12.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.8",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pointers-and-const/",
+        "title": "LearnCpp - 12.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.9",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pass-by-address/",
+        "title": "LearnCpp - 12.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.10",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pass-by-address-part-2/",
+        "title": "LearnCpp - 12.11",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.11",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-pointers/",
+        "title": "LearnCpp - 20.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 20.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1067",
+        "title": "Delete this. Now!",
+        "cells": [
+          "Delete this. Now!",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/507",
+        "title": "How big is a pointer?",
+        "cells": [
+          "How big is a pointer?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1239",
+        "title": "Who are you pointing to?",
+        "cells": [
+          "Who are you pointing to?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1148",
+        "title": "Freedom?",
+        "cells": [
+          "Freedom?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/952",
+        "title": "Get around &.",
+        "cells": [
+          "Get around &.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/997",
+        "title": "Aaaargggc",
+        "cells": [
+          "Aaaargggc",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1068",
+        "title": "Getting high(er).",
+        "cells": [
+          "Getting high(er).",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/873",
+        "title": "Is a pointer a pointer?",
+        "cells": [
+          "Is a pointer a pointer?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1394",
+        "title": "print function?",
+        "cells": [
+          "print function?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/970",
+        "title": "sizeof your comprehension",
+        "cells": [
+          "sizeof your comprehension",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1268",
+        "title": "Over here, then over there.",
+        "cells": [
+          "Over here, then over there.",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/problem/18/implement-an-allocator",
+        "title": "Implement an allocator",
+        "cells": [
+          "Implement an allocator",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/problem/158/implement-malloc-on-the-stack",
+        "title": "Implement malloc on the stack",
+        "cells": [
+          "Implement malloc on the stack",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-241",
+    "title": "References",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/lvalue-references/",
+        "title": "LearnCpp - 12.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/lvalue-references-to-const/",
+        "title": "LearnCpp - 12.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pass-by-lvalue-reference/",
+        "title": "LearnCpp - 12.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pass-by-const-lvalue-reference/",
+        "title": "LearnCpp - 12.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/return-by-reference-and-return-by-address/",
+        "title": "LearnCpp - 12.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.12",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/in-and-out-parameters/",
+        "title": "LearnCpp - 12.13",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.13",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/type-deduction-with-pointers-references-and-const/",
+        "title": "LearnCpp - 12.14",
+        "cells": [
+          "Website",
+          "LearnCpp - 12.14",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/792",
+        "title": "Where'd it go?",
+        "cells": [
+          "Where'd it go?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/974",
+        "title": "& through me.",
+        "cells": [
+          "& through me.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/857",
+        "title": "In one out the other.",
+        "cells": [
+          "In one out the other.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/967",
+        "title": "I min-maxed my character.",
+        "cells": [
+          "I min-maxed my character.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/510",
+        "title": "You don't get references.",
+        "cells": [
+          "You don't get references.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-310",
+    "title": "Move Semantics",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-smart-pointers-move-semantics/",
+        "title": "LearnCpp - 22.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.1",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/682",
+        "title": "Moved from.",
+        "cells": [
+          "Moved from.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/problem/5/we-re-moving",
+        "title": "We're moving.",
+        "cells": [
+          "We're moving.",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-311",
+    "title": "lvalue, rvalue, xvalue, prvalue, glvalue",
+    "items": [
+      {
+        "href": "https://learn.microsoft.com/en-us/windows/uwp/cpp-and-winrt-apis/cpp-value-categories",
+        "title": "Microsoft - C++ Value Categories",
+        "cells": [
+          "Article",
+          "Microsoft - C++ Value Categories",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/rvalue-references/",
+        "title": "LearnCpp - 22.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.2",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/move-constructors-and-move-assignment/",
+        "title": "LearnCpp - 22.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.3",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdmove/",
+        "title": "LearnCpp - 22.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.4",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1724",
+        "title": "What-value",
+        "cells": [
+          "What-value",
+          "Cracked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-261",
+    "title": "std::unique_ptr",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdunique_ptr/",
+        "title": "LearnCpp - 22.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=YeI6V2O5BFE&list=PL5jc9xFGsL8FWtnZBeTqZBbniyw0uHyaH&index=10&pp=iAQB",
+        "title": "Bo Qian - Unique Pointer",
+        "cells": [
+          "Video",
+          "Bo Qian - Unique Pointer",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/823",
+        "title": "It's unique, but is it big?",
+        "cells": [
+          "It's unique, but is it big?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1259",
+        "title": "Have him play with it.",
+        "cells": [
+          "Have him play with it.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1027",
+        "title": "I'm moving in.",
+        "cells": [
+          "I'm moving in.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/problem/2/implement-unique-ptr",
+        "title": "Implement unique_ptr",
+        "cells": [
+          "Implement unique_ptr",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/problem/3/implement-make-unique",
+        "title": "Implement make_unique",
+        "cells": [
+          "Implement make_unique",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-262",
+    "title": "std::shared_ptr",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdshared_ptr/",
+        "title": "LearnCpp - 22.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=qUDAkDvoLas&list=PL5jc9xFGsL8FWtnZBeTqZBbniyw0uHyaH&index=7&pp=iAQB0gcJCdgKAYcqIYzv",
+        "title": "Bo Qian - Shared Pointer I",
+        "cells": [
+          "Video",
+          "Bo Qian - Shared Pointer I",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=n10ERmH8bYk&list=PL5jc9xFGsL8FWtnZBeTqZBbniyw0uHyaH&index=8&pp=iAQB",
+        "title": "Bo Qian - Shared Pointer II",
+        "cells": [
+          "Video",
+          "Bo Qian - Shared Pointer II",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1328",
+        "title": "A tale of two pointers!",
+        "cells": [
+          "A tale of two pointers!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/419",
+        "title": "Default shared pointer",
+        "cells": [
+          "Default shared pointer",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/824",
+        "title": "How many allocations?",
+        "cells": [
+          "How many allocations?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/825",
+        "title": "It's shared, but is it big?",
+        "cells": [
+          "It's shared, but is it big?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/407",
+        "title": "Shared pointer constructor",
+        "cells": [
+          "Shared pointer constructor",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/388",
+        "title": "Why std::make_shared?",
+        "cells": [
+          "Why std::make_shared?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1284",
+        "title": "Who lives here?",
+        "cells": [
+          "Who lives here?",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/problem/4/implement-shared-ptr",
+        "title": "Implement shared_ptr",
+        "cells": [
+          "Implement shared_ptr",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-263",
+    "title": "std::weak_ptr",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/circular-dependency-issues-with-stdshared_ptr-and-stdweak_ptr/",
+        "title": "LearnCpp - 22.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 22.7",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=EWoMjuN5OH4&list=PL5jc9xFGsL8FWtnZBeTqZBbniyw0uHyaH&index=9&pp=iAQB",
+        "title": "Bo Qian - Weak Pointer",
+        "cells": [
+          "Video",
+          "Bo Qian - Weak Pointer",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/826",
+        "title": "It's weak, but how big is it?",
+        "cells": [
+          "It's weak, but how big is it?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/984",
+        "title": "Where do we go now?",
+        "cells": [
+          "Where do we go now?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-215",
+    "title": "Constant and Constexpr Variables",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/constant-expressions/",
+        "title": "LearnCpp - 5.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 5.5",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/constexpr-variables/",
+        "title": "LearnCpp - 5.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 5.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.cppstories.com/2022/const-options-cpp20/",
+        "title": "Cpp Stories - const, constexpr, consteval, constinit",
+        "cells": [
+          "Website",
+          "Cpp Stories - const, constexpr, consteval, constinit",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1275",
+        "title": "Constipated constexpr",
+        "cells": [
+          "Constipated constexpr",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1026",
+        "title": "Keep your cool, keep it constant.",
+        "cells": [
+          "Keep your cool, keep it constant.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1278",
+        "title": "You don't always matter to me",
+        "cells": [
+          "You don't always matter to me",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1215",
+        "title": "East to West",
+        "cells": [
+          "East to West",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/874",
+        "title": "The const or the ?",
+        "cells": [
+          "The const or the ?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-216",
+    "title": "char, const char*, and string",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/constexpr-variables/",
+        "title": "LearnCpp - 5.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 5.6",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://youtu.be/JqXAcD1UfXM?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - String: Constructors",
+        "cells": [
+          "Video",
+          "Bo Qian - String: Constructors",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=6OCaJbL-kMQ&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=13",
+        "title": "Bo Qian - String: Accessing Characters",
+        "cells": [
+          "Video",
+          "Bo Qian - String: Accessing Characters",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/avZfl3VoKw0?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - String: Member Functions",
+        "cells": [
+          "Video",
+          "Bo Qian - String: Member Functions",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=8lMAMQZRwQM&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=15",
+        "title": "Bo Qian - String: Non-Member Functions",
+        "cells": [
+          "Video",
+          "Bo Qian - String: Non-Member Functions",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/975",
+        "title": "0.0_7",
+        "cells": [
+          "0.0_7",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/674",
+        "title": "Char + Char",
+        "cells": [
+          "Char + Char",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1216",
+        "title": "String placement",
+        "cells": [
+          "String placement",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/996",
+        "title": "String them together.",
+        "cells": [
+          "String them together.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/847",
+        "title": "What's a character?",
+        "cells": [
+          "What's a character?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/757",
+        "title": "Where did it go?",
+        "cells": [
+          "Where did it go?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/699",
+        "title": "You don't understand strings.",
+        "cells": [
+          "You don't understand strings.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/1423",
+        "title": "Another string question?",
+        "cells": [
+          "Another string question?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/870",
+        "title": "Change it for me.",
+        "cells": [
+          "Change it for me.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/687",
+        "title": "GG",
+        "cells": [
+          "GG",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/858",
+        "title": "More chars more problems.",
+        "cells": [
+          "More chars more problems.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/767",
+        "title": "Pointers to Pointers to Pointers",
+        "cells": [
+          "Pointers to Pointers to Pointers",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/381",
+        "title": "Signed Char == Unsigned Char?",
+        "cells": [
+          "Signed Char == Unsigned Char?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/881",
+        "title": "What even is a string?",
+        "cells": [
+          "What even is a string?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/question/818",
+        "title": "What's zero?",
+        "cells": [
+          "What's zero?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      },
+      {
+        "href": "/problem/90/implement-std-string",
+        "title": "Implement std::string",
+        "cells": [
+          "Implement std::string",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-217",
+    "title": "stringstream, string_view, and from_chars",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdstring_view/",
+        "title": "LearnCpp - 5.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 5.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdstring_view-part-2/",
+        "title": "LearnCpp - 5.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 5.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.cppstories.com/2018/12/fromchars/",
+        "title": "CppStories - C++17 From Chars",
+        "cells": [
+          "Blog",
+          "CppStories - C++17 From Chars",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stream-classes-for-strings/",
+        "title": "LearnCpp - 28.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 28.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/VzM1GWUl8eI?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Stream: Stringstream",
+        "cells": [
+          "Video",
+          "Bo Qian - Stream: Stringstream",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/2051",
+        "title": "Returned View",
+        "cells": [
+          "Returned View",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-281",
+    "title": "Small String Optimization",
+    "items": [
+      {
+        "href": "https://devblogs.microsoft.com/oldnewthing/20230803-00/?p=108532",
+        "title": "Microsoft - Small String Optimization",
+        "cells": [
+          "Article",
+          "Microsoft - Small String Optimization",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1206",
+        "title": "SOO, about that object.",
+        "cells": [
+          "SOO, about that object.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/problem/90/implement-std-string",
+        "title": "Implement std::string",
+        "cells": [
+          "Implement std::string",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-280",
+    "title": "I/O Streams: Console",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/input-and-output-io-streams/",
+        "title": "LearnCpp - 28.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 28.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/input-with-istream/",
+        "title": "LearnCpp - 28.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 28.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/output-with-ostream-and-ios/",
+        "title": "LearnCpp - 28.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 28.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=hk5NYscSPHI&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=17",
+        "title": "Bo Qian - Streams: Introduction",
+        "cells": [
+          "Video",
+          "Bo Qian - Streams: Introduction",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/751",
+        "title": "Double flushing?",
+        "cells": [
+          "Double flushing?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1283",
+        "title": "std::cout vs std::cerr",
+        "cells": [
+          "std::cout vs std::cerr",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/968",
+        "title": "Streams of strings.",
+        "cells": [
+          "Streams of strings.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1348",
+        "title": "Streams",
+        "cells": [
+          "Streams",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1222",
+        "title": "1s in chat if you're cooked",
+        "cells": [
+          "1s in chat if you're cooked",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-282",
+    "title": "I/O Streams: File",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/basic-file-io/",
+        "title": "LearnCpp - 28.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 28.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=bzlDPBKn2Fs&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=18",
+        "title": "Bo Qian - Stream: Files",
+        "cells": [
+          "Video",
+          "Bo Qian - Stream: Files",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=CdZxKlC7Y-E&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=19",
+        "title": "Bo Qian - Stream: Files (Formatting)",
+        "cells": [
+          "Video",
+          "Bo Qian - Stream: Files (Formatting)",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-283",
+    "title": "std::filesystem",
+    "items": [
+      {
+        "href": "https://www.cppstories.com/2017/08/cpp17-details-filesystem/",
+        "title": "CppStories - std::filesystem in Detail",
+        "cells": [
+          "Blog",
+          "CppStories - std::filesystem in Detail",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-243",
+    "title": "Classes and Structs",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-object-oriented-programming/",
+        "title": "LearnCpp - 14.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-classes/",
+        "title": "LearnCpp - 14.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/MefRKIml_1w?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Stream: Your Own Class",
+        "cells": [
+          "Video",
+          "Bo Qian - Stream: Your Own Class",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/372",
+        "title": "Class vs Struct",
+        "cells": [
+          "Class vs Struct",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1329",
+        "title": "Class inStruction",
+        "cells": [
+          "Class inStruction",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/373",
+        "title": "Struct over Class",
+        "cells": [
+          "Struct over Class",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/969",
+        "title": "wtf const",
+        "cells": [
+          "wtf const",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-245",
+    "title": "Member Functions",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/member-functions/",
+        "title": "LearnCpp - 14.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1398",
+        "title": "Invoke me.",
+        "cells": [
+          "Invoke me.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1265",
+        "title": "skibidi pointer",
+        "cells": [
+          "skibidi pointer",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1062",
+        "title": "X ways",
+        "cells": [
+          "X ways",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/802",
+        "title": "Haha…",
+        "cells": [
+          "Haha…",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-246",
+    "title": "Const Classes and Functions & Access Specifiers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/const-class-objects-and-const-member-functions/",
+        "title": "LearnCpp - 14.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/public-and-private-members-and-access-specifiers/",
+        "title": "LearnCpp - 14.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.5",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/access-functions/",
+        "title": "LearnCpp - 14.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/member-functions-returning-references-to-data-members/",
+        "title": "LearnCpp - 14.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.7",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-benefits-of-data-hiding-encapsulation/",
+        "title": "LearnCpp - 14.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/827",
+        "title": "& and &&",
+        "cells": [
+          "& and &&",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1066",
+        "title": "Drop these.",
+        "cells": [
+          "Drop these.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-247",
+    "title": "Special Member Functions",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-constructors/",
+        "title": "LearnCpp - 14.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/constructor-member-initializer-lists/",
+        "title": "LearnCpp - 14.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.10",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/default-constructors-and-default-arguments/",
+        "title": "LearnCpp - 14.11",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.11",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/delegating-constructors/",
+        "title": "LearnCpp - 14.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.12",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/temporary-class-objects/",
+        "title": "LearnCpp - 14.13",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.13",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-the-copy-constructor/",
+        "title": "LearnCpp - 14.14",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.14",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/class-initialization-and-copy-elision/",
+        "title": "LearnCpp - 14.15",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.15",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/converting-constructors-and-the-explicit-keyword/",
+        "title": "LearnCpp - 14.16",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.16",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-destructors/",
+        "title": "LearnCpp - 15.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 15.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/447",
+        "title": "Don't end me.",
+        "cells": [
+          "Don't end me.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/738",
+        "title": "It's hidden",
+        "cells": [
+          "It's hidden",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/871",
+        "title": "Not this, again.",
+        "cells": [
+          "Not this, again.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/986",
+        "title": "Stop! Don’t move!",
+        "cells": [
+          "Stop! Don’t move!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/964",
+        "title": "Copying and Not Copying",
+        "cells": [
+          "Copying and Not Copying",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/985",
+        "title": "Do it for you.",
+        "cells": [
+          "Do it for you.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/822",
+        "title": "I'm here! Now I'm gone.",
+        "cells": [
+          "I'm here! Now I'm gone.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/683",
+        "title": "r-expression",
+        "cells": [
+          "r-expression",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1299",
+        "title": "Tear it out root and stem",
+        "cells": [
+          "Tear it out root and stem",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1006",
+        "title": "? 1 : 2 -> auto",
+        "cells": [
+          "? 1 : 2 -> auto",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/418",
+        "title": "96% of you will fail this.",
+        "cells": [
+          "96% of you will fail this.",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1233",
+        "title": "Who'd you call?",
+        "cells": [
+          "Who'd you call?",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-312",
+    "title": "Friends and Enemies",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/nested-types-member-types/",
+        "title": "LearnCpp - 15.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 15.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/friend-non-member-functions/",
+        "title": "LearnCpp - 15.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 15.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/friend-classes-and-friend-member-functions/",
+        "title": "LearnCpp - 15.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 15.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-264",
+    "title": "C-Style Arrays",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-c-style-arrays/",
+        "title": "LearnCpp - 17.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.7",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/c-style-array-decay/",
+        "title": "LearnCpp - 17.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pointer-arithmetic-and-subscripting/",
+        "title": "LearnCpp - 17.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/517",
+        "title": "#square",
+        "cells": [
+          "#square",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/725",
+        "title": "Indexing arrays",
+        "cells": [
+          "Indexing arrays",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/423",
+        "title": "The headers you never knew",
+        "cells": [
+          "The headers you never knew",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/768",
+        "title": "3D Arrays",
+        "cells": [
+          "3D Arrays",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/787",
+        "title": "Allocation decisions",
+        "cells": [
+          "Allocation decisions",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/1024",
+        "title": "To delete or not to delete",
+        "cells": [
+          "To delete or not to delete",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/783",
+        "title": "[0]",
+        "cells": [
+          "[0]",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/860",
+        "title": "Array, Array, go away, come again another day.",
+        "cells": [
+          "Array, Array, go away, come again another day.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/problem/8/3d-space",
+        "title": "3D Space",
+        "cells": [
+          "3D Space",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-265",
+    "title": "Multidimensional C-Style Arrays",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/multidimensional-c-style-arrays/",
+        "title": "LearnCpp - 17.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.12",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/714",
+        "title": "What a Jump!",
+        "cells": [
+          "What a Jump!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-269",
+    "title": "std::array",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdarray/",
+        "title": "LearnCpp - 17.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdarray-length-and-indexing/",
+        "title": "LearnCpp - 17.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/passing-and-returning-stdarray/",
+        "title": "LearnCpp - 17.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdarray-of-class-types-and-brace-elision/",
+        "title": "LearnCpp - 17.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdarray-and-enumerations/",
+        "title": "LearnCpp - 17.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 17.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=ltBdTiRgSaw&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=2",
+        "title": "Bo Qian - Introduction to STL",
+        "cells": [
+          "Video",
+          "Bo Qian - Introduction to STL",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://devblogs.microsoft.com/oldnewthing/20230811-00/?p=108591",
+        "title": "Microsoft - Inside STL: The array",
+        "cells": [
+          "Article",
+          "Microsoft - Inside STL: The array",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1279",
+        "title": "Array extensioooooons",
+        "cells": [
+          "Array extensioooooons",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-266",
+    "title": "std::vector",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-containers-and-arrays/",
+        "title": "LearnCpp - 16.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-stdvector-and-list-constructors/",
+        "title": "LearnCpp - 16.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdvector-and-the-unsigned-length-and-subscript-problem/",
+        "title": "LearnCpp - 16.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/passing-stdvector/",
+        "title": "LearnCpp - 16.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/returning-stdvector-and-an-introduction-to-move-semantics/",
+        "title": "LearnCpp - 16.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.5",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdvector-resizing-and-capacity/",
+        "title": "LearnCpp - 16.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.10",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdvector-and-stack-behavior/",
+        "title": "LearnCpp - 16.11",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.11",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=gxZJ5JNuWMY&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=3",
+        "title": "Bo Qian - Sequence Containers",
+        "cells": [
+          "Video",
+          "Bo Qian - Sequence Containers",
+          "Until 6:30",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/843",
+        "title": "Don't @ me",
+        "cells": [
+          "Don't @ me",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/820",
+        "title": "A, B, C, initializer_list",
+        "cells": [
+          "A, B, C, initializer_list",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1100",
+        "title": "Containers for containers.",
+        "cells": [
+          "Containers for containers.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/problem/46/build-a-histogram",
+        "title": "Build a Histogram",
+        "cells": [
+          "Build a Histogram",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/problem/19/yeah-i-know-what-a-call-stack-is",
+        "title": "Yeah, I know what a call stack is.",
+        "cells": [
+          "Yeah, I know what a call stack is.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-267",
+    "title": "Internals",
+    "items": [
+      {
+        "href": "https://devblogs.microsoft.com/oldnewthing/20230802-00/?p=108524",
+        "title": "Microsoft - Inside STL: Vector",
+        "cells": [
+          "Blog",
+          "Microsoft - Inside STL: Vector",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "http://medium.com/@gayakk/vectors-in-c-the-complete-guide-88e7e184215b",
+        "title": "Vector - An (Almost) Complete Guide",
+        "cells": [
+          "Article",
+          "Vector - An (Almost) Complete Guide",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/849",
+        "title": "How does it allocate?",
+        "cells": [
+          "How does it allocate?",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/544",
+        "title": "Vector growth 2",
+        "cells": [
+          "Vector growth 2",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/543",
+        "title": "Vector growth 1",
+        "cells": [
+          "Vector growth 1",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/764",
+        "title": "So, how big is vector?",
+        "cells": [
+          "So, how big is vector?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/problem/1/implement-vector",
+        "title": "Implement vector",
+        "cells": [
+          "Implement vector",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-268",
+    "title": "Special Case: std::vector<bool>",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/stdvector-bool/",
+        "title": "LearnCpp - 16.12",
+        "cells": [
+          "Website",
+          "LearnCpp - 16.12",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-334",
+    "title": "std::list",
+    "items": [
+      {
+        "href": "https://youtu.be/DMqlCXrFY0k",
+        "title": "CppNuts - std::list",
+        "cells": [
+          "Video",
+          "CppNuts - std::list",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=gxZJ5JNuWMY&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=3",
+        "title": "Bo Qian - Sequence Containers",
+        "cells": [
+          "Video",
+          "Bo Qian - Sequence Containers",
+          "From 6:30",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://baptiste-wicht.com/posts/2012/11/cpp-benchmark-vector-vs-list.html",
+        "title": "C++ Benchmark - std::vector vs. std::list",
+        "cells": [
+          "Article",
+          "C++ Benchmark - std::vector vs. std::list",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-271",
+    "title": "Iterator Categories",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-iterators/",
+        "title": "LearnCpp - 18.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 18.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/vO2AlrBf5rQ?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Iterators and Algorithms",
+        "cells": [
+          "Video",
+          "Bo Qian - Iterators and Algorithms",
+          "Until 8:23",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://medium.com/@gayakk/a-comprehensive-guide-to-iterators-in-c-from-classic-to-modern-c-26-94cfc95ba574",
+        "title": "Medium - A Comprehensive Guide to Iterators",
+        "cells": [
+          "Article",
+          "Medium - A Comprehensive Guide to Iterators",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1103",
+        "title": "Side-by-side",
+        "cells": [
+          "Side-by-side",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-320",
+    "title": "STL Algorithms",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-standard-library-algorithms/",
+        "title": "LearnCpp - 18.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 18.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/vO2AlrBf5rQ?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Iterators and Algorithms",
+        "cells": [
+          "Video",
+          "Bo Qian - Iterators and Algorithms",
+          "From 8:23",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/eV7tVdNIw9o?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Non-modifying Algorithms",
+        "cells": [
+          "Video",
+          "Bo Qian - Non-modifying Algorithms",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=kYYm-Quj97o&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=9",
+        "title": "Bo Qian - Modifying Algorithms",
+        "cells": [
+          "Video",
+          "Bo Qian - Modifying Algorithms",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=Z4HOLxIkpj0&list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb&index=16",
+        "title": "Bo Qian - String: Algorithms",
+        "cells": [
+          "Video",
+          "Bo Qian - String: Algorithms",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=2olsGf6JIkU",
+        "title": "CppCon 2018: 105 STL Algorithms in Less Than an Hour",
+        "cells": [
+          "Video",
+          "CppCon 2018: 105 STL Algorithms in Less Than an Hour",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/950",
+        "title": "Call it, improved.",
+        "cells": [
+          "Call it, improved.",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/949",
+        "title": "Call it.",
+        "cells": [
+          "Call it.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1437",
+        "title": "Get it for me quick!",
+        "cells": [
+          "Get it for me quick!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1213",
+        "title": "Removing the polymorphic",
+        "cells": [
+          "Removing the polymorphic",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1069",
+        "title": "Zip it 3",
+        "cells": [
+          "Zip it 3",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-274",
+    "title": "Hashing",
+    "items": [
+      {
+        "href": "https://www.youtube.com/watch?v=xIejolxzZS8",
+        "title": "William Fisset - Open Addressing",
+        "cells": [
+          "Video",
+          "William Fisset - Open Addressing",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=T9gct6Dx-jo",
+        "title": "William Fisset - Separate Chaining",
+        "cells": [
+          "Video",
+          "William Fisset - Separate Chaining",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/913",
+        "title": "Where are we?",
+        "cells": [
+          "Where are we?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-284",
+    "title": "std::unordered_map & std::map",
+    "items": [
+      {
+        "href": "https://youtu.be/6iyzPed7FrM?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Associative Containers",
+        "cells": [
+          "Video",
+          "Bo Qian - Associative Containers",
+          "From 5:47",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/KiB0vRi2wlc",
+        "title": "The Cherno - std::unordered_map and std::map",
+        "cells": [
+          "Video",
+          "The Cherno - std::unordered_map and std::map",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/2_3fR-k-LzI",
+        "title": "Coding Jesus - Basic Hashtable Implementation",
+        "cells": [
+          "Video",
+          "Coding Jesus - Basic Hashtable Implementation",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1843",
+        "title": "Fifty shades of '2'",
+        "cells": [
+          "Fifty shades of '2'",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1003",
+        "title": "Wrong map, bro.",
+        "cells": [
+          "Wrong map, bro.",
+          "Cracked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/problem/70/implement-lru-cache",
+        "title": "Implement LRU Cache",
+        "cells": [
+          "Implement LRU Cache",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-285",
+    "title": "std::set & std::unordered_set",
+    "items": [
+      {
+        "href": "https://youtu.be/nfKVyv_up34",
+        "title": "Kenny Yip Coding - C++ Set, Unordered Set, Multiset",
+        "cells": [
+          "Video",
+          "Kenny Yip Coding - C++ Set, Unordered Set, Multiset",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://devblogs.microsoft.com/oldnewthing/20230807-00/?p=108562",
+        "title": "Microsoft - Inside STL: The map, set, multimap, and multiset",
+        "cells": [
+          "Article",
+          "Microsoft - Inside STL: The map, set, multimap, and multiset",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/6iyzPed7FrM?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Associative Containers",
+        "cells": [
+          "Video",
+          "Bo Qian - Associative Containers",
+          "Until 5:47",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1004",
+        "title": "In the beginning...",
+        "cells": [
+          "In the beginning...",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1097",
+        "title": "Bound to love lower_bound.",
+        "cells": [
+          "Bound to love lower_bound.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-332",
+    "title": "std::queue, std::deque & std::priority_queue",
+    "items": [
+      {
+        "href": "https://youtu.be/aLkvrRRa1TE",
+        "title": "CppNuts - std::queue",
+        "cells": [
+          "Video",
+          "CppNuts - std::queue",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=uGWeixb7HMo",
+        "title": "CppNuts - std::deque",
+        "cells": [
+          "Video",
+          "CppNuts - std::deque",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://devblogs.microsoft.com/oldnewthing/20230809-00/?p=108577",
+        "title": "Microsoft - Inside STL: The deque, design",
+        "cells": [
+          "Article",
+          "Microsoft - Inside STL: The deque, design",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=JSqznrzWGvc",
+        "title": "CppNuts - std::priority_queue",
+        "cells": [
+          "Video",
+          "CppNuts - std::priority_queue",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/problem/57/conflating-a-queue",
+        "title": "Conflating a Queue",
+        "cells": [
+          "Conflating a Queue",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-333",
+    "title": "std::stack",
+    "items": [
+      {
+        "href": "https://youtu.be/Y4yEOJgxISc",
+        "title": "CppNuts - std::stack",
+        "cells": [
+          "Video",
+          "CppNuts - std::stack",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/NNLvY9O7ufU?list=PL5jc9xFGsL8G3y3ywuFSvOuNm3GjBwdkb",
+        "title": "Bo Qian - Unordered Containers",
+        "cells": [
+          "Video",
+          "Bo Qian - Unordered Containers",
+          "From 9:30",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-275",
+    "title": "Access Modifiers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/public-and-private-members-and-access-specifiers/",
+        "title": "LearnCpp - 14.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.5",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/access-functions/",
+        "title": "LearnCpp - 14.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 14.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/inheritance-and-access-specifiers/",
+        "title": "LearnCpp - 24.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.5",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=EYuPBkgJtCQ&list=PLE28375D4AC946CC3&index=18",
+        "title": "Bo Qian - Access Modifiers and Inheritance",
+        "cells": [
+          "Video",
+          "Bo Qian - Access Modifiers and Inheritance",
+          "",
+          ""
+        ],
+        "svgs": "lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "https://www.youtube.com/watch?v=iFK-D13LX2U",
+        "title": "Bo Qian - Duality Of Public Inheritance",
+        "cells": [
+          "Video",
+          "Bo Qian - Duality Of Public Inheritance",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/862",
+        "title": "private, public, protected",
+        "cells": [
+          "private, public, protected",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-276",
+    "title": "Construction Order",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-inheritance/",
+        "title": "LearnCpp - 24.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/basic-inheritance-in-c/",
+        "title": "LearnCpp - 24.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/order-of-construction-of-derived-classes/",
+        "title": "LearnCpp - 24.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/constructors-and-initialization-of-derived-classes/",
+        "title": "LearnCpp - 24.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/705",
+        "title": "Constructing it, with it.",
+        "cells": [
+          "Constructing it, with it.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/706",
+        "title": "Constructing it.",
+        "cells": [
+          "Constructing it.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/703",
+        "title": "Do you understand creation?",
+        "cells": [
+          "Do you understand creation?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/735",
+        "title": "Is it const?",
+        "cells": [
+          "Is it const?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1081",
+        "title": "Parents are always right?",
+        "cells": [
+          "Parents are always right?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/734",
+        "title": "References in Class",
+        "cells": [
+          "References in Class",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/704",
+        "title": "A mix of creations.",
+        "cells": [
+          "A mix of creations.",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-277",
+    "title": "Adding & Hiding Functionality",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/adding-new-functionality-to-a-derived-class/",
+        "title": "LearnCpp - 24.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/calling-inherited-functions-and-overriding-behavior/",
+        "title": "LearnCpp - 24.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.7",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/hiding-inherited-functionality/",
+        "title": "LearnCpp - 24.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/913",
+        "title": "Where are we?",
+        "cells": [
+          "Where are we?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1721",
+        "title": "I'm printing mom...",
+        "cells": [
+          "I'm printing mom...",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/716",
+        "title": "Under the Shadow",
+        "cells": [
+          "Under the Shadow",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-278",
+    "title": "Multiple Inheritance (Issues)",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/multiple-inheritance/",
+        "title": "LearnCpp - 24.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 24.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://youtu.be/7APovvvftQs",
+        "title": "Bo Qian - Multiple Inheritance",
+        "cells": [
+          "Video",
+          "Bo Qian - Multiple Inheritance",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/718",
+        "title": "In a Diamond",
+        "cells": [
+          "In a Diamond",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-287",
+    "title": "Base Class References & Pointers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pointers-and-references-to-the-base-class-of-derived-objects/",
+        "title": "LearnCpp - 25.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/virtual-functions/",
+        "title": "LearnCpp - 25.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/909",
+        "title": "Adding const, overrid-ially.",
+        "cells": [
+          "Adding const, overrid-ially.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/908",
+        "title": "Adding const, virtually?",
+        "cells": [
+          "Adding const, virtually?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/491",
+        "title": "Chop Chop Chop",
+        "cells": [
+          "Chop Chop Chop",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/851",
+        "title": "Static* and Dynamic*",
+        "cells": [
+          "Static* and Dynamic*",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-288",
+    "title": "Override and Final",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-override-and-final-specifiers-and-covariant-return-types/",
+        "title": "LearnCpp - 25.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://devblogs.microsoft.com/cppblog/the-performance-benefits-of-final-classes/",
+        "title": "Microsoft - The Performance Benefits of Final Classes",
+        "cells": [
+          "Blog",
+          "Microsoft - The Performance Benefits of Final Classes",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/707",
+        "title": "Is it accessible?",
+        "cells": [
+          "Is it accessible?",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1395",
+        "title": "override!",
+        "cells": [
+          "override!",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1213",
+        "title": "Removing the polymorphic",
+        "cells": [
+          "Removing the polymorphic",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1178",
+        "title": "We're virtually there.",
+        "cells": [
+          "We're virtually there.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-x size-3 text-[#1e1e1e]"
+      }
+    ]
+  },
+  {
+    "id": "node-289",
+    "title": "Covariant Return Types",
+    "items": [
+      {
+        "href": "https://www.modernescpp.com/index.php/covariant-return-type/",
+        "title": "Modernes Cpp - Covariant Return Type",
+        "cells": [
+          "Blog",
+          "Modernes Cpp - Covariant Return Type",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-290",
+    "title": "Virtual Destructor",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/virtual-destructors-virtual-assignment-and-overriding-virtualization/",
+        "title": "LearnCpp - 25.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1218",
+        "title": "Herb's Destructor",
+        "cells": [
+          "Herb's Destructor",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      }
+    ]
+  },
+  {
+    "id": "node-291",
+    "title": "Pure Virtual Functions and Abstract Classes",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/early-binding-and-late-binding/",
+        "title": "LearnCpp - 25.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.5",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/the-virtual-table/",
+        "title": "LearnCpp - 25.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/pure-virtual-functions-abstract-base-classes-and-interface-classes/",
+        "title": "LearnCpp - 25.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.7",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/virtual-base-classes/",
+        "title": "LearnCpp - 25.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/1837",
+        "title": "Free Real Estate",
+        "cells": [
+          "Free Real Estate",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-293",
+    "title": "Dynamic Cast",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/object-slicing/",
+        "title": "LearnCpp - 25.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/dynamic-casting/",
+        "title": "LearnCpp - 25.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 25.10",
+          "",
+          ""
+        ],
+        "svgs": ""
+      }
+    ]
+  },
+  {
+    "id": "node-294",
+    "title": "Templates: Functions",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-templates/",
+        "title": "LearnCpp - 11.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 11.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-template-instantiation/",
+        "title": "LearnCpp - 11.7",
+        "cells": [
+          "Website",
+          "LearnCpp - 11.7",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-templates-with-multiple-template-types/",
+        "title": "LearnCpp - 11.8",
+        "cells": [
+          "Website",
+          "LearnCpp - 11.8",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/non-type-template-parameters/",
+        "title": "LearnCpp - 11.9",
+        "cells": [
+          "Website",
+          "LearnCpp - 11.9",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/using-function-templates-in-multiple-files/",
+        "title": "LearnCpp - 11.10",
+        "cells": [
+          "Website",
+          "LearnCpp - 11.10",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/function-template-specialization/",
+        "title": "LearnCpp - 26.3",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.3",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/876",
+        "title": "Template sum 2",
+        "cells": [
+          "Template sum 2",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/958",
+        "title": "Templatey signatures.",
+        "cells": [
+          "Templatey signatures.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/944",
+        "title": "There is no free template.",
+        "cells": [
+          "There is no free template.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/953",
+        "title": "Virtually a template.",
+        "cells": [
+          "Virtually a template.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+      },
+      {
+        "href": "/question/966",
+        "title": "First or second?",
+        "cells": [
+          "First or second?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/692",
+        "title": "Template Specializations 1",
+        "cells": [
+          "Template Specializations 1",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/694",
+        "title": "Template Specializations 2",
+        "cells": [
+          "Template Specializations 2",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/875",
+        "title": "Template sum 1",
+        "cells": [
+          "Template sum 1",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-295",
+    "title": "Templates: Classes",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/class-templates/",
+        "title": "LearnCpp - 13.13",
+        "cells": [
+          "Website",
+          "LearnCpp - 13.13",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/class-template-argument-deduction-ctad-and-deduction-guides/",
+        "title": "LearnCpp - 13.14",
+        "cells": [
+          "Website",
+          "LearnCpp - 13.14",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/template-classes/",
+        "title": "LearnCpp - 26.1",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.1",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/946",
+        "title": "If you've used templates, you've run into this.",
+        "cells": [
+          "If you've used templates, you've run into this.",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1269",
+        "title": "structs of structs of structs",
+        "cells": [
+          "structs of structs of structs",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1270",
+        "title": "structs of structs of structs 2",
+        "cells": [
+          "structs of structs of structs 2",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/690",
+        "title": "To <T> or not to <T>",
+        "cells": [
+          "To <T> or not to <T>",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1221",
+        "title": "Copy constructor, maybe.",
+        "cells": [
+          "Copy constructor, maybe.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1271",
+        "title": "structs of structs of structs 3",
+        "cells": [
+          "structs of structs of structs 3",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-296",
+    "title": "Class Template Argument Deduction",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/class-template-argument-deduction-ctad-and-deduction-guides/",
+        "title": "LearnCpp - 13.14",
+        "cells": [
+          "Website",
+          "LearnCpp - 13.14",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/844",
+        "title": "CTAD",
+        "cells": [
+          "CTAD",
+          "Cooked",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/686",
+        "title": "A template, or not not?",
+        "cells": [
+          "A template, or not not?",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-297",
+    "title": "Template Non-Type Parameters",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/template-non-type-parameters/",
+        "title": "LearnCpp - 26.2",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.2",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/problem/84/compile-time-fibonacci",
+        "title": "Compile Time Fibonacci",
+        "cells": [
+          "Compile Time Fibonacci",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-298",
+    "title": "Class Template Specialization",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/class-template-specialization/",
+        "title": "LearnCpp - 26.4",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.4",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/959",
+        "title": "Specialize me.",
+        "cells": [
+          "Specialize me.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-299",
+    "title": "Partial Class Template Specialization",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/partial-template-specialization/",
+        "title": "LearnCpp - 26.5",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.5",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/partial-template-specialization-for-pointers/",
+        "title": "LearnCpp - 26.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/problem/39/implement-std-optional",
+        "title": "Implement std::optional",
+        "cells": [
+          "Implement std::optional",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-330",
+    "title": "Variadic Templates",
+    "items": [
+      {
+        "href": "https://learn.microsoft.com/en-us/cpp/cpp/ellipses-and-variadic-templates?view=msvc-170",
+        "title": "Microsoft - Ellipses and Variadic Templates",
+        "cells": [
+          "Article",
+          "Microsoft - Ellipses and Variadic Templates",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/962",
+        "title": "This scares me.",
+        "cells": [
+          "This scares me.",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-331",
+    "title": "Templates and Pointers",
+    "items": [
+      {
+        "href": "https://www.learncpp.com/cpp-tutorial/partial-template-specialization-for-pointers/",
+        "title": "LearnCpp - 26.6",
+        "cells": [
+          "Website",
+          "LearnCpp - 26.6",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/957",
+        "title": "Overloading the overload.",
+        "cells": [
+          "Overloading the overload.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      }
+    ]
+  },
+  {
+    "id": "node-314",
+    "title": "Universal References & Perfect Forwarding",
+    "items": [
+      {
+        "href": "https://medium.com/pranayaggarwal25/universal-reference-perfect-forwarding-5664514cacf9",
+        "title": "Medium - Universal References",
+        "cells": [
+          "Article",
+          "Medium - Universal References",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "https://isocpp.org/blog/2012/11/universal-references-in-c11-scott-meyers",
+        "title": "Scott Meyers - Universal References in C++",
+        "cells": [
+          "Article",
+          "Scott Meyers - Universal References in C++",
+          "",
+          ""
+        ],
+        "svgs": ""
+      },
+      {
+        "href": "/question/828",
+        "title": "auto&& T&& <T>&&",
+        "cells": [
+          "auto&& T&& <T>&&",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/955",
+        "title": "std::forward",
+        "cells": [
+          "std::forward",
+          "Easy",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/939",
+        "title": "You're still not real.",
+        "cells": [
+          "You're still not real.",
+          "Medium",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/question/1001",
+        "title": "r-value confusion.",
+        "cells": [
+          "r-value confusion.",
+          "Hard",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+      },
+      {
+        "href": "/quizzes/3",
+        "title": "Intern Quantitative Developer Quiz",
+        "cells": [
+          "Intern Quantitative Developer Quiz",
+          "Easy",
+          "—",
+          "100",
+          "60 min",
+          ""
+        ],
+        "svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25"
+      }
+    ]
+  }
+]

@@ -121,3 +121,17 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Questions (getcracked)
 
 - [x] _global_variable — 29/08 — ok
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Undefined Behavior
+- ✓ [_global_variable](https://getcracked.io/question/994) — Hard
+
+### The other behaviors.
+- ✓ [++i ++i](https://getcracked.io/question/1000) — Easy
+
+<!-- gc-questions:end -->

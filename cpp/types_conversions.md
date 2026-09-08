@@ -138,3 +138,36 @@ The entries below preserve the original practice record. Use the explanations ab
 
 - 30/08: 300→44 u8 wrap chain — ok. `char x = 128` → -128 defined conversion (not UB) — half (said UB). 'A'+1 mechanism ok, ASCII value off.
 - 31/08: uint8+uint8 promotion → 300 — ok. Shift ladder: (b)-(e) ok, (a) `1 << 31` said 2^31, it's INT_MIN (int can't hold +2^31).
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Signed versus Unsigned Integers
+- ✓ [long vs int](https://getcracked.io/question/971) — Easy
+- ✓ [Signed Integer Overflow](https://getcracked.io/question/709) — Easy
+- ✓ [Unsigned Integer Overflow](https://getcracked.io/question/708) — Easy
+- ✓ [Unsigned - Unsigned](https://getcracked.io/question/788) — Medium
+
+### Enumerations
+- ✓ [Ranges of enums](https://getcracked.io/question/867) — Medium
+
+### static_cast
+- ✓ [Null and void.](https://getcracked.io/question/1005) — Easy
+- ✗ [Castaway](https://getcracked.io/question/1260) — Medium
+
+### Bitwise Operators and Bit Masks
+- ✓ [Shifting off the edge](https://getcracked.io/question/1267) — Cooked
+- ✗ [Down shift](https://getcracked.io/question/1102) — Medium
+- ✓ [Let's go the other way.](https://getcracked.io/question/1152) — Medium
+
+### Arithmetic Operators
+- ✓ [Zero Division, Error Error?](https://getcracked.io/question/1719) — Easy
+- ✓ [Zero Division, Error?](https://getcracked.io/question/782) — Easy
+
+### Relational Operators
+- ✓ [Is it converted?](https://getcracked.io/question/715) — Easy
+
+<!-- gc-questions:end -->

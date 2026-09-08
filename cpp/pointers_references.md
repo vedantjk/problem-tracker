@@ -271,3 +271,39 @@ The entries below preserve the original practice record. Use the explanations ab
 - [x] Triple-pointer array puzzle (`const char* c[]`, `char const** cp[]`, `char const*** cpp`) — 07/09 — ok: `MID s Exam OOP`. Method: track the pointer level, `[]` and `+` index within the current level, postfix `[]` binds before prefix `*`; the fourth dereference lands on a `char`, so one expression prints a single character.
 - [ ] **MISSED 02/09: I'm moving in.** (unique_ptr by-value param) — answered 1342; A dies with the PARAM at end of x, not with p1 at end of main. Reason: tracked lifetime by where the object was created, not by who currently owns the pointer.
   - **Anki**: front: "`x(unique_ptr<A> ptr)` called with `std::move(p1)` — when does ~A run?" back: "When ptr (the param) is destroyed at x's return — ownership moved in; p1 is null and its dtor is a no-op. By-value unique_ptr param = sink; const& = borrow (then A dies with p1)."
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Const
+- ✓ [Changing Const?](https://getcracked.io/question/511) — Cooked
+
+### Pointers
+- ✓ [Delete this. Now!](https://getcracked.io/question/1067) — Cooked
+- ✓ [How big is a pointer?](https://getcracked.io/question/507) — Cooked
+- ✗ [Who are you pointing to?](https://getcracked.io/question/1239) — Cooked
+- ✓ [Freedom?](https://getcracked.io/question/1148) — Easy
+- ✗ [Get around &.](https://getcracked.io/question/952) — Easy
+- ✗ [Aaaargggc](https://getcracked.io/question/997) — Medium
+- ✓ [Getting high(er).](https://getcracked.io/question/1068) — Medium
+- ✓ [Is a pointer a pointer?](https://getcracked.io/question/873) — Medium
+- ✗ [print function?](https://getcracked.io/question/1394) — Medium
+- ✓ [sizeof your comprehension](https://getcracked.io/question/970) — Medium
+- ✓ [Over here, then over there.](https://getcracked.io/question/1268) — Hard
+- ✓ [Implement an allocator](https://getcracked.io/problem/18/implement-an-allocator) — problem
+- ✓ [Implement malloc on the stack](https://getcracked.io/problem/158/implement-malloc-on-the-stack) — problem
+
+### References
+- ✓ [Where'd it go?](https://getcracked.io/question/792) — Cooked
+- ✓ [& through me.](https://getcracked.io/question/974) — Easy
+- ✗ [In one out the other.](https://getcracked.io/question/857) — Easy
+- ✗ [I min-maxed my character.](https://getcracked.io/question/967) — Medium
+- ✓ [You don't get references.](https://getcracked.io/question/510) — Medium
+
+### stringstream, string_view, and from_chars
+- ✓ [Returned View](https://getcracked.io/question/2051) — Medium
+
+<!-- gc-questions:end -->

@@ -317,3 +317,53 @@ The entries below preserve the original practice record. Use the explanations ab
 
 - learncpp 5.5 Constant expressions, 5.6 Constexpr variables — read 07/09.
 - cppstories "const vs constexpr vs consteval vs constinit in C++20" — read 07/09.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Variables, Objects, Initialization
+- ✓ [Forgot one?](https://getcracked.io/question/998) — Easy
+- ✓ [Schrödinger's Initializer](https://getcracked.io/question/1236) — Medium
+- ✓ [The designated representative.](https://getcracked.io/question/1157) — Medium
+
+### auto
+- ✓ [2 variables 1 auto](https://getcracked.io/question/1322) — Easy
+- ✓ [auto... &?](https://getcracked.io/question/856) — Easy
+- ✓ [A, B, C, harder than 1, 2, 3](https://getcracked.io/question/1273) — Medium
+
+### Storage Durations
+- ✓ [Lambda defaults](https://getcracked.io/question/995) — Easy
+- ✗ [That's BS!](https://getcracked.io/question/1327) — Medium
+
+### Const
+- ✓ [Changing Const?](https://getcracked.io/question/511) — Cooked
+
+### Constant and Constexpr Variables
+- ✓ [Constipated constexpr](https://getcracked.io/question/1275) — Easy
+- ✓ [Keep your cool, keep it constant.](https://getcracked.io/question/1026) — Easy
+- ✗ [You don't always matter to me](https://getcracked.io/question/1278) — Easy
+- ✗ [East to West](https://getcracked.io/question/1215) — Medium
+- ✗ [The const or the ?](https://getcracked.io/question/874) — Medium
+
+### char, const char*, and string
+- ✓ [0.0_7](https://getcracked.io/question/975) — Easy
+- ✓ [Char + Char](https://getcracked.io/question/674) — Easy
+- ✓ [String placement](https://getcracked.io/question/1216) — Easy
+- ✓ [String them together.](https://getcracked.io/question/996) — Easy
+- ✓ [What's a character?](https://getcracked.io/question/847) — Easy
+- ✗ [Where did it go?](https://getcracked.io/question/757) — Easy
+- ✗ [You don't understand strings.](https://getcracked.io/question/699) — Easy
+- ✗ [Another string question?](https://getcracked.io/question/1423) — Medium
+- ✗ [Change it for me.](https://getcracked.io/question/870) — Medium
+- ✗ [GG](https://getcracked.io/question/687) — Medium
+- ✗ [More chars more problems.](https://getcracked.io/question/858) — Medium
+- ✓ [Pointers to Pointers to Pointers](https://getcracked.io/question/767) — Medium
+- ✗ [Signed Char == Unsigned Char?](https://getcracked.io/question/381) — Medium
+- ✗ [What even is a string?](https://getcracked.io/question/881) — Medium
+- ✗ [What's zero?](https://getcracked.io/question/818) — Medium
+- ○ [Implement std::string](https://getcracked.io/problem/90/implement-std-string) — problem
+
+<!-- gc-questions:end -->

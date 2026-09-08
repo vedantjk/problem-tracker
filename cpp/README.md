@@ -298,3 +298,43 @@ Preserve dated quizzes, missed questions, and Anki reminders here.
 ```
 
 The concept index and quiz tables are navigation and history, so their compact labels are intentional.
+
+<!-- gc-questions:start -->
+
+## Questions without a concept file yet
+
+Tree nodes not yet mapped to a concept file (mostly Intermediate material). When a file is created for one of these, add the mapping in `cpp/tools/gc_links.py`.
+
+- **I/O Streams: Console** — 0/5 attempted
+- **Classes and Structs** — 0/4 attempted
+- **Member Functions** — 0/4 attempted
+- **Const Classes and Functions & Access Specifiers** — 0/2 attempted
+- **C-Style Arrays** — 3/9 attempted: ✓ [The headers you never knew](https://getcracked.io/question/423), ✓ [Allocation decisions](https://getcracked.io/question/787), ✓ [To delete or not to delete](https://getcracked.io/question/1024)
+- **Multidimensional C-Style Arrays** — 0/1 attempted
+- **std::array** — 0/1 attempted
+- **std::vector** — 0/5 attempted
+- **Internals** — 0/5 attempted
+- **Iterator Categories** — 0/1 attempted
+- **STL Algorithms** — 0/5 attempted
+- **Hashing** — 0/1 attempted
+- **std::unordered_map & std::map** — 0/3 attempted
+- **std::set & std::unordered_set** — 0/2 attempted
+- **std::queue, std::deque & std::priority_queue** — 0/1 attempted
+- **Access Modifiers** — 0/1 attempted
+- **Construction Order** — 0/7 attempted
+- **Adding & Hiding Functionality** — 0/3 attempted
+- **Multiple Inheritance (Issues)** — 1/1 attempted: ✓ [In a Diamond](https://getcracked.io/question/718)
+- **Base Class References & Pointers** — 4/4 attempted: ✓ [Adding const, overrid-ially.](https://getcracked.io/question/909), ✓ [Adding const, virtually?](https://getcracked.io/question/908), ✓ [Chop Chop Chop](https://getcracked.io/question/491), ✓ [Static* and Dynamic*](https://getcracked.io/question/851)
+- **Override and Final** — 1/4 attempted: ✗ [We're virtually there.](https://getcracked.io/question/1178)
+- **Virtual Destructor** — 1/1 attempted: ✓ [Herb's Destructor](https://getcracked.io/question/1218)
+- **Pure Virtual Functions and Abstract Classes** — 0/1 attempted
+- **Templates: Functions** — 1/8 attempted: ✓ [Virtually a template.](https://getcracked.io/question/953)
+- **Templates: Classes** — 0/6 attempted
+- **Class Template Argument Deduction** — 0/2 attempted
+- **Template Non-Type Parameters** — 0/1 attempted
+- **Class Template Specialization** — 0/1 attempted
+- **Partial Class Template Specialization** — 0/1 attempted
+- **Variadic Templates** — 0/1 attempted
+- **Templates and Pointers** — 0/1 attempted
+
+<!-- gc-questions:end -->

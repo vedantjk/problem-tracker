@@ -116,3 +116,33 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Quiz log (Claude)
 
 - 31/08: `a+++b` (a=2,b=2,c=3) — ok, munch miss not repeated.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### The other behaviors.
+- ✓ [++i ++i](https://getcracked.io/question/1000) — Easy
+
+### Precedence
+- ✓ [Shortcuts](https://getcracked.io/question/712) — Easy
+
+### Arithmetic Operators
+- ✓ [Zero Division, Error Error?](https://getcracked.io/question/1719) — Easy
+- ✓ [Zero Division, Error?](https://getcracked.io/question/782) — Easy
+
+### Pre and Post Decrement
+- ✓ [++ before or after?](https://getcracked.io/question/702) — Easy
+- ✗ [One after the other](https://getcracked.io/question/1319) — Easy
+- ✗ [Munch munch munch!](https://getcracked.io/question/859) — Medium
+- ✓ [Preprocessor chicanery](https://getcracked.io/question/1101) — Medium
+
+### Relational Operators
+- ✓ [Is it converted?](https://getcracked.io/question/715) — Easy
+
+### Operator Overloading
+- ✓ [Overloading ++](https://getcracked.io/question/736) — Easy
+
+<!-- gc-questions:end -->

@@ -406,3 +406,50 @@ It lets an object hand out a shared_ptr to itself that shares the existing contr
 - learncpp 22.5 std::unique_ptr — read 07/09.
 - learncpp 22.6 std::shared_ptr — read 07/09.
 - learncpp 22.7 Circular dependency issues with shared_ptr, and weak_ptr — read 07/09.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Move Semantics
+- ✗ [Moved from.](https://getcracked.io/question/682) — Easy
+- ○ [We're moving.](https://getcracked.io/problem/5/we-re-moving) — problem
+
+### std::unique_ptr
+- ✓ [It's unique, but is it big?](https://getcracked.io/question/823) — Cooked
+- ✗ [Have him play with it.](https://getcracked.io/question/1259) — Easy
+- ✗ [I'm moving in.](https://getcracked.io/question/1027) — Medium
+- ✓ [Implement unique_ptr](https://getcracked.io/problem/2/implement-unique-ptr) — problem
+- ○ [Implement make_unique](https://getcracked.io/problem/3/implement-make-unique) — problem
+
+### std::shared_ptr
+- ✗ [A tale of two pointers!](https://getcracked.io/question/1328) — Easy
+- ✗ [Default shared pointer](https://getcracked.io/question/419) — Easy
+- ✓ [How many allocations?](https://getcracked.io/question/824) — Easy
+- ✓ [It's shared, but is it big?](https://getcracked.io/question/825) — Easy
+- ✓ [Shared pointer constructor](https://getcracked.io/question/407) — Easy
+- ✗ [Why std::make_shared?](https://getcracked.io/question/388) — Medium
+- ✗ [Who lives here?](https://getcracked.io/question/1284) — Hard
+- ✓ [Implement shared_ptr](https://getcracked.io/problem/4/implement-shared-ptr) — problem
+
+### std::weak_ptr
+- ✗ [It's weak, but how big is it?](https://getcracked.io/question/826) — Medium
+- ✓ [Where do we go now?](https://getcracked.io/question/984) — Medium
+
+### Special Member Functions
+- ○ [Don't end me.](https://getcracked.io/question/447) — Easy
+- ○ [It's hidden](https://getcracked.io/question/738) — Easy
+- ○ [Not this, again.](https://getcracked.io/question/871) — Easy
+- ○ [Stop! Don’t move!](https://getcracked.io/question/986) — Easy
+- ○ [Copying and Not Copying](https://getcracked.io/question/964) — Medium
+- ○ [Do it for you.](https://getcracked.io/question/985) — Medium
+- ○ [I'm here! Now I'm gone.](https://getcracked.io/question/822) — Medium
+- ○ [r-expression](https://getcracked.io/question/683) — Medium
+- ○ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
+- ○ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
+- ○ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
+- ○ [Who'd you call?](https://getcracked.io/question/1233) — Hard
+
+<!-- gc-questions:end -->

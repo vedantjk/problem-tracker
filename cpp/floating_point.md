@@ -115,3 +115,20 @@ The entries below preserve the original practice record. Correction to the old q
 
 - 30/08: exchange price representation (×10^4 ITCH, venue-dependent scales, tick size ≠ representation) — ok.
 - 31/08: numeric_limits quartet — 4/4, prior miss reversed.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Floating Point Types
+- ✓ [a + b + c](https://getcracked.io/question/1282) — Cooked
+- ✓ [Floating points, you sure?](https://getcracked.io/question/701) — Cooked
+- ✓ [Double trouble?](https://getcracked.io/question/796) — Easy
+- ✗ [To sign or not to sign?](https://getcracked.io/question/700) — Easy
+- ✓ [Whatever floats your cope.](https://getcracked.io/question/1064) — Easy
+- ✓ [I don't give a flying float](https://getcracked.io/question/987) — Medium
+- ✗ [A very small value](https://getcracked.io/question/1020) — Hard
+
+<!-- gc-questions:end -->

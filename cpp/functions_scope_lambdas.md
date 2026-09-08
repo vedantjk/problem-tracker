@@ -196,3 +196,32 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Quiz log (Claude)
 
 - 31/08: return-CE/UB triple (a,b,c) — ok. NRVO count right, naming imprecise: named local = NRVO (optional), prvalue = guaranteed elision. Mutable/const-operator() — ok twice.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Functions, Parameters, Arguments and Return Values
+- ✓ [Once or twice?](https://getcracked.io/question/835) — Cooked
+
+### Scope
+- ✓ [I am the shadows.](https://getcracked.io/question/441) — Easy
+
+### Anonymous Functions
+- ✓ [Between two parts.](https://getcracked.io/question/956) — Easy
+- ✓ [Overloading lambdas!](https://getcracked.io/question/1096) — Easy
+- ✓ [Am I missing something?](https://getcracked.io/question/1012) — Hard
+
+### Tuple
+- ✓ [I'm harboring ints.](https://getcracked.io/question/976) — Easy
+
+### Recursion
+- ✓ [A Loop Without A Loop](https://getcracked.io/question/771) — Easy
+
+### Storage Durations
+- ✓ [Lambda defaults](https://getcracked.io/question/995) — Easy
+- ✗ [That's BS!](https://getcracked.io/question/1327) — Medium
+
+<!-- gc-questions:end -->

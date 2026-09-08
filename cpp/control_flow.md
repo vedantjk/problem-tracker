@@ -254,3 +254,30 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Questions (getcracked) / Quiz log
 
 _(none yet — learncpp 4.10 / 8.5 / 8.6 / 8.8-8.12 / 16.8 (range-for) read 01/09/2026)_
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### if
+- ✓ [Conditional Trap](https://getcracked.io/question/786) — Easy
+- ✗ [If Else... What?](https://getcracked.io/question/1245) — Medium
+
+### Switch and Fallthrough
+- ✓ [Case and point 1](https://getcracked.io/question/1331) — Easy
+- ✓ [Case and point 2](https://getcracked.io/question/1332) — Easy
+
+### Loops I: while, do-while, for
+- ✓ [Do-while...](https://getcracked.io/question/819) — Easy
+- ✓ [How'd you read this?](https://getcracked.io/question/1011) — Easy
+
+### Ending Early
+- ✓ [3 exits](https://getcracked.io/question/1063) — Easy
+- ✓ [Exit the function early.](https://getcracked.io/question/1015) — Medium
+
+### Recursion
+- ✓ [A Loop Without A Loop](https://getcracked.io/question/771) — Easy
+
+<!-- gc-questions:end -->

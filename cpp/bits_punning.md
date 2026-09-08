@@ -134,3 +134,19 @@ Only if I can establish all the object-model and format requirements, which a ca
 ### Why use test instead of bitset's subscript operator?
 
 Test checks the index and throws out_of_range if it is invalid. Subscript requires the index to be valid already. I use the interface that matches whether the caller or the access operation is responsible for establishing the bound.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### Bitflags and std::bitset
+- ✓ [Hidden calories](https://getcracked.io/question/1836) — Medium
+
+### Bitwise Operators and Bit Masks
+- ✓ [Shifting off the edge](https://getcracked.io/question/1267) — Cooked
+- ✗ [Down shift](https://getcracked.io/question/1102) — Medium
+- ✓ [Let's go the other way.](https://getcracked.io/question/1152) — Medium
+
+<!-- gc-questions:end -->

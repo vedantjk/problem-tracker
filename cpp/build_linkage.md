@@ -131,3 +131,17 @@ The entries below preserve the original practice record. Use the explanations ab
 - 30/08 getcracked "Bodyguard" — ok.
 - 31/08 Claude quiz: MISSED `SQUARE(2+3)` = 11 — assumed the preprocessor parenthesizes; it pastes. Sibling of the double-eval trap.
 - 31/08 Claude quiz: inline-identical-across-TUs = legal (ODR 3) — ok.
+
+<!-- gc-questions:start -->
+
+## Related getcracked questions
+
+Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
+
+### What, Why, and When?
+- ✓ [C++ is a…](https://getcracked.io/question/1210) — Easy
+
+### The Preprocessor and Header Guards
+- ✓ [Bodyguard](https://getcracked.io/question/1291) — Easy
+
+<!-- gc-questions:end -->
