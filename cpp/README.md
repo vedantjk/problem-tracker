@@ -26,6 +26,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [error_handling.md](error_handling.md) | std::optional (access tiers, in_place, monadic ops), std::expected (C++23), exceptions (matching, unwinding, rethrow, function try, throwing dtors, cost model) |
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 | [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references, unique_ptr move example, std::move versus the move operation (swap, push_back, when to use), move ctor/assign (steal-and-null, noexcept + vector), implicit move rules, rule of five/zero, implicit move on return, shared_ptr/weak_ptr overview |
+| [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
@@ -197,7 +198,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 - std::move (expression cast versus actual move; named rvalue references) → value_categories, smart_pointers_move
 - string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
-- std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → initialization_deduction
+- std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → strings (table), initialization_deduction
+- std::string API (size/capacity/reserve/resize, [] vs at, data/c_str invalidation, append/insert/erase/replace, substr, starts_with/contains, find/npos, compare/<=>) → strings
+- string ↔ number (stoi family throws; from_chars/to_chars non-throwing, locale-free, hot-path; to_string formatting; stringstream cost) → strings
 - SSO (small string optimization; data() inside the object) → memory_layout
 - std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators
 - std::byte (raw-memory type, bitwise operations, representation access, byte-stride pointer) → allocators

@@ -121,6 +121,7 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Questions (getcracked)
 
 - [x] _global_variable — 29/08 — ok
+- [ ] Moved from. (`std::string newStr{ std::move(str) }; cout << str;`) — 07/09 — MISSED per platform record. Answer: unspecified behavior; the moved-from string is valid but unspecified, in practice empty on libstdc++ and libc++. Anki: "Print a std::string after std::move-ing from it?" / "Valid but unspecified state: legal to print, contents not guaranteed; unique_ptr is the exception (guaranteed null)."
 
 <!-- gc-questions:start -->
 

@@ -348,22 +348,4 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [East to West](https://getcracked.io/question/1215) — Medium
 - ✗ [The const or the ?](https://getcracked.io/question/874) — Medium
 
-### char, const char*, and string
-- ✓ [0.0_7](https://getcracked.io/question/975) — Easy
-- ✓ [Char + Char](https://getcracked.io/question/674) — Easy
-- ✓ [String placement](https://getcracked.io/question/1216) — Easy
-- ✓ [String them together.](https://getcracked.io/question/996) — Easy
-- ✓ [What's a character?](https://getcracked.io/question/847) — Easy
-- ✗ [Where did it go?](https://getcracked.io/question/757) — Easy
-- ✗ [You don't understand strings.](https://getcracked.io/question/699) — Easy
-- ✗ [Another string question?](https://getcracked.io/question/1423) — Medium
-- ✗ [Change it for me.](https://getcracked.io/question/870) — Medium
-- ✗ [GG](https://getcracked.io/question/687) — Medium
-- ✗ [More chars more problems.](https://getcracked.io/question/858) — Medium
-- ✓ [Pointers to Pointers to Pointers](https://getcracked.io/question/767) — Medium
-- ✗ [Signed Char == Unsigned Char?](https://getcracked.io/question/381) — Medium
-- ✗ [What even is a string?](https://getcracked.io/question/881) — Medium
-- ✗ [What's zero?](https://getcracked.io/question/818) — Medium
-- ○ [Implement std::string](https://getcracked.io/problem/90/implement-std-string) — problem
-
 <!-- gc-questions:end -->
