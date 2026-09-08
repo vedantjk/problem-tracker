@@ -200,6 +200,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
 - std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → strings (table), initialization_deduction
 - std::string API (size/capacity/reserve/resize, [] vs at, data/c_str invalidation, append/insert/erase/replace, substr, starts_with/contains, find/npos, compare/<=>) → strings
+- string_view (pointer + length, by value, implicit from literal/string, explicit back; remove_prefix/suffix and substr O(1); NOT null-terminated; lifetime tied to source) → strings (parameters: pointers_references)
+- strings on the hot path (SSO limits per lib 15/22, growth, fixed char arrays in messages, string_view + from_chars zero-alloc parse, heterogeneous lookup is_transparent) → strings
+- basic_string template / char types / raw string literals R"()" → strings
 - string ↔ number (stoi family throws; from_chars/to_chars non-throwing, locale-free, hot-path; to_string formatting; stringstream cost) → strings
 - SSO (small string optimization; data() inside the object) → memory_layout
 - std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators

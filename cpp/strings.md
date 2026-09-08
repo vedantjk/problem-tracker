@@ -60,7 +60,40 @@ Comparison operators do lexicographic comparison by `char` value, so uppercase s
 
 `std::stringstream` parses or formats with the stream operators, so `iss >> a >> b` splits on whitespace and `oss << x << ' ' << y` builds a string via `oss.str()`. It is flexible and slow: each stream carries locale and formatting state, and constructing one costs an allocation. Use it for one-off formatting, `getline` with a delimiter for simple splitting, and `from_chars` where speed matters.
 
+## std::string_view
+
+A `std::string_view`, from `<string_view>` in C++17, is two words: a pointer to the first character and a length. It owns nothing. It is a window onto characters that belong to something else, a literal, a `std::string`, a `char` array, or a buffer you received from the network. Because it is two words with trivial copy, it is passed by value, never by reference.
+
+Any of the sources converts to a view implicitly, so a function taking `std::string_view` accepts a literal, a `std::string`, and another view without the caller doing anything, and without copying a single character. That is the whole reason it exists as a parameter type: `const std::string&` forces a temporary `std::string` for a literal, and `const char*` loses the length and demands a null terminator. A view does neither.
+
+The operations are the read-only half of `std::string`. `size()`, `empty()`, `[]`, `at()`, `front()`, `back()`, `data()`, iterators, `find` and its relatives with `npos`, `compare`, the comparison operators, and the C++20/23 `starts_with`, `ends_with`, and `contains`. Two are new and are the point of the type: `remove_prefix(n)` and `remove_suffix(n)` shrink the window in place by moving the pointer or the length, and `substr(pos, count)` returns another view rather than a new string. All three are O(1) and allocate nothing, which is why a tokenizer written with `string_view` is a loop of pointer arithmetic. A view can also be built from a pointer and a length, `std::string_view{ buf, n }`, which is how you look at part of a raw buffer without copying it.
+
+```cpp
+std::string_view line = "BID,100,42.50";
+auto comma = line.find(',');
+std::string_view side = line.substr(0, comma);   // "BID", no allocation
+line.remove_prefix(comma + 1);                    // "100,42.50"
+int qty{};
+std::from_chars(line.data(), line.data() + line.find(','), qty);  // 100, no allocation
+```
+
+The two rules that make it safe to use, and dangerous to misuse. First, a view is not null-terminated. `view.data()` points at the first character and nothing promises a null after the last, especially after `substr` or `remove_suffix`. Passing `data()` to `strlen`, `printf("%s")`, `fopen`, `atoi`, or any C function that expects a terminator reads past the window. Pass the length explicitly, or construct a `std::string` when a C API needs one. Second, a view lives no longer than what it views. `std::string_view v = getName();` is dangling on the next line, because the returned string was a temporary that died at the semicolon. Returning a view into a local string, or storing a view in a member while the source string later grows and reallocates, are the same bug. The safe pattern is: views as parameters and as short-lived locals; strings as members and return values.
+
+Converting back is explicit: `std::string{ view }`, or `std::string s(view)`, copies the characters, and there is no implicit conversion because that copy allocates. Constructing a view from a `std::string` is implicit and free.
+
+## Beyond the basics: what a low-latency interviewer asks
+
+`std::string` is a specialization: `std::basic_string<char>`. The same template over `wchar_t`, `char8_t`, `char16_t`, and `char32_t` gives `std::wstring`, `std::u8string`, `std::u16string`, and `std::u32string`, and `std::string_view` is likewise `std::basic_string_view<char>`. Raw string literals, `R"(...)"`, keep backslashes and newlines verbatim and are how regexes and multi-line text are written without escaping; a delimiter can be added as `R"x(...)x"` when the content contains `)"`.
+
+Layout is implementation-specific and worth knowing for the platform you name. libstdc++ stores a `std::string` in 32 bytes with 15 characters of small-string capacity inside the object; libc++ uses 24 bytes with 22. A string longer than that allocates, and growth on overflow roughly doubles the capacity. This is what makes a `std::string` in a per-message path a hidden `malloc`: any symbol, key, or field over the SSO limit costs an allocation per message. See [memory layout](memory_layout.md) for the measured addresses.
+
+The hot-path answer is therefore to keep strings out of it. Messages use fixed-size `char` arrays, `char symbol[8]`, so a struct is trivially copyable and has no pointer. Parsing uses `std::string_view` to carve the buffer and `std::from_chars` to read numbers, so a whole packet is decoded with zero allocations. `std::string` is used at the edges, for configuration, logging, and anything that runs once per session rather than once per message.
+
+Lookups by string have their own trap. With `std::unordered_map<std::string, T>`, calling `find` with a `string_view` or a `const char*` constructs a temporary `std::string` for the lookup, an allocation per query. C++20 allows heterogeneous lookup in unordered containers when the hasher and equality both declare `using is_transparent = void;` and can hash and compare a `string_view`. With that, `map.find(view)` hashes the view directly and allocates nothing. `std::map` has supported the same through `std::less<>` since C++14. For a symbol table on the hot path, this is the difference between a hash and a `malloc` per lookup.
+
 ## Errors and pitfalls
+
+Passing `view.data()` to a C function that expects a null terminator reads past the window; views are not null-terminated, particularly after `substr` or `remove_suffix`.
 
 A `const char*` obtained from `c_str()` or `data()` dangles as soon as the string reallocates or is destroyed; storing it past the next mutating call is a use-after-free.
 
@@ -83,6 +116,18 @@ The overloads are chosen by the first argument's type. With a const char*, the n
 ### When would you use from_chars over stoi?
 
 On a hot path or in a parser. from_chars is locale-independent, does not allocate, does not throw, and reports where it stopped and why through a return struct, so it works on a string_view without constructing a string. stoi needs a std::string, consults the locale, and throws on failure.
+
+### What is a string_view and when do you use it?
+
+A pointer and a length, owning nothing, viewing characters that belong to something else. I use it as a parameter type because a literal, a std::string, and another view all convert to it for free, and as a short-lived local for parsing, because substr, remove_prefix, and remove_suffix are O(1) and never allocate. I do not store it in a member or return it from a function that owns the source, because it dies with the source, and I never hand its data() to a C API, because it is not null-terminated.
+
+### How would you parse a message without allocating?
+
+Wrap the buffer in a string_view, carve fields with find and substr, and read numbers with from_chars on the field's pointer range. Nothing in that path constructs a std::string. The message struct itself uses fixed-size char arrays so it is trivially copyable. std::string stays at the edges: config, logging, anything that runs once per session.
+
+### Why is unordered_map<string, T>::find(string_view) a problem?
+
+Without a transparent hasher and equality, find takes a const std::string&, so the view is converted to a temporary string, which allocates on every lookup. C++20 heterogeneous lookup fixes it: give the map a hasher and equality that declare is_transparent and accept string_view, and find hashes the view directly.
 
 ### What does npos mean?
 
