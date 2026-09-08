@@ -1,6 +1,6 @@
 # Resolve Queue
 
-Top 20 from the confidence-2/3 backlog (77 solved problems at conf ≤ 3 as of 2026-09-07). Ordered by priority: recorded wrong attempts or hesitations first, then interview-relevant conf-2s, then highest-frequency conf-3s by pattern. Drains through the Notion plan's REVISE slots (Fri ~30 min, Sun ~90 min, about six per week). Tick a row and bump its confidence in `tracker.md` when re-solved cold.
+Top 20 from the confidence-2/3 backlog (77 solved problems at conf ≤ 3 as of 2026-09-07). Ordered by priority: recorded wrong attempts or hesitations first, then interview-relevant conf-2s, then highest-frequency conf-3s by pattern. Drains through the daily active-recall loop: each morning, read two cpp notes files aloud in `cpp/README.md` order, then re-solve two of these cold. Twenty problems is ten mornings. Tick a row and bump its confidence in `tracker.md` when re-solved cold.
 
 Left out on purpose: the four conf-2 hards (Basic Calculator IV, Minimum Time to Make Array Sum At Most x, Minimum Operations to Make Numbers Non-positive, Maximum Total Damage With Spell Casting) are contest-style with low interview yield; later pass.
 
