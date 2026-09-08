@@ -257,7 +257,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 
 | Date | Quiz | Score | Time | Percentile | Notes |
 |---|---|---|---|---|---|
-| 29/08/2026 | Beginner C++ (getcracked) | 11/20 | 18:11 | top 9.7% of 248 ("Cracked") | Baseline, cold. 2 coding Qs skipped. Missed: full-specialization member def (no `template<>`), fold `sum(2,0.5,..)` is double (arith conversions per `+`), macro double-eval `121`, `delete` on `malloc`, `const alias` = top-level const (`int* const`), `class A; struct A{}` same entity. Priority: Templates, Pointers/const, new/delete, Classes. Retake after tree. |
+| 29/08/2026 | Beginner C++ (getcracked hub quiz; the tree's own end-of-tree quiz is separate and still 0/1) | 11/20 | 18:11 | top 9.7% of 248 ("Cracked") | Baseline, cold. 2 coding Qs skipped. Missed: full-specialization member def (no `template<>`), fold `sum(2,0.5,..)` is double (arith conversions per `+`), macro double-eval `121`, `delete` on `malloc`, `const alias` = top-level const (`int* const`), `class A; struct A{}` same entity. Priority: Templates, Pointers/const, new/delete, Classes. Retake after tree. |
 | 31/08/2026 | Claude notes quiz #1 (11 Q) | 8 clean | ~30m | — | MISSED: SQUARE(2+3)=11 (macro paste), auto& keeps const (REPEAT). Precision dings: padding offsets map, 1<<31=INT_MIN, NRVO vs guaranteed elision. |
 | 01/09/2026 | Claude quiz #2 (10 Q, day's material + exceptions) | 8.5/10 | ~30m | — | HALVES: catch(...)-first is CE not catch-everything; uncaught→unwind impl-defined (dtors not guaranteed); switch decl-vs-init terminology + "garbage" for UB (REPEAT). Clean: ctor-throw member destruction, exit cleanup order, segments, access tiers, and_then retest, slicing rethrow, constinit. |
 
