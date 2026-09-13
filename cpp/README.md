@@ -27,6 +27,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 | [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references, unique_ptr move example, std::move versus the move operation (swap, push_back, when to use), move ctor/assign (steal-and-null, noexcept + vector), implicit move rules, rule of five/zero, implicit move on return, shared_ptr/weak_ptr overview |
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
+| [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
@@ -110,6 +111,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
 - if (x) non-bool condition conversion → control_flow
 - if-else vs switch (when to use which) → control_flow
+- input/output streams (hierarchy, cin/cout/cerr/clog, >> vs get/getline, ignore/peek/unget/putback, flags/manipulators, precision/width/fill/alignment, flush/endl) → iostreams
 - infinite loops (while(true) idiom, semicolon null-body, unsigned counter wrap) → control_flow
 - inline (ODR meaning, requirements, why not everything) → build_linkage
 - integral promotion (sub-int → signed int) → types_conversions
@@ -258,6 +260,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | if / switch / loops (learncpp 4.10, 8.5-8.6, 8.8-8.10 — read 01/09) | control_flow | (pending) |
 | Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | &x+1 vs x+1 ok |
 | Dev problem: Bump Memory Allocator (07/09) | allocators | solved with guidance; 1 hidden-test fail on Deallocate(nullptr) |
+| I/O Streams: Console (learncpp 28.1-28.3 — read 12/09) | iostreams | (pending) |
 
 ## Quizzes
 
@@ -311,7 +314,6 @@ The concept index and quiz tables are navigation and history, so their compact l
 
 Tree nodes not yet mapped to a concept file (mostly Intermediate material). When a file is created for one of these, add the mapping in `cpp/tools/gc_links.py`.
 
-- **I/O Streams: Console** — 0/5 attempted
 - **Classes and Structs** — 0/4 attempted
 - **Member Functions** — 0/4 attempted
 - **Const Classes and Functions & Access Specifiers** — 0/2 attempted
