@@ -35,6 +35,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 
 - [[fallthrough]] attribute / fallthrough rules → control_flow
 - [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
+- `obj(i);` declares a variable named i (parenthesized declarator), not a temporary → classes
 - ABI / RAX:RDX struct return → functions_scope_lambdas
 - access functions / getters and setters (naming styles, behavior over setAlive, value vs const& return) → classes
 - access specifiers (public/private/protected; per-class not per-object; struct/class default) → classes
@@ -70,6 +71,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - comma operator (precedence, return a,b) → expressions
 - comments don't nest / #if 0 → build_linkage
 - conditional operator value category (lvalue only if both branches same-type lvalues; mixed → prvalue copy, const& binds temporary not x) → expressions
+- conditional operator with two class types (`flag ? C{} : D{}` converts toward the reachable type; auto deduces it) → expressions, classes (Q&A)
 - const / constexpr / consteval / constinit four-way table; constinit not usable in constant expressions; keyword combinations → initialization_deduction
 - const member functions / mutable / this is const X* → classes
 - const ref = read-only view not immutability (aliasing writes visible) → pointers_references
@@ -115,6 +117,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - EXIT_SUCCESS / status codes → build_linkage
 - expected (std::expected/unexpected/unexpect, error(), transform_error) → error_handling
 - explicit constructors (blocks copy-init, copy-list-init, implicit args, `return {x}`; allows direct, direct-list, T{x}, static_cast) → classes
+- explicit destructor call `a.~A()` on an automatic object = double destruction UB (placement-new the only legitimate follow-up) → classes, ub_catalog
 - explicit object parameter (C++23 `this X& self`; member pointer becomes plain function pointer) → classes
 - file streams (ifstream/ofstream/fstream, RAII, open modes, text vs binary, buffering, safe read loops) → iostreams
 - filesystem (path composition/decomposition, queries and mutations, error_code overloads, directory traversal, race/symlink pitfalls) → iostreams
@@ -141,6 +144,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - implicit object / this / member access before declaration → classes
 - infinite loops (while(true) idiom, semicolon null-body, unsigned counter wrap) → control_flow
 - initialization forms for class types (six forms; copy forms skip explicit; list forms reject narrowing, prefer initializer_list) → classes
+- initializer_list copies elements at construction; copying the list copies only the handle → classes
 - inline (ODR meaning, requirements, why not everything) → build_linkage
 - input/output streams (hierarchy, cin/cout/cerr/clog, >> vs get/getline, ignore/peek/unget/putback, flags/manipulators, precision/width/fill/alignment, flush/endl) → iostreams
 - integral promotion (sub-int → signed int) → types_conversions
@@ -171,6 +175,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - most vexing parse `Y y(X());` (function taking X(*)(), error at y.f()) → initialization_deduction (+ classes Q&A)
 - most vexing parse → initialization_deduction
 - move constructor / move assignment (syntax, steal-and-null, when selected, self-move check, swap recursion trap) → smart_pointers_move
+- move ctor forwarding by name (`Base(other)` copies; needs `Base(std::move(other))`) → classes; named rvalue ref is an lvalue → value_categories
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - mutable (modify from const member function) → classes
 - NaN != NaN / signed zero → floating_point
@@ -300,7 +305,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class vs Struct ok, Struct over Class ok; Class inStruction MISSED, wtf const MISSED |
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
 | Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
-| Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | (pending, 12 questions) |
+| Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | 5 ok; wrong first attempt: Stop! Don't move!, Copying and Not Copying, r-expression, Tear it out root and stem, ? 1 : 2 -> auto, 96% of you will fail this.; Who'd you call? not attempted |
 
 ## Quizzes
 

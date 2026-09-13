@@ -3571,7 +3571,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/constructor-member-initializer-lists/",
@@ -3582,7 +3582,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/default-constructors-and-default-arguments/",
@@ -3593,7 +3593,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/delegating-constructors/",
@@ -3604,7 +3604,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/temporary-class-objects/",
@@ -3615,7 +3615,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-the-copy-constructor/",
@@ -3626,7 +3626,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/class-initialization-and-copy-elision/",
@@ -3637,7 +3637,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/converting-constructors-and-the-explicit-keyword/",
@@ -3648,7 +3648,7 @@
 "",
 ""
 ],
-"svgs": ""
+"svgs": "lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "https://www.learncpp.com/cpp-tutorial/introduction-to-destructors/",
@@ -3669,7 +3669,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/738",
@@ -3679,7 +3679,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/871",
@@ -3689,7 +3689,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/986",
@@ -3699,7 +3699,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/964",
@@ -3709,7 +3709,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/985",
@@ -3719,7 +3719,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/822",
@@ -3729,7 +3729,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/683",
@@ -3739,7 +3739,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/1299",
@@ -3749,7 +3749,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/1006",
@@ -3759,7 +3759,7 @@
 "Hard",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/418",
@@ -3769,7 +3769,7 @@
 "Hard",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/1233",
@@ -3779,7 +3779,7 @@
 "Hard",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+5)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-minus size-3 text-text-secondary"
 }
 ]
 },

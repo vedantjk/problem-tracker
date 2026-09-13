@@ -55,6 +55,7 @@ Each item links to the file that explains its mechanism and safe alternatives:
 - [Bits](bits_punning.md) covers unchecked bitset access outside its bounds, with language/library version qualifications.
 - [Types](types_conversions.md) covers invalid bool representations and out-of-range conversions into enums without a fixed underlying type.
 - [Error handling](error_handling.md) covers optional and expected access without satisfying the corresponding state precondition.
+- [Classes](classes.md) covers an explicit destructor call on an automatic object followed by the implicit one at scope exit (double destruction), and default member initializers that read a later-declared member.
 - [Memory management](memory_layout.md) covers buffer overflow, use-after-free, double free, invalid free, and mismatched allocation/deallocation families.
 - A data race involving conflicting unsynchronized accesses, at least one a write, can cause undefined behavior. A const access path or thread-safe static initialization does not synchronize later mutation.
 
@@ -121,6 +122,7 @@ The entries below preserve the original practice record. Use the explanations ab
 ### Questions (getcracked)
 
 - [x] _global_variable — 29/08 — ok
+- [ ] Tear it out root and stem (`A a; a.~A();`) — 13/09 — wrong first attempt per platform record, filed under classes.md. Answer: undefined behavior, double destruction; `11` is one possible output, not the answer.
 - [ ] Moved from. (`std::string newStr{ std::move(str) }; cout << str;`) — 07/09 — MISSED per platform record. Answer: unspecified behavior; the moved-from string is valid but unspecified, in practice empty on libstdc++ and libc++. Anki: "Print a std::string after std::move-ing from it?" / "Valid but unspecified state: legal to print, contents not guaranteed; unique_ptr is the exception (guaranteed null)."
 
 <!-- gc-questions:start -->

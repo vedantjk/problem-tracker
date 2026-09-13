@@ -395,6 +395,8 @@ It lets an object hand out a shared_ptr to itself that shares the existing contr
 
 - [x] shared_ptr<void> with custom deleters + std::swap — 07/09 — ok. Answer `X() Y() foo ~X() bar ~Y()`: reverse destruction order (ptr2 first), swap moves control-block pointers so deleters follow objects; works because the raw-pointer constructor is a template and erases object type and deleter into the control block. Platform text is sloppy: `std::unique_ptr ptr(new X())` without `<void>` is a CTAD compile error, and `unique_ptr<void>` fails a `static_assert`, not a runtime assertion.
 
+- [ ] Stop! Don't move! (which user-defined special member does not suppress the implicit move constructor) — 13/09 — wrong first attempt per platform record. Answer: an ordinary constructor. Copy constructor, copy assignment, move assignment, and destructor each suppress it.
+- [ ] Copying and Not Copying (`std::initializer_list<A> i{a}; f(i); f(i);`) — 13/09 — wrong first attempt per platform record. Answer: `1`, one element copy at list construction; passing the list copies the pointer-and-length handle only. Mechanism filed in classes.md copy-constructor section.
 - [ ] Who lives here? (control block contents) — 07/09 — MISSED per platform record. Anki: "What does a shared_ptr control block hold?" / "strong count, weak count, deleter, allocator; plus the object itself under make_shared." Answer 4: strong count, weak count, deleter, allocator. Plus, with make_shared/allocate_shared, the managed object itself sits in the same block.
 
 ### Reading
@@ -439,17 +441,17 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [Where do we go now?](https://getcracked.io/question/984) — Medium
 
 ### Special Member Functions
-- ○ [Don't end me.](https://getcracked.io/question/447) — Easy
-- ○ [It's hidden](https://getcracked.io/question/738) — Easy
-- ○ [Not this, again.](https://getcracked.io/question/871) — Easy
-- ○ [Stop! Don’t move!](https://getcracked.io/question/986) — Easy
-- ○ [Copying and Not Copying](https://getcracked.io/question/964) — Medium
-- ○ [Do it for you.](https://getcracked.io/question/985) — Medium
-- ○ [I'm here! Now I'm gone.](https://getcracked.io/question/822) — Medium
-- ○ [r-expression](https://getcracked.io/question/683) — Medium
-- ○ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
-- ○ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
-- ○ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
+- ✓ [Don't end me.](https://getcracked.io/question/447) — Easy
+- ✓ [It's hidden](https://getcracked.io/question/738) — Easy
+- ✓ [Not this, again.](https://getcracked.io/question/871) — Easy
+- ✗ [Stop! Don’t move!](https://getcracked.io/question/986) — Easy
+- ✗ [Copying and Not Copying](https://getcracked.io/question/964) — Medium
+- ✓ [Do it for you.](https://getcracked.io/question/985) — Medium
+- ✓ [I'm here! Now I'm gone.](https://getcracked.io/question/822) — Medium
+- ✗ [r-expression](https://getcracked.io/question/683) — Medium
+- ✗ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
+- ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
+- ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
 - ○ [Who'd you call?](https://getcracked.io/question/1233) — Hard
 
 <!-- gc-questions:end -->

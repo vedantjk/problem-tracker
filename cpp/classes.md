@@ -214,6 +214,26 @@ A copy constructor initializes a new object from an existing object of the same 
 
 The copy constructor runs whenever a new object is made from an existing one: `Fraction fCopy{f};`, passing a `Fraction` by value, and, absent elision, returning one by value. It should have no side effects beyond producing an equal copy, and the implicit one is preferred unless the class owns a resource. `Fraction(const Fraction&) = default;` requests the generated one explicitly, which is useful when another declaration would suppress it. `Fraction(const Fraction&) = delete;` makes the type non-copyable, so `Fraction fCopy{f};` and pass-by-value are compile errors. A class that needs a user-written copy constructor almost always also needs a user-written destructor and copy assignment operator, the rule of three, extended to five by the move operations; that discussion lives in [smart_pointers_move.md](smart_pointers_move.md).
 
+A derived class's copy and move constructors must hand the base subobject to a base constructor in the initializer list, and the value category of what they pass decides which base constructor runs. Inside `Car(Car&& other)`, the parameter `other` has a name, so as an expression it is an lvalue even though its type is an rvalue reference. `Car(Car&& other) : Vehicle(other)` therefore calls the base copy constructor, not the base move constructor. To move the base part you must write `Vehicle(std::move(other))`. The same applies member by member: a move constructor that writes `m_name(other.m_name)` copies the string. This is the "named rvalue reference is an lvalue" rule from [value_categories.md](value_categories.md), and it is the most common way a hand-written move constructor silently degrades into a copy.
+
+```cpp
+struct Vehicle {
+    Vehicle() = default;
+    Vehicle(const Vehicle&) { std::cout << "A"; }
+    Vehicle(Vehicle&&)      { std::cout << "B"; }
+};
+struct Car : Vehicle {
+    Car() = default;
+    Car(const Car& other) : Vehicle(other) { std::cout << "C"; }
+    Car(Car&& other) : Vehicle(other)      { std::cout << "D"; }   // prints AD: base is copied
+    // Car(Car&& other) : Vehicle(std::move(other)) { ... }        // prints BD
+};
+Car one;
+Car two(std::move(one));
+```
+
+A related copy-counting trap is `std::initializer_list`. Constructing one from named objects, `std::initializer_list<A> i{a};`, copies each element into the list's backing array, so `A`'s copy constructor runs once per element. The list object itself is only a pointer and a length over that array, so passing it by value to `f(std::initializer_list<A>)` copies the handle, not the elements, and calling `f(i)` twice prints nothing further. With `A(const A&)` printing `1`, the whole program prints `1` once.
+
 ## Converting constructors and `explicit`
 
 Any constructor that can be called with one argument is a converting constructor by default: the compiler may use it for an implicit conversion, so with `Foo(int)` the call `printFoo(5)` builds a `Foo` from `5` on its own. Only one user-defined conversion may take part in any implicit conversion sequence. Given `Employee(std::string_view)`, the call `printEmployee("Joe")` fails, because it would need `const char*` to `string_view` and then `string_view` to `Employee`, which is two. `printEmployee("Joe"sv)` or `printEmployee(Employee{"Joe"})` each leave one conversion for the compiler and compile.
@@ -227,6 +247,8 @@ Make single-argument constructors explicit by default. The exception is when the
 A destructor is the member function that runs automatically when an object's lifetime ends: at the closing brace for a local, at `delete` for a heap object, at the end of the full expression for a temporary, and when the enclosing object is destroyed for a member. It is named with a tilde and the class name, takes no parameters, has no return type, and a class has exactly one. Locals in one scope are destroyed in reverse order of construction. If the class declares no destructor the compiler generates one with an empty body, which then runs the destructors of the members and bases, so a class made of `std::string` and `std::vector` members needs nothing written.
 
 Write a destructor only when the object holds something that must be released or finished: memory acquired with `new`, a file handle, a socket, a queue that should be flushed on close. Doing the cleanup in the destructor means every path out of a scope, including early returns and exceptions, releases the resource without the caller remembering anything. That pattern is RAII, and it is why owning a resource through a member with its own destructor is preferred to writing cleanup by hand. A class that manages a resource in its destructor also needs correct copy and move behavior, which is the rule of five again.
+
+A destructor can be called explicitly, `a.~A();`, but for an object with automatic storage that is almost always a bug. The call runs the body and ends the object's lifetime, while the name `a` and its storage remain until the closing brace, where the compiler destroys `a` again. Destroying an object whose lifetime has already ended is undefined behavior, and a program that prints `1` twice is only one of the outcomes. The legitimate use is manual lifetime management in storage you control: destroy the object explicitly, then either leave the storage dead or construct a new object in it with placement new before anything else, including scope exit, touches it. Containers and allocators do exactly this, as described in [allocators.md](allocators.md).
 
 Two things skip destructors. `std::exit()` terminates the program without unwinding the stack, so no local's destructor runs; only static-storage objects are destroyed. An exception that is never caught may terminate without unwinding, and whether destructors run first is implementation-defined. Destructors should not let exceptions escape; the reasoning and the `noexcept` interaction are in [error_handling.md](error_handling.md).
 
@@ -349,6 +371,10 @@ On the Itanium ABI a pointer to member function is two words (a function address
 - **Invalid: two user-defined conversions in one implicit sequence.** `printEmployee("Joe")` with `Employee(std::string_view)` fails; pass `"Joe"sv` or `Employee{"Joe"}`.
 - **Invalid: copy-initialization through an explicit constructor.** `Dollars d = 5;`, `print(5)`, and `return {5};` all fail; `Dollars d{5}` and `Dollars{5}` work.
 - **Logical error: counting copies by printing from the copy constructor.** Elision may remove the call, and since C++17 the prvalue cases are guaranteed to.
+- **Undefined behavior: explicit destructor call on an automatic object.** `A a; a.~A();` destroys `a` twice, once by the call and once at scope exit.
+- **Logical error: forwarding a move constructor's parameter by name.** `Car(Car&& other) : Vehicle(other)` copies the base; `Vehicle(std::move(other))` moves it.
+- **Logical error: `obj(i);` is a declaration.** It declares a variable `i` of type `obj` with redundant parentheses and runs the default constructor; it is not a call or a cast.
+- **Logical error: assuming a conditional with two different class types fails.** If exactly one operand converts to the other's type, the whole expression has that type and the conversion runs; see [expressions.md](expressions.md).
 - **Logical error: expecting destructors after `std::exit`.** Locals are not unwound; only static-storage objects are destroyed.
 - **Logical error: calling a constructor from a constructor body.** `Employee(name, id);` builds and destroys a temporary; the object being constructed is unchanged.
 - **Undefined behavior: default member initializer reading a later member.** Members initialize in declaration order, so `int a{ b }; int b{ 5 };` reads an uninitialized `b`.
@@ -446,6 +472,22 @@ Implicit conversion through that constructor. Concretely, copy-initialization `T
 
 When the program leaves through `std::exit` or `std::abort` rather than by unwinding, when an uncaught exception terminates without unwinding, when an object was allocated with `new` and never deleted, and when a constructor throws partway through, in which case the object's own destructor never runs though its completed members are destroyed. A moved-from object still gets its destructor, which is why move operations must leave the source in a state its destructor can handle.
 
+### Why does `Car(Car&& other) : Vehicle(other)` call the base copy constructor?
+
+Because `other` is a name. A named variable is an lvalue in any expression regardless of its declared type, so `Vehicle(other)` binds to `const Vehicle&` and copies. Only `Vehicle(std::move(other))` yields an rvalue that selects `Vehicle(Vehicle&&)`. The same mistake with members, `m_data(other.m_data)`, copies too. A move constructor is only a move if every base and member initializer casts its source with `std::move`.
+
+### What does `A a; a.~A();` print?
+
+Nothing you can rely on. The explicit call runs the destructor body and ends `a`'s lifetime, then the closing brace runs the destructor again on a dead object, which is undefined behavior. Printing `11` is the common outcome, not the answer. Explicit destructor calls belong only in code that manages object lifetime by hand inside storage it owns, followed by placement new or by never touching the storage as an object again.
+
+### What is the type of `flag ? C{} : D{}` when `C` and `D` are different classes?
+
+The compiler tries to form an implicit conversion sequence from each operand to the other's type. If exactly one direction works, the result has that type and the conversion is applied; if both work, or neither, the expression is ill-formed. With `D(const C&)` present and no way to make a `C` from a `D`, the type is `D`, so a function `auto f(bool flag) { return flag ? C{} : D{}; }` returns `D`. When the flag is true a `C` temporary is built and then converted to `D`, so the calls print the constructors in that order and always call `D::foo`.
+
+### In `obj c();` and `obj(i);`, which is a declaration and which is a call?
+
+Both are declarations. `obj c();` is the most vexing parse: a function named `c` returning `obj`, so no constructor runs and compilers warn. `obj(i);` is a declaration of a variable `i` of type `obj` with parentheses around the declarator, exactly like `int(x);`, so the default constructor runs. Neither creates a temporary. A temporary of type `obj` is spelled `obj{}` or `obj()` with nothing inside the parentheses at expression scope, such as `auto e = obj{};`.
+
 ### Can a member function access the private members of another object of the same class?
 
 Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
@@ -461,10 +503,11 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 ## Practice history
 
 - 12/09/2026: read learncpp 14.9 (constructors), 14.10 (member initializer lists), 14.11 (default constructors and default arguments), 14.12 (delegating constructors).
-- 13/09/2026: read learncpp 14.13 (temporary class objects), 14.14 (copy constructor), 14.15 (class initialization and copy elision), 14.16 (converting constructors and explicit), 15.4 (destructors). Special Member Functions node reading complete; its 12 questions not yet attempted.
+- 13/09/2026: read learncpp 14.13 (temporary class objects), 14.14 (copy constructor), 14.15 (class initialization and copy elision), 14.16 (converting constructors and explicit), 15.4 (destructors).
+- 13/09/2026 Special Member Functions node, per platform record: Don't end me. ok, It's hidden ok, Not this, again. ok, Do it for you. ok, I'm here! Now I'm gone. ok. Wrong first attempt (retest in a week): Stop! Don't move! (declaring an ordinary constructor does not suppress the implicit move constructor; copy ctor, copy assignment, and destructor do). Copying and Not Copying (`std::initializer_list<A> i{a}` copies the element once; `f(i)` copies only the handle; prints `1`). r-expression (`Car(Car&& other) : Vehicle(other)` copies the base because `other` is an lvalue; prints AD). Tear it out root and stem (`a.~A()` on an automatic object then scope exit destroys twice; UB). ? 1 : 2 -> auto (conditional with different class types converts toward the one reachable type; `auto` deduces `D`; prints cD2d2). 96% of you will fail this. (six init forms plus `obj c();` vexing parse and `obj(i);` declaration; prints 112312221). Who'd you call? not attempted.
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
 - 12/09/2026 getcracked, per platform record (rescraped 13/09): Class vs Struct ok, Struct over Class ok, X ways (four overload aspects) ok, skibidi pointer ok, & and && (`A().doSomething()` picks `&&`, named object picks `&`, prints 21) ok. MISSED: Class inStruction (`class A; struct A {}` compiles, definition sets access). MISSED: wtf const (`const C c;` with `C() = default` and uninitialized `int i` is a compile error, not junk; const-default-constructible rule). MISSED: Haha… (`Y y(X());` most vexing parse, error at `y.f()`). MISSED: Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`). MISSED: Drop these. (out-of-class definition may drop top-level parameter const and the default argument). Notes on the platform's explanations: for Invoke me., `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong; for Drop these., `int* const` is top-level const and is dropped from the signature like `const int`, only `const int*` and `const int&` are part of the type.
-- Anki: copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- Anki: a named rvalue reference is an lvalue, so `Base(other)` in a move ctor copies; explicit destructor call on an automatic object is UB (double destruction); `obj(i);` declares `i`; `?:` with two class types picks the one the other converts to; copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
@@ -489,17 +532,17 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [Drop these.](https://getcracked.io/question/1066) — Medium
 
 ### Special Member Functions
-- ○ [Don't end me.](https://getcracked.io/question/447) — Easy
-- ○ [It's hidden](https://getcracked.io/question/738) — Easy
-- ○ [Not this, again.](https://getcracked.io/question/871) — Easy
-- ○ [Stop! Don’t move!](https://getcracked.io/question/986) — Easy
-- ○ [Copying and Not Copying](https://getcracked.io/question/964) — Medium
-- ○ [Do it for you.](https://getcracked.io/question/985) — Medium
-- ○ [I'm here! Now I'm gone.](https://getcracked.io/question/822) — Medium
-- ○ [r-expression](https://getcracked.io/question/683) — Medium
-- ○ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
-- ○ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
-- ○ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
+- ✓ [Don't end me.](https://getcracked.io/question/447) — Easy
+- ✓ [It's hidden](https://getcracked.io/question/738) — Easy
+- ✓ [Not this, again.](https://getcracked.io/question/871) — Easy
+- ✗ [Stop! Don’t move!](https://getcracked.io/question/986) — Easy
+- ✗ [Copying and Not Copying](https://getcracked.io/question/964) — Medium
+- ✓ [Do it for you.](https://getcracked.io/question/985) — Medium
+- ✓ [I'm here! Now I'm gone.](https://getcracked.io/question/822) — Medium
+- ✗ [r-expression](https://getcracked.io/question/683) — Medium
+- ✗ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
+- ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
+- ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
 - ○ [Who'd you call?](https://getcracked.io/question/1233) — Hard
 
 <!-- gc-questions:end -->
