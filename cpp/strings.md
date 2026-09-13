@@ -161,7 +161,6 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [String them together.](https://getcracked.io/question/996) — Easy
 - ✓ [What's a character?](https://getcracked.io/question/847) — Easy
 - ✗ [Where did it go?](https://getcracked.io/question/757) — Easy
-- ✗ [You don't understand strings.](https://getcracked.io/question/699) — Easy
 - ✗ [Another string question?](https://getcracked.io/question/1423) — Medium
 - ✗ [Change it for me.](https://getcracked.io/question/870) — Medium
 - ✗ [GG](https://getcracked.io/question/687) — Medium
@@ -170,6 +169,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [Signed Char == Unsigned Char?](https://getcracked.io/question/381) — Medium
 - ✗ [What even is a string?](https://getcracked.io/question/881) — Medium
 - ✗ [What's zero?](https://getcracked.io/question/818) — Medium
+- ✗ [You don't understand strings.](https://getcracked.io/question/699) — Medium
 - ○ [Implement std::string](https://getcracked.io/problem/90/implement-std-string) — problem
 
 ### stringstream, string_view, and from_chars

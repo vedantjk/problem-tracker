@@ -29,8 +29,11 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
 | [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
-| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, constructors (non-aggregate, never const), member initializer lists (declaration order, three-source priority, body assignment is worse), default constructors (one only, implicit vs = default vs user-provided and zero-init), delegating constructors, temporaries + six init forms for class types, copy constructor (reference param, = default / = delete), converting constructors + explicit (one user-defined conversion), destructors (reverse order, implicit, std::exit skips), the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
-| [arrays.md](arrays.md) | C-style array declaration/init rules (constexpr length, `int i[0]` ill-formed, omitted length, value-init), sizeof vs std::size/ssize, decay (four non-decay contexts, parameter adjustment, length loss, auto vs auto&, typeid), pointer arithmetic and subscripting (`a[n]` = `*(a+n)`, `n[a]`, relative indices, negative index, begin/end traversal, range-for expansion, multidim flattening), heap arrays (`delete[]` needs the original pointer) and stack limits (huge local array) |
+| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, constructors (non-aggregate, never const), member initializer lists (declaration order, three-source priority, body assignment is worse), default constructors (one only, implicit vs = default vs user-provided and zero-init), delegating constructors, temporaries + six init forms for class types, copy constructor (reference param, = default / = delete), converting constructors + explicit (one user-defined conversion), destructors (reverse order, implicit, std::exit skips), nested types (class as scope, nested enum/alias/class, no outer this but member access), friends (non-member, class, member-function friends and the ordering fix; not reciprocal/transitive/inherited), the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
+| [arrays.md](arrays.md) | C-style array declaration/init rules (constexpr length, `int i[0]` ill-formed, omitted length, value-init), sizeof vs std::size/ssize, decay (four non-decay contexts, parameter adjustment, length loss, auto vs auto&, typeid), pointer arithmetic and subscripting (`a[n]` = `*(a+n)`, `n[a]`, relative indices, negative index, begin/end traversal, range-for expansion, multidim flattening), multidimensional arrays (row-major, nested braces, `int (*)[3]` decay, row-pointer subscripts), variable-length arrays (stack pointer bump, extension), heap arrays (`delete[]` needs the original pointer) and stack limits (huge local array) |
+| [containers.md](containers.md) | std::array (aggregate, constexpr, CTAD, to_array, double braces / brace elision, size_type, at vs [] vs std::get, passing by template T/N, returning copies) and std::vector (list ctor vs explicit length ctor, {10} vs (10), at vs [], unsigned size_type / ssize, pass by const&, return by value moves, resize vs reserve, capacity and reallocation, push_back vs emplace_back, braced-list evaluation order) |
+| [inheritance.md](inheritance.md) | base pointers see static type, virtual functions and exact-signature overrides (const counts), implicit virtual, covariant returns, default args bind statically, slicing, no virtual calls in ctor/dtor, override/final, devirtualization and inlining, multiple inheritance + diamond (ABACD), virtual destructors + Sutter's rule, calling Base::f explicitly |
+| [templates.md](templates.md) | function templates: primary/instantiation, deduction never converts, `<>` vs plain call and non-template preference, static locals per instance, multiple type params + auto return, abbreviated templates, partial ordering, non-type params (auto, converted constant expressions, ambiguity), templates in headers + implicit inline, full specialization (`template<>`, same signature, not inline), member function templates cannot be virtual |
 
 ## Where is...? (every concept, A-Z)
 
@@ -38,6 +41,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
 - `delete[]` must get the pointer `new[]` returned (`arr++; delete[] arr;` UB); array of shared_ptr still needs `delete[]` → arrays
 - `obj(i);` declares a variable named i (parenthesized declarator), not a temporary → classes
+- abbreviated function templates (`auto` parameters, C++20) → templates
 - ABI / RAX:RDX struct return → functions_scope_lambdas
 - access functions / getters and setters (naming styles, behavior over setAlive, value vs const& return) → classes
 - access specifiers (public/private/protected; per-class not per-object; struct/class default) → classes
@@ -55,12 +59,14 @@ For a missed question, make an Anki card with the question on the front and a sh
 - array length: sizeof idiom vs std::size / std::ssize (refuse pointers) vs template `T(&)[N]` → arrays
 - ASCII anchors ('A'=65, 'a'=97, '0'=48) → types_conversions
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
+- at() vs operator[] (bounds check + throw vs UB; both return references) → containers
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
 - auto_ptr (copy-as-move, pass-by-value steals, delete not delete[], deprecated C++11 / removed C++17) → smart_pointers_move
 - basic_string template / char types / raw string literals R"()" → strings
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
 - bool (boolalpha, cin failure, non-0/1 byte UB) → types_conversions
+- braced initializer list evaluates left to right (function args do not) → containers
 - braces: auto x{1,2} / initializer_list → initialization_deduction
 - break vs return (switch + loops, innermost-only, no labeled break) → control_flow
 - bump allocator (cursor allocation; optional headers and deallocation without individual space reclamation) → allocators
@@ -98,21 +104,27 @@ For a missed question, make an Anki card with the question on the front and a sh
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
 - copy-initialization `C c2 = c1;` is one copy-constructor call, not construct-then-assign → classes
 - cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
+- covariant return types (pointer/reference to derived; static return type at the call) → inheritance
 - cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - dangling pointer (distinguish ended lifetime from released storage) → pointers_references
 - data hiding vs encapsulation (five benefits; public-first member order; prefer non-member functions) → classes
 - data races → ub_catalog (pointer)
 - declaration vs out-of-class definition (names, top-level const incl. `int* const`, default argument once, cv/ref/noexcept must match) → classes
+- deduction never converts (`max(2, 3.5)` fails; explicit `<double>` or two params + auto) → templates
 - default args don't apply through function pointers → pointers_references
+- default arguments on virtual functions bind statically (`D1`) → inheritance
 - default constructor (only one allowed; all-defaulted params count; implicit one suppressed by any ctor; `= default` vs empty body zero-init difference) → classes
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
 - delegating constructors (`: Foo{...}` in the initializer list; delegate or initialize, not both; body-call makes a temporary) → classes
 - designated initializers (all 6 CE cases) → initialization_deduction
 - destructor basics (~T, one per class, reverse order, implicit runs member dtors, std::exit skips locals) → classes; throwing dtors → error_handling
 - destructor exception specifications (implicit noexcept and termination cases) → error_handling
+- devirtualization / final / can virtual functions be inlined → inheritance
+- diamond inheritance (two base subobjects, ABACD, ambiguity; virtual base fixes) → inheritance
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
 - double delete from shallow-copied owning pointer → smart_pointers_move
 - early return → control_flow
+- emplace_back vs push_back (in-place, uses explicit ctors, no aggregate before C++20) → containers
 - endian / std::endian → bits_punning
 - endl vs '\n' → build_linkage
 - enum / enum class / to_underlying / using enum → types_conversions
@@ -134,6 +146,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - forward declarations → build_linkage
 - forward progress rule (including the C++26 trivial-loop exception) → control_flow, ub_catalog
 - forwarding references / std::forward / reference collapsing → value_categories
+- friend functions / friend classes / friend member functions (granted by the accessed class; not reciprocal, transitive, or inherited; ordering fix for friend member) → classes; hidden friends + ADL → expressions
+- full specialization (`template<>`, same signature, not implicitly inline; prefer non-template overload) → templates
 - function pointers (syntax, decay, overload disambiguation, no void* conversion) → pointers_references
 - function try blocks (ctor init-list catches, implicit rethrow) → error_handling
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
@@ -184,11 +198,14 @@ For a missed question, make an Anki card with the question on the front and a sh
 - move ctor forwarding by name (`Base(other)` copies; needs `Base(std::move(other))`) → classes; named rvalue ref is an lvalue → value_categories
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - multidimensional array pointer arithmetic (`int(*p)[5][2]`, p+1 skips a block, flatten the index) → arrays
+- multidimensional arrays (row-major, leftmost length omission, `int (*)[3]`, `a[y][x]`) → arrays
 - mutable (modify from const member function) → classes
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
+- nested types (enum, alias, class inside a class; `Outer::Type`; nested class has no outer `this` but has member access; forward-declare only inside or after) → classes
 - noexcept on move operations (vector reallocation, move_if_noexcept, strong exception guarantee) → smart_pointers_move
+- non-type template parameters (constexpr values, `auto` C++17, converted constant expressions, overload ambiguity) → templates
 - nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
 - nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t (prvalue, not a pointer type) → pointers_references
 - numeric_limits quartet → floating_point
@@ -198,6 +215,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - optional (std::optional, all of it) → error_handling
 - out params / in-out params (why discouraged) → pointers_references
 - overload ambiguity foo(-1.5) → types_conversions
+- override (exact signature incl. const; error when nothing overridden; implies virtual) → inheritance
 - padding / tail padding / offsets / pahole → memory_layout
 - pass by address (null-check patterns, optional params, int*& reseating) → pointers_references
 - pass by value vs const& (2×pointer cheap-to-copy rule, string_view by value) → pointers_references
@@ -217,6 +235,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - ref-qualifiers `&` / `&&` on member functions (optional::value overloads, consume-only members) → classes
 - references: sizeof(int&) vs reference members → memory_layout
 - reinterpret_cast legal-pattern checklist → bits_punning
+- reserve vs resize; capacity vs length; reallocation cost; shrink_to_fit non-binding → containers
 - reserved identifiers (_x, _X, __) → build_linkage
 - rethrow (bare throw vs throw e slicing) → error_handling
 - return by reference / address (lifetime conditions, static-local aliasing, assignment through T&) → pointers_references
@@ -234,6 +253,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - signature (excludes return type) → build_linkage
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
+- slicing (by-value Base parameter loses dynamic type) → inheritance
 - smart pointers: copyable-with-count vs move-only fork (shared_ptr vs unique_ptr), why C++11 needed rvalue refs → smart_pointers_move
 - special-member call trace (`x = T()` = ctor+move-assign+dtor; `return std::move(param)` moves, params never elided; param + discarded return value die at the call; `A b = A()` = one ctor) → classes (Q&A)
 - SSO (small string optimization; data() inside the object) → memory_layout
@@ -241,14 +261,17 @@ For a missed question, make an Anki card with the question on the front and a sh
 - stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
 - static init order fiasco → functions_scope_lambdas (+ build_linkage)
 - static local in generic lambda (per-instantiation) → functions_scope_lambdas
+- static local variables are per template instantiation → templates
 - static members (not in sizeof) → memory_layout
 - std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators
+- std::array (aggregate, constexpr length, CTAD, double braces, std::get compile-time check, pass as `<T, N>` template, returns copy) → containers
 - std::byte (raw-memory type, bitwise operations, representation access, byte-stride pointer) → allocators
 - std::function costs / bad_function_call → functions_scope_lambdas
 - std::invoke / std::mem_fn / reference_wrapper is callable → classes
 - std::move (expression cast versus actual move; named rvalue references) → value_categories, smart_pointers_move
 - std::string API (size/capacity/reserve/resize, [] vs at, data/c_str invalidation, append/insert/erase/replace, substr, starts_with/contains, find/npos, compare/<=>) → strings
 - std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → strings (table), initialization_deduction
+- std::vector `{10}` vs `(10)`; explicit length ctor; `vector<const int>` invalid; not constexpr → containers
 - string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
 - string ↔ number (stoi family throws; from_chars/to_chars non-throwing, locale-free, hot-path; to_string formatting; stringstream cost) → strings
 - string_view (pointer + length, by value, implicit from literal/string, explicit back; remove_prefix/suffix and substr O(1); NOT null-terminated; lifetime tied to source) → strings (parameters: pointers_references)
@@ -259,6 +282,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - subscripting = `*((a)+(n))`: `n[a]`, `2["123"]`, relative/negative indices, `(*arr + 1)` trap → arrays
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
+- templates go in headers (instances implicitly inline; .cpp definition = link error) → templates
 - temporary class objects (`T{}` vs `T()`, dies at end of full expression, prvalue) → classes; lifetime extension → initialization_deduction
 - terminate (uncaught throw; unwind impl-defined) → error_handling
 - ternary (precedence, branch unification, lvalue) → expressions
@@ -272,8 +296,12 @@ For a missed question, make an Anki card with the question on the front and a sh
 - unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
 - unique_ptr<std::byte[]> as buffer owner (verify 24-byte layout; matching delete[]; no ownership flag) → allocators
 - unsigned wrap (arithmetic + conversion) → types_conversions
+- variable-length array (extension; stack pointer adjusted, no heap) → arrays
 - vexing parse → initialization_deduction
+- virtual destructor: public virtual or protected non-virtual (Sutter); delete through base without it leaks/UB → inheritance
+- virtual function resolution (most-derived between static and dynamic type; pointer/reference only; not in ctor/dtor) → inheritance
 - virtual inheritance sizes → memory_layout
+- virtual member function template is invalid; class template virtual dtor is fine → templates, inheritance
 - vptr → memory_layout
 - weak_ptr (cycle breaking, lock() over expired(), keeps control block not object, make_shared storage caveat, enable_shared_from_this / bad_weak_ptr) → smart_pointers_move
 - while / do-while / for (full loop notes) → control_flow
@@ -316,7 +344,16 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
 | Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
 | Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | 5 ok; wrong first attempt: Stop! Don't move!, Copying and Not Copying, r-expression, Tear it out root and stem, ? 1 : 2 -> auto, 96% of you will fail this., Who'd you call? |
+| Friends and Enemies (learncpp 15.3, 15.8, 15.9 — read 13/09) | classes + expressions | no questions |
 | C-Style Arrays (learncpp 17.7-17.9 — read 13/09) | arrays + pointers_references | 6 ok; wrong first attempt: Indexing arrays, [0]; 3D Space problem not attempted |
+| Multidimensional C-Style Arrays (learncpp 17.12 — read 13/09) | arrays | What a Jump! ok |
+| std::array (learncpp 17.1-17.4, 17.6 + Chen Inside STL — read 13/09) | containers + arrays | Array extensioooooons wrong first attempt |
+| std::vector (learncpp 16.1-16.5, 16.10-16.11 — read 13/09) | containers | Don't @ me ok, Containers for containers. ok; A, B, C, initializer_list wrong first attempt; 2 problems not attempted |
+| Multiple Inheritance (Issues) (learncpp 24.9 — read 13/09) | inheritance | In a Diamond ok |
+| Base Class References & Pointers (learncpp 25.1-25.2 — read 13/09) | inheritance | 4/4 ok |
+| Override and Final (learncpp 25.3 + MS final classes — read 13/09) | inheritance | We're virtually there. wrong first attempt; 3 not attempted |
+| Virtual Destructor (learncpp 25.4 — read 13/09) | inheritance | Herb's Destructor ok |
+| Templates: Functions (learncpp 11.6-11.10, 26.3 — read 13/09) | templates | Virtually a template. ok; 7 not attempted |
 
 ## Quizzes
 
@@ -370,9 +407,6 @@ The concept index and quiz tables are navigation and history, so their compact l
 
 Tree nodes not yet mapped to a concept file (mostly Intermediate material). When a file is created for one of these, add the mapping in `cpp/tools/gc_links.py`.
 
-- **Multidimensional C-Style Arrays** — 0/1 attempted
-- **std::array** — 0/1 attempted
-- **std::vector** — 0/5 attempted
 - **Internals** — 0/5 attempted
 - **Iterator Categories** — 0/1 attempted
 - **STL Algorithms** — 0/5 attempted
@@ -383,12 +417,7 @@ Tree nodes not yet mapped to a concept file (mostly Intermediate material). When
 - **Access Modifiers** — 0/1 attempted
 - **Construction Order** — 0/7 attempted
 - **Adding & Hiding Functionality** — 0/3 attempted
-- **Multiple Inheritance (Issues)** — 1/1 attempted: ✓ [In a Diamond](https://getcracked.io/question/718)
-- **Base Class References & Pointers** — 4/4 attempted: ✓ [Adding const, overrid-ially.](https://getcracked.io/question/909), ✓ [Adding const, virtually?](https://getcracked.io/question/908), ✓ [Chop Chop Chop](https://getcracked.io/question/491), ✓ [Static* and Dynamic*](https://getcracked.io/question/851)
-- **Override and Final** — 1/4 attempted: ✗ [We're virtually there.](https://getcracked.io/question/1178)
-- **Virtual Destructor** — 1/1 attempted: ✓ [Herb's Destructor](https://getcracked.io/question/1218)
 - **Pure Virtual Functions and Abstract Classes** — 0/1 attempted
-- **Templates: Functions** — 1/8 attempted: ✓ [Virtually a template.](https://getcracked.io/question/953)
 - **Templates: Classes** — 0/6 attempted
 - **Class Template Argument Deduction** — 0/2 attempted
 - **Template Non-Type Parameters** — 0/1 attempted

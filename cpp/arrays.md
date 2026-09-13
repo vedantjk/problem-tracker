@@ -28,6 +28,27 @@ Traversal with a pair of pointers is the model behind every iterator loop: `cons
 
 Multidimensional arrays are one contiguous block in row-major order, and pointer arithmetic on a pointer to a sub-array steps by the whole sub-array. For `int array[2][5][2]`, `int (*p)[5][2] = array;` points at the first `[5][2]` block of ten ints, `p + 1` is the second block, and casting that to `int*` and adding `(1 * 2) + i` reaches flat elements ten plus two plus `i`. With the initializer filled in order, flat elements twelve and thirteen are `3` and `4`, so the loop prints `34`. Work these by flattening the index rather than by visualizing the nesting.
 
+## Multidimensional arrays
+
+An array's element type may itself be an array, so `int a[3][4]` is three elements each of which is an array of four ints, and the dimension of an array is the number of subscripts needed to reach an element. Read the left subscript as the row and the right as the column. Memory is linear, and C++ lays a multidimensional array out in row-major order: all of row zero, then all of row one, so the last subscript varies fastest. Initialize with nested braces, one inner list per row; inner braces may sometimes be omitted but should be written, and a short inner list leaves the rest of that row value-initialized. Only the leftmost length may be omitted when initializing, since the compiler can count rows but needs the other dimensions to know how long a row is. Loop rows outermost and columns innermost so accesses walk memory in order; `std::size(arr)` is the number of rows and `std::size(arr[0])` the number of columns. Translating Cartesian coordinates into indices is backwards from what the letters suggest: `x` selects the column and `y` the row, so the element at `{x, y}` is `a[y][x]`.
+
+A multidimensional array decays to a pointer to its first row, so `int a[3][3]` becomes `int (*)[3]`, and a parameter written `int b[][3]` is that pointer; every dimension but the first must be given, because the compiler needs the row length to scale the arithmetic. `++b` moves to the next row, and subscripts are relative to wherever `b` points: after `++b`, `b[0]` is row one, `b[1]` is row two, and `b[2]` is the row past the end, which does not exist. In the question below the writes land on `a[2][1]` and `a[1][1]`, so the program prints `239`; a `b[2][1]` after the increment would be out of bounds.
+
+```cpp
+void function(int b[][3]) {   // b is int (*)[3]
+    ++b;                      // now points at a[1]
+    b[1][1] = 9;              // a[2][1]
+    b[0][1] = 3;              // a[1][1]
+}
+int a[3][3]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+function(a);
+std::cout << a[0][1] << a[1][1] << a[2][1];   // 239
+```
+
+## Variable-length arrays
+
+`int arr[n]` with a runtime `n` is not C++, but GCC and Clang accept it as a C99-style extension unless told to be pedantic. Under the hood the compiler does what `alloca` does: it adjusts the stack pointer downward by `n` elements at the point of declaration and restores it when the scope ends. There is no `malloc` or `new`, nothing is precomputed at compile time, and nothing checks that the stack has room, so a large `n` is a silent overflow. `std::vector` is the portable spelling of the same intent, with the buffer on the heap and the length available afterwards.
+
 ## Heap arrays and stack limits
 
 `new int[10]` allocates on the free store and must be released with `delete[]` on the pointer the allocation returned. Incrementing that pointer and then calling `delete[]` is undefined behavior, since the deallocation function receives an address it never handed out; `arr` "still being inside the array" is irrelevant. The same holds for arrays of class type: `auto t = new std::shared_ptr<char>[15];` is an array of fifteen shared pointers, released with `delete[] t;`, which runs each element's destructor and then frees the block. Plain `delete t;` on an array is undefined behavior, and neither form is needed if the array is held by `std::unique_ptr<T[]>` or `std::vector` in the first place; see [smart_pointers_move.md](smart_pointers_move.md).
@@ -45,6 +66,8 @@ A local array lives on the stack, and the stack is small: typically eight megaby
 - **Undefined behavior: `delete[]` on anything but the pointer `new[]` returned**, and `delete` without brackets on an array.
 - **Undefined behavior in practice: a multi-megabyte local array.** Stack overflow is not diagnosed by the compiler.
 - **Logical error: `(*arr + 1)`** is element zero plus one, not element one. `*(arr + 1)`, `arr[1]`, and `1[arr]` are the second element.
+- **Undefined behavior: indexing a row past the end after advancing a row pointer.** `int b[][3]` plus `++b` makes `b[2]` the row past the array.
+- **Non-portable: variable-length arrays.** A compiler extension that bumps the stack pointer; use `std::vector`.
 - **Logical error: `auto y = arr;` is a pointer.** Use `auto& y = arr;` to keep the array type.
 
 ## Additional syntax examples
@@ -92,11 +115,11 @@ The array is automatic storage, so its full forty megabytes are reserved on the 
 
 ### Reading
 
-- 13/09/2026: learncpp 17.7 (introduction to C-style arrays), 17.8 (C-style array decay), 17.9 (pointer arithmetic and subscripting). Multidimensional arrays (17.12) and the std::array chapter not yet read.
+- 13/09/2026: learncpp 17.7 (introduction to C-style arrays), 17.8 (C-style array decay), 17.9 (pointer arithmetic and subscripting), 17.12 (multidimensional C-style arrays). std::array is in [containers.md](containers.md).
 
 ### Questions (getcracked)
 
-- 13/09/2026 C-Style Arrays node, per platform record: #square (`2["123"]` prints 3) ok. The headers you never knew (`arr++; delete[] arr;` is not safe, wrong pointer to the deallocator) ok. 3D Arrays (`int(*p)[5][2]`, `(int*)(p + 1) + 2 + i` reaches flat elements 12 and 13, prints 34) ok. Allocation decisions (ten-million-int local array overflows the stack) ok. To delete or not to delete (`new std::shared_ptr<char>[15]` needs `delete[] t;`) ok. Array, Array, go away, come again another day. (typeid on array vs reference vs decayed pointer, prints 1011011) ok. Wrong first attempt (retest in a week): Indexing arrays (`(*arr + 1)` is element zero plus one, the one option that is not the second element). [0] (`int i[0];` is ill-formed, not UB or implementation-defined). 3D Space coding problem not attempted.
+- 13/09/2026 C-Style Arrays node, per platform record: #square (`2["123"]` prints 3) ok. The headers you never knew (`arr++; delete[] arr;` is not safe, wrong pointer to the deallocator) ok. 3D Arrays (`int(*p)[5][2]`, `(int*)(p + 1) + 2 + i` reaches flat elements 12 and 13, prints 34) ok. Allocation decisions (ten-million-int local array overflows the stack) ok. To delete or not to delete (`new std::shared_ptr<char>[15]` needs `delete[] t;`) ok. Array, Array, go away, come again another day. (typeid on array vs reference vs decayed pointer, prints 1011011) ok. Wrong first attempt (retest in a week): Indexing arrays (`(*arr + 1)` is element zero plus one, the one option that is not the second element). [0] (`int i[0];` is ill-formed, not UB or implementation-defined). 3D Space coding problem not attempted. Multidimensional C-Style Arrays: What a Jump! (`int b[][3]`, `++b`, writes land on rows 1 and 2, prints 239) ok. std::array node: Array extensioooooons (variable-length array = stack pointer adjustment) wrong first attempt, retest in a week.
 - Anki: `int i[0]` is ill-formed; `(*arr + 1)` is not `arr[1]`; `delete[]` needs the original pointer; `auto` from an array is a pointer, `auto&` keeps the array; `typeid` strips references.
 
 <!-- gc-questions:start -->
@@ -115,5 +138,11 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [[0]](https://getcracked.io/question/783) — Medium
 - ✓ [Array, Array, go away, come again another day.](https://getcracked.io/question/860) — Medium
 - ○ [3D Space](https://getcracked.io/problem/8/3d-space) — problem
+
+### Multidimensional C-Style Arrays
+- ✓ [What a Jump!](https://getcracked.io/question/714) — Easy
+
+### std::array
+- ✗ [Array extensioooooons](https://getcracked.io/question/1279) — Medium
 
 <!-- gc-questions:end -->

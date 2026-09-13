@@ -252,6 +252,58 @@ A destructor can be called explicitly, `a.~A();`, but for an object with automat
 
 Two things skip destructors. `std::exit()` terminates the program without unwinding the stack, so no local's destructor runs; only static-storage objects are destroyed. An exception that is never caught may terminate without unwinding, and whether destructors run first is implementation-defined. Destructors should not let exceptions escape; the reasoning and the `noexcept` interaction are in [error_handling.md](error_handling.md).
 
+## Nested types
+
+A class is a scope region in the same way a namespace is, so enumerations, type aliases, and other classes can be declared inside it. Outside the class they are named through the class, `Fruit::Type` or `Employee::IDType`; inside member functions they are used unqualified. Nested types obey the access specifiers, so a public nested type is usable by outside code and a private one is not. Declare nested types at the top of the class, because a member cannot use a type that has not been defined yet.
+
+A nested enumeration is usually an unscoped `enum` rather than an `enum class`: the class already provides the scope, so `Fruit::apple` reads well and `Fruit::Type::apple` would be a double qualification. Naming the nested enum `Type` rather than `FruitType` avoids repeating the class name at every use. A nested alias such as `using IDType = int;` documents the meaning of a member and lets callers write `Employee::IDType id{e.getId()};` without knowing the underlying type.
+
+A nested class is a member of the enclosing class but not a part of its objects: it has no `this` pointer to the outer object and cannot touch outer members directly. It does have the access rights of a member, so when handed an `Employee&` it may read `e.m_name` even though that member is private. Forward-declaring a nested class is allowed inside the enclosing class, and after the enclosing class is complete as `class outer::inner;`, but not before the enclosing class exists.
+
+```cpp
+class Employee {
+public:
+    using IDType = int;
+    enum Type { fullTime, contractor };
+    class Printer {
+    public:
+        void print(const Employee& e) const { std::cout << e.m_name << ' ' << e.m_id; }  // private access, via the parameter
+    };
+private:
+    std::string m_name{};
+    IDType m_id{};
+    Type m_type{fullTime};
+};
+Employee::Printer p{};
+```
+
+## Friends
+
+A friend is a function or class that a class grants full access to its private and protected members. Friendship is always granted by the class being accessed, written inside its body, never claimed from outside. A friend non-member function is declared with `friend` in the class and is otherwise an ordinary non-member: it has no implicit object, so the class is passed explicitly, and it may be defined outside the class or inline inside the body, where it remains a non-member despite its position. Non-members read better when both operands deserve equal treatment, `isEqual(v1, v2)` rather than `v1.isEqual(v2)`, which is the reason symmetric operators are usually friends or plain non-members; see [expressions.md](expressions.md) for the hidden-friend and argument-dependent-lookup angle. One function can be a friend of several classes, which needs a forward declaration of the later class so the earlier friend declaration can name it.
+
+```cpp
+class Humidity;                       // forward declaration so Temperature can name it
+class Temperature {
+    int m_temp{};
+public:
+    explicit Temperature(int t) : m_temp{t} {}
+    friend void printWeather(const Temperature&, const Humidity&);
+};
+class Humidity {
+    int m_humidity{};
+public:
+    explicit Humidity(int h) : m_humidity{h} {}
+    friend void printWeather(const Temperature&, const Humidity&);
+};
+void printWeather(const Temperature& t, const Humidity& h) {
+    std::cout << t.m_temp << ' ' << h.m_humidity << '\n';
+}
+```
+
+`friend class Display;` inside `Storage` lets every member function of `Display` use `Storage`'s private members, and the declaration doubles as a forward declaration of `Display`. Friendship has three limits worth stating in an interview. It is not reciprocal: `Storage` gains nothing from befriending `Display`. It is not transitive: a friend of a friend is a stranger. It is not inherited: classes derived from a friend are not friends. A single member function can be made a friend, `friend void Display::displayStorage(const Storage&);`, but the compiler must have seen the full definition of `Display` to name its member, while `displayStorage` itself needs the full definition of `Storage` to use its members. The single-file layout that satisfies both is: forward-declare `Storage`, define `Display` with only the declaration of `displayStorage`, define `Storage` with the friend declaration, then define `displayStorage` last. Splitting the classes into headers and source files removes the ordering problem entirely.
+
+Friends couple the outside code to the class's representation, so a change to the private members ripples into every friend. Two rules of thumb follow. A friend should still prefer the public interface over direct member access when it can. And a function should be a non-friend whenever an accessor makes that possible: `print(const Accumulator&)` calling `acc.value()` needs no friendship and survives a representation change.
+
 ## What can overload a member function
 
 A function is identified by its name plus its signature, and a member function's signature has more parts than a free function's. Each of the following can differ between two member functions with the same name and produce a distinct overload:
@@ -515,6 +567,10 @@ int main() {
 
 The three places people slip. First, `a = A()` is three events, not one: the temporary is constructed, move-assigned from, and destroyed at the end of the full expression. Second, `return std::move(a)` from a by-value parameter runs the move constructor: named return value optimization never applies to parameters, so `return a;` would also have moved, and the explicit `std::move` changes nothing here but would defeat elision for a local. Third, two objects die when the call `foo(*p)` completes, the parameter and the unnamed return value that nobody bound; the parameter may be destroyed at function exit or at the end of the calling full expression, which is implementation-defined, but either way both `f`s print before the next statement. `A b = A();` prints only `a` because since C++17 the prvalue initializes `b` directly and no copy or move constructor is involved, however loudly they print.
 
+### What does friendship grant, and what does it not?
+
+A friend function or class gets access to the private and protected members of the granting class, nothing more: it does not become a member, gets no implicit object, and takes on none of the class's interface. Friendship is one-directional, not transitive, and not inherited, so befriending `Display` gives `Storage` no access to `Display`, a friend of `Display` gets nothing from `Storage`, and a class derived from `Display` is not a friend. The practical guidance is to keep friends few, let them use the public interface where they can, and reach for a non-friend plus an accessor when that suffices.
+
 ### Can a member function access the private members of another object of the same class?
 
 Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
@@ -530,6 +586,7 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 ## Practice history
 
 - 12/09/2026: read learncpp 14.9 (constructors), 14.10 (member initializer lists), 14.11 (default constructors and default arguments), 14.12 (delegating constructors).
+- 13/09/2026: read learncpp 15.3 (nested types), 15.8 (friend non-member functions), 15.9 (friend classes and friend member functions), the Friends and Enemies node.
 - 13/09/2026: read learncpp 14.13 (temporary class objects), 14.14 (copy constructor), 14.15 (class initialization and copy elision), 14.16 (converting constructors and explicit), 15.4 (destructors).
 - 13/09/2026 Special Member Functions node, per platform record: Don't end me. ok, It's hidden ok, Not this, again. ok, Do it for you. ok, I'm here! Now I'm gone. ok. Wrong first attempt (retest in a week): Stop! Don't move! (declaring an ordinary constructor does not suppress the implicit move constructor; copy ctor, copy assignment, and destructor do). Copying and Not Copying (`std::initializer_list<A> i{a}` copies the element once; `f(i)` copies only the handle; prints `1`). r-expression (`Car(Car&& other) : Vehicle(other)` copies the base because `other` is an lvalue; prints AD). Tear it out root and stem (`a.~A()` on an automatic object then scope exit destroys twice; UB). ? 1 : 2 -> auto (conditional with different class types converts toward the one reachable type; `auto` deduces `D`; prints cD2d2). 96% of you will fail this. (six init forms plus `obj c();` vexing parse and `obj(i);` declaration; prints 112312221). Who'd you call? wrong first attempt (full special-member trace; `a = A()` is ctor + move assign + dtor, `return std::move(param)` move-constructs since parameters are never elided, parameter and discarded return value both die at the call; prints abaefHcffaadffKf).
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
