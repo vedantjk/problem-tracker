@@ -64,9 +64,75 @@ Two conventions follow from the struct-versus-class split. A struct should avoid
 
 ## Const objects and const member functions
 
-A const object may only call member functions marked `const` after the parameter list, because the compiler cannot tell from the outside whether an unmarked member function modifies the object. Inside a const member function, `this` has type `const X*`, so writing to a member or calling a non-const member function on `*this` is an error. A `mutable` member is exempt and may be modified from a const member function; it exists for caches and counters that are not part of the logical state. Mark every member function that does not modify the observable state as `const`, or callers holding a `const X&` will be unable to use it.
+A const object of class type must be initialized when created and cannot be modified afterwards, so `const Date today{2020, 10, 14};` is fine while `today.day += 1;` is an error. The rule extends to member functions: a const object may only call member functions marked `const` after the parameter list, because the compiler cannot tell from outside whether an unmarked function modifies the object. `today.print()` fails on a const `today` if `print` is not const, even when the body only reads. Passing by const reference has the same effect inside the callee, so a `void doSomething(const Date& d)` can only call const members of `d`. Since almost every type is at some point handled through a `const T&`, a class whose readers are not const is unusable in practice.
 
-Only the object's constness matters, not the expression's value category, so `const X x; x.f();` needs `f` to be const, while `X{}.f()` can call a non-const `f` on the temporary. Ref-qualifiers, below, are the tool for constraining the value category.
+Inside a const member function `this` has type `const X*`. The function cannot modify a data member, cannot call a non-const member function on the implicit object, and cannot return a non-const reference to a member. It can still modify locals and parameters, call other const members, and call non-member functions. A `mutable` member is exempt and may be modified from a const member function; it exists for caches, counters, and mutexes that are not part of the logical state. A const member function is callable on both const and non-const objects, so mark every member that does not modify the observable state as `const`.
+
+A member may be overloaded on constness alone. The compiler picks by the implicit object: a non-const object calls the non-const overload, a const object the const one. The common use is a pair of accessors where the return type differs, a `T&` from the non-const version and a `const T&` from the const version, rather than two bodies that print different things.
+
+```cpp
+struct Something {
+    void print()       { std::cout << "non-const\n"; }
+    void print() const { std::cout << "const\n"; }
+};
+
+Something s1{};
+s1.print();             // non-const
+const Something s2{};
+s2.print();             // const
+```
+
+Only the object's constness matters here, not its value category, so `X{}.f()` can call a non-const `f` on the temporary. Ref-qualifiers, below, are the tool for constraining the value category.
+
+## Access specifiers and data hiding
+
+Every member has one of three access levels. Public members can be used by anyone. Private members can be used only by other members of the same class. Protected members can be used by members of the class and of classes derived from it, but not by outside code. The access specifiers `public:`, `private:`, and `protected:` set the level for everything that follows them in the class body; they may appear any number of times and in any order. The only technical difference between the keywords `struct` and `class` is the default before the first specifier: public for a struct, private for a class. The presence of a private member also makes the type a non-aggregate, so it loses aggregate initialization.
+
+Access is checked per class, not per object. A member function of `Person` may read and write the private members of any other `Person` it can name, which is why a member `bool isEqual(const Point3d& p) const` can compare `m_x == p.m_x` directly and why copy constructors and comparison operators can be written as members without accessors.
+
+```cpp
+class Person {
+private:
+    std::string m_name{};
+public:
+    void setName(std::string_view name) { m_name = name; }
+    void kisses(const Person& p) const {
+        std::cout << m_name << " kisses " << p.m_name << '\n';   // p's private member: fine
+    }
+};
+```
+
+Data hiding is the practice of keeping the implementation of a type out of reach of its users: data members private, member functions public, so the only way in is through the public interface. Encapsulation is the broader word for bundling data with the functions that operate on it; in C++ usage a class that bundles data behind a public interface and hides the data is called encapsulated. The public interface is an implicit contract: users build on it, so changing it breaks them, while the private implementation can change freely.
+
+The benefits are concrete rather than aesthetic. Users only need to understand the interface, not the internals of `std::string_view` to call `length()`. Invariants live in one place: an `Employee` whose `m_firstInitial` must track `m_name` keeps both private and updates them together in `setName`, so no outside code can desynchronize them. Validation and error handling become possible: a setter can reject an empty name before `front()` becomes undefined behavior. The representation can change, from three named `int` members to an array of three, without touching any caller that used `setValue1` and `getValue1`. And debugging narrows to one place: if a member holds a bad value, the only code that can have written it is the class's own members.
+
+Two conventions follow. Declare the public interface first and the private implementation last, so a reader sees what the class does before how; the older private-first style is common in existing code. Private data members carry an `m_` prefix so they never collide with parameters, locals, or accessor names, and so a read of `m_name` in a body is visibly a read of persistent state.
+
+## Access functions, and preferring non-member functions
+
+An access function is a public member that reads or writes a private data member: a getter, which returns the value and should be `const`, or a setter, which modifies it and is not. Three naming styles are in use: `getDay` and `setDay`; the standard library's bare `day()` for both the getter and an overloaded setter; or a bare `day()` getter with a `setDay` setter, which learncpp recommends because the `set` prefix marks mutation while the getter reads naturally. The `m_` prefix on the member is what makes a bare `day()` getter possible without a name clash.
+
+Access functions are not automatically good design. A `setAlive(bool)` says less than `kill()` and `revive()`; behavior-named members express intent and can enforce transitions. If a type needs a getter and a setter for every member with no validation in between, it is probably a struct with public members that has been dressed up. Provide access only for what outside code genuinely needs.
+
+Prefer non-member functions when a function can be written against the public interface. A `print(const Yogurt&)` free function that uses `getFlavor()` keeps the class interface small, cannot bypass encapsulation, is unaffected by changes to the private representation, and lets each application format output its own way instead of baking one format into the class. Member functions are required for constructors, destructors, virtual functions, and some operators, and are the right choice when the function needs private access that should not be exposed; otherwise, especially for functions that do not modify state, reach for a non-member.
+
+## Returning references to data members
+
+A getter that returns a `std::string` by value copies the string on every call. Returning `const std::string&` avoids the copy and is safe in the common case, because the implicit object outlives the call: the member lives inside the object, and the object lives in the caller's scope. Match the return type to the member's type. Returning `std::string_view` from a `std::string` member works but creates a view of the member on every call, and returning `const auto&` deduces the right type but hides it from the reader, so `const std::string& getName() const` is the form to write.
+
+The safety argument depends on the implicit object being an lvalue. When the object is a temporary, the member dies with it at the end of the full expression, and a saved reference dangles.
+
+```cpp
+Employee createEmployee(std::string_view name);   // returns by value
+
+std::cout << createEmployee("Frank").getName();               // fine: used in the same expression
+const std::string& ref{ createEmployee("Garbo").getName() };  // dangling: the temporary is gone
+std::string val{ createEmployee("Hans").getName() };          // fine: copied before the temporary dies
+```
+
+The rule is to use the result of a reference-returning member immediately, or copy it into a non-reference variable if it must outlive the expression. This is the same lifetime rule as any function returning a reference into an object that may not outlive the caller's use, and the ref-qualified overload pattern earlier in this file is the class-side fix: a `&&` overload that returns by value or moves out, so a temporary never hands out a reference into itself.
+
+Never return a non-const reference to a private member from a public function. `int& value() { return m_value; }` lets any caller write `f.value() = 5;`, which is public access to a private member with extra steps and defeats every benefit of data hiding. A const member function cannot return a non-const reference to a member at all, because `this` is a `const X*` and the member is const through it; `const int& getValue() const` is the version that compiles.
 
 ## What can overload a member function
 
@@ -154,6 +220,9 @@ On the Itanium ABI a pointer to member function is two words (a function address
 - **Invalid: `mf(x, 42)` on a pointer to member.** Use `(x.*mf)(42)` or `std::invoke(mf, x, 42)`.
 - **Invalid: the most vexing parse.** `Y y(X());` declares a function named `y` returning `Y` and taking a pointer to a function returning `X`. Nothing prints, and the error surfaces later at `y.f()`, where `y` is a function, not a `Y`. See [initialization_deduction.md](initialization_deduction.md) for the rule and the fixes; `Y y{X{}};` is the idiomatic one.
 - **Undefined behavior: default member initializer reading a later member.** Members initialize in declaration order, so `int a{ b }; int b{ 5 };` reads an uninitialized `b`.
+- **Invalid: returning a non-const reference from a const member function.** `int& get() const` fails because the member is const through `this`; return `const int&`.
+- **Undefined behavior: saving a reference returned from a member of a temporary.** `const auto& r = make().name();` dangles at the semicolon; use it in the same expression or copy it.
+- **Design error: public non-const reference to a private member.** `int& value()` is a public member with extra steps.
 - **Logical error: forgetting `const` on an accessor.** The class works until someone holds a `const X&`, at which point every read becomes a compile error somewhere far from the class.
 - **Design error: constructor on a struct meant as an aggregate.** Adding a constructor silently removes aggregate initialization and designated initializers.
 
@@ -221,9 +290,21 @@ Because anything that can be parsed as a function declaration is. `X()` in that 
 
 When the same operation should behave differently on a temporary and on a named object, most often to move a member out of a temporary while returning a reference from an lvalue, as `std::optional::value()` does. Also to make an operation consume-only with a `&&`-only overload, so calling it on a named object is a compile error rather than a silent use-after-move later.
 
+### Can a member function access the private members of another object of the same class?
+
+Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
+
+### Should a getter return by value or by reference?
+
+By value when the member is cheap to copy, such as an `int`. By `const T&` when it is expensive, such as a `std::string`, with the return type matching the member's type exactly. The reference is safe as long as it is used while the object is alive, so use it in the same expression or copy it out; saving a reference obtained from a temporary dangles at the end of the full expression. Never return a non-const reference to a private member, since that is public write access in disguise.
+
+### What is the difference between data hiding and encapsulation?
+
+Encapsulation is bundling data with the functions that operate on it into one type. Data hiding is making the data private so the only path in is the public interface. A class that does both is what people mean by an encapsulated class in C++. The payoff is that invariants are enforced in one place, validation is possible, the representation can change without breaking callers, and a bad value can only have been written by the class's own code.
+
 ## Practice history
 
-- 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions). 14.4 through 14.8 (const members, access specifiers, access functions, returning references to members, data hiding) still to read.
+- 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
 - 12/09/2026 getcracked: Class inStruction (`class A; struct A {}` compiles, definition sets access) ok. X ways (four overload aspects incl. ref-qualifier) ok. Haha… (`Y y(X());` most vexing parse, compilation error at `y.f()`) ok. Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`) ok. Note for the platform's explanation of Invoke me.: `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong.
 - Anki: top-level const on a parameter is not part of the signature; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 

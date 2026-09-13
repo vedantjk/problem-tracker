@@ -29,13 +29,15 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
 | [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
-| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
+| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
 
 ## Where is...? (every concept, A-Z)
 
 - [[fallthrough]] attribute / fallthrough rules → control_flow
 - [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
 - ABI / RAX:RDX struct return → functions_scope_lambdas
+- access functions / getters and setters (naming styles, behavior over setAlive, value vs const& return) → classes
+- access specifiers (public/private/protected; per-class not per-object; struct/class default) → classes
 - ADL (friend found only by) → expressions (operator overloading)
 - aggregate rules → initialization_deduction
 - aliasing (strict) rule + audit checklist → bits_punning
@@ -86,6 +88,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
 - cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - dangling pointer (distinguish ended lifetime from released storage) → pointers_references
+- data hiding vs encapsulation (five benefits; public-first member order; prefer non-member functions) → classes
 - data races → ub_catalog (pointer)
 - default args don't apply through function pointers → pointers_references
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
@@ -116,6 +119,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - function pointers (syntax, decay, overload disambiguation, no void* conversion) → pointers_references
 - function try blocks (ctor init-list catches, implicit rethrow) → error_handling
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
+- getter returning const& (match member type; dangling when called on a temporary; never non-const& to private) → classes
 - halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - header guards / #pragma once → build_linkage
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
@@ -155,6 +159,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - most vexing parse → initialization_deduction
 - move constructor / move assignment (syntax, steal-and-null, when selected, self-move check, swap recursion trap) → smart_pointers_move
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
+- mutable (modify from const member function) → classes
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
@@ -280,7 +285,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | std::filesystem (C++ Stories — read 12/09) | iostreams | no questions |
 | Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class inStruction ok |
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, Haha… ok, Invoke me. ok |
-| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — not yet read) | classes | (pending) |
+| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | (pending) |
 
 ## Quizzes
 
