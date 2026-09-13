@@ -306,4 +306,15 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 ### stringstream, string_view, and from_chars
 - ✓ [Returned View](https://getcracked.io/question/2051) — Medium
 
+### C-Style Arrays
+- ✓ [#square](https://getcracked.io/question/517) — Cooked
+- ✗ [Indexing arrays](https://getcracked.io/question/725) — Cooked
+- ✓ [The headers you never knew](https://getcracked.io/question/423) — Cooked
+- ✓ [3D Arrays](https://getcracked.io/question/768) — Easy
+- ✓ [Allocation decisions](https://getcracked.io/question/787) — Easy
+- ✓ [To delete or not to delete](https://getcracked.io/question/1024) — Easy
+- ✗ [[0]](https://getcracked.io/question/783) — Medium
+- ✓ [Array, Array, go away, come again another day.](https://getcracked.io/question/860) — Medium
+- ○ [3D Space](https://getcracked.io/problem/8/3d-space) — problem
+
 <!-- gc-questions:end -->

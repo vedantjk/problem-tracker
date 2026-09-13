@@ -85,6 +85,7 @@ NODE_TO_FILES = {
     "I/O Streams: Console": ["iostreams"],
     "I/O Streams: File": ["iostreams"],
     "std::filesystem": ["iostreams"],
+    "C-Style Arrays": ["arrays", "pointers_references"],
     "Classes and Structs": ["classes"],
     "Member Functions": ["classes"],
     "Const Classes and Functions & Access Specifiers": ["classes"],

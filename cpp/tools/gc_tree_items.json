@@ -3867,7 +3867,7 @@
 "Cooked",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/725",
@@ -3877,7 +3877,7 @@
 "Cooked",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/423",
@@ -3887,7 +3887,7 @@
 "Cooked",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+2)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/768",
@@ -3897,7 +3897,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/787",
@@ -3907,7 +3907,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/1024",
@@ -3917,7 +3917,7 @@
 "Easy",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+3)]:opacity-25 lucide lucide-check size-3 text-primary-foreground"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/question/783",
@@ -3927,7 +3927,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 },
 {
 "href": "/question/860",
@@ -3937,7 +3937,7 @@
 "Medium",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 [&>path:nth-of-type(n+4)]:opacity-25 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-check size-3 text-primary-foreground"
 },
 {
 "href": "/problem/8/3d-space",

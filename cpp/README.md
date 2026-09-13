@@ -30,11 +30,13 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
 | [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, constructors (non-aggregate, never const), member initializer lists (declaration order, three-source priority, body assignment is worse), default constructors (one only, implicit vs = default vs user-provided and zero-init), delegating constructors, temporaries + six init forms for class types, copy constructor (reference param, = default / = delete), converting constructors + explicit (one user-defined conversion), destructors (reverse order, implicit, std::exit skips), the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
+| [arrays.md](arrays.md) | C-style array declaration/init rules (constexpr length, `int i[0]` ill-formed, omitted length, value-init), sizeof vs std::size/ssize, decay (four non-decay contexts, parameter adjustment, length loss, auto vs auto&, typeid), pointer arithmetic and subscripting (`a[n]` = `*(a+n)`, `n[a]`, relative indices, negative index, begin/end traversal, range-for expansion, multidim flattening), heap arrays (`delete[]` needs the original pointer) and stack limits (huge local array) |
 
 ## Where is...? (every concept, A-Z)
 
 - [[fallthrough]] attribute / fallthrough rules → control_flow
 - [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
+- `delete[]` must get the pointer `new[]` returned (`arr++; delete[] arr;` UB); array of shared_ptr still needs `delete[]` → arrays
 - `obj(i);` declares a variable named i (parenthesized declarator), not a temporary → classes
 - ABI / RAX:RDX struct return → functions_scope_lambdas
 - access functions / getters and setters (naming styles, behavior over setAlive, value vs const& return) → classes
@@ -48,7 +50,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 - Anki-priority repeat miss: auto& keeps const → initialization_deduction
 - anonymous namespace / internal linkage → build_linkage
 - argv[argc] == 0 guarantee (null-terminated argv) → pointers_references
+- array decay (four non-decay contexts: sizeof, typeid, unary &, class member, reference binding; parameter `int arr[]` is `int*`) → arrays; &x+1 vs x+1 → pointers_references
 - array decay / pointer arithmetic (&x+1 vs x+1 stride) → pointers_references
+- array length: sizeof idiom vs std::size / std::ssize (refuse pointers) vs template `T(&)[N]` → arrays
 - ASCII anchors ('A'=65, 'a'=97, '0'=48) → types_conversions
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
@@ -60,6 +64,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - braces: auto x{1,2} / initializer_list → initialization_deduction
 - break vs return (switch + loops, innermost-only, no labeled break) → control_flow
 - bump allocator (cursor allocation; optional headers and deallocation without individual space reclamation) → allocators
+- C-style array declaration (constexpr length, `int i[0]` ill-formed, omitted length, too many initializers, `auto arr[]` invalid) → arrays
 - case labels (constant, unique, '6'==54 collision) → control_flow
 - case scoping / init-in-case CE / explicit block fix → control_flow
 - catch matching (no conversions, derived→base, const&) / catch-all must be last → error_handling
@@ -135,6 +140,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - getter returning const& (match member type; dangling when called on a temporary; never non-const& to private) → classes
 - halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - header guards / #pragma once → build_linkage
+- huge local array → stack overflow at frame entry (`int a[10000000]`) → arrays; stack vs heap → memory_layout
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
 - if (x) non-bool condition conversion → control_flow
 - if-else vs switch (when to use which) → control_flow
@@ -177,6 +183,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - move constructor / move assignment (syntax, steal-and-null, when selected, self-move check, swap recursion trap) → smart_pointers_move
 - move ctor forwarding by name (`Base(other)` copies; needs `Base(std::move(other))`) → classes; named rvalue ref is an lvalue → value_categories
 - moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
+- multidimensional array pointer arithmetic (`int(*p)[5][2]`, p+1 skips a block, flatten the index) → arrays
 - mutable (modify from const member function) → classes
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
@@ -249,6 +256,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - strings: literals deduce const char*, ""s/""sv → initialization_deduction
 - struct: no constructors (keeps aggregate); no-data class → namespace → classes
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
+- subscripting = `*((a)+(n))`: `n[a]`, `2["123"]`, relative/negative indices, `(*arr + 1)` trap → arrays
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
 - temporary class objects (`T{}` vs `T()`, dies at end of full expression, prvalue) → classes; lifetime extension → initialization_deduction
@@ -257,6 +265,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - thread_local (per-thread copy, lazy locals, fs-segment access) → initialization_deduction
 - top-level vs low-level const (deduction drop rules, auto* vs auto) → initialization_deduction
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
+- typeid on arrays (strips references; `int[2]` != `int[3]`; decayed `auto` is `int*`) → arrays
 - UB taxonomy + master list → ub_catalog
 - uninitialized reads → initialization_deduction, ub_catalog
 - unique_ptr API (get/reset/release, bool, T[], returning by value, as member → move-only + pimpl, custom deleter and size, misuses) → smart_pointers_move
@@ -307,6 +316,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
 | Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
 | Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | 5 ok; wrong first attempt: Stop! Don't move!, Copying and Not Copying, r-expression, Tear it out root and stem, ? 1 : 2 -> auto, 96% of you will fail this., Who'd you call? |
+| C-Style Arrays (learncpp 17.7-17.9 — read 13/09) | arrays + pointers_references | 6 ok; wrong first attempt: Indexing arrays, [0]; 3D Space problem not attempted |
 
 ## Quizzes
 
@@ -360,7 +370,6 @@ The concept index and quiz tables are navigation and history, so their compact l
 
 Tree nodes not yet mapped to a concept file (mostly Intermediate material). When a file is created for one of these, add the mapping in `cpp/tools/gc_links.py`.
 
-- **C-Style Arrays** — 3/9 attempted: ✓ [The headers you never knew](https://getcracked.io/question/423), ✓ [Allocation decisions](https://getcracked.io/question/787), ✓ [To delete or not to delete](https://getcracked.io/question/1024)
 - **Multidimensional C-Style Arrays** — 0/1 attempted
 - **std::array** — 0/1 attempted
 - **std::vector** — 0/5 attempted
