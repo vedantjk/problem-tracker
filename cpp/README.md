@@ -29,7 +29,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
 | [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
-| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, constructors (non-aggregate, never const), member initializer lists (declaration order, three-source priority, body assignment is worse), default constructors (one only, implicit vs = default vs user-provided and zero-init), delegating constructors, the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
+| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, constructors (non-aggregate, never const), member initializer lists (declaration order, three-source priority, body assignment is worse), default constructors (one only, implicit vs = default vs user-provided and zero-init), delegating constructors, temporaries + six init forms for class types, copy constructor (reference param, = default / = delete), converting constructors + explicit (one user-defined conversion), destructors (reverse order, implicit, std::exit skips), the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
 
 ## Where is...? (every concept, A-Z)
 
@@ -86,6 +86,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - constructor basics (runs after storage exists; class name, no return type; never const; any ctor makes non-aggregate) → classes
 - continue (runs for's end-expression; while-loop infinite-loop trap) → control_flow
 - conversion vs promotion ranks (overloads) → types_conversions
+- converting constructor / one user-defined conversion per implicit sequence (`printEmployee("Joe")` fails) → classes
+- copy constructor (memberwise implicit; must take reference; = default / = delete; no side effects) → classes
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
 - copy-initialization `C c2 = c1;` is one copy-constructor call, not construct-then-assign → classes
 - cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
@@ -99,6 +101,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
 - delegating constructors (`: Foo{...}` in the initializer list; delegate or initialize, not both; body-call makes a temporary) → classes
 - designated initializers (all 6 CE cases) → initialization_deduction
+- destructor basics (~T, one per class, reverse order, implicit runs member dtors, std::exit skips locals) → classes; throwing dtors → error_handling
 - destructor exception specifications (implicit noexcept and termination cases) → error_handling
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
 - double delete from shallow-copied owning pointer → smart_pointers_move
@@ -111,6 +114,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - exceptions (all of it: throw/try/catch, unwinding, terminate, cost model) → error_handling
 - EXIT_SUCCESS / status codes → build_linkage
 - expected (std::expected/unexpected/unexpect, error(), transform_error) → error_handling
+- explicit constructors (blocks copy-init, copy-list-init, implicit args, `return {x}`; allows direct, direct-list, T{x}, static_cast) → classes
 - explicit object parameter (C++23 `this X& self`; member pointer becomes plain function pointer) → classes
 - file streams (ifstream/ofstream/fstream, RAII, open modes, text vs binary, buffering, safe read loops) → iostreams
 - filesystem (path composition/decomposition, queries and mutations, error_code overloads, directory traversal, race/symlink pitfalls) → iostreams
@@ -136,6 +140,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - implicit move operations (suppressed by any user-declared copy/move/dtor; memberwise; raw pointer copied not nulled) → smart_pointers_move
 - implicit object / this / member access before declaration → classes
 - infinite loops (while(true) idiom, semicolon null-body, unsigned counter wrap) → control_flow
+- initialization forms for class types (six forms; copy forms skip explicit; list forms reject narrowing, prefer initializer_list) → classes
 - inline (ODR meaning, requirements, why not everything) → build_linkage
 - input/output streams (hierarchy, cin/cout/cerr/clog, >> vs get/getline, ignore/peek/unget/putback, flags/manipulators, precision/width/fill/alignment, flush/endl) → iostreams
 - integral promotion (sub-int → signed int) → types_conversions
@@ -240,6 +245,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
+- temporary class objects (`T{}` vs `T()`, dies at end of full expression, prvalue) → classes; lifetime extension → initialization_deduction
 - terminate (uncaught throw; unwind impl-defined) → error_handling
 - ternary (precedence, branch unification, lvalue) → expressions
 - thread_local (per-thread copy, lazy locals, fs-segment access) → initialization_deduction
@@ -294,7 +300,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class vs Struct ok, Struct over Class ok; Class inStruction MISSED, wtf const MISSED |
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
 | Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
-| Special Member Functions (learncpp 14.9-14.12 — read 12/09; 14.13-14.16, 15.4 pending) | classes + smart_pointers_move | (pending, 12 questions) |
+| Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | (pending, 12 questions) |
 
 ## Quizzes
 

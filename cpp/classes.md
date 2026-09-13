@@ -189,6 +189,47 @@ A delegating constructor may do nothing else in its initializer list: a construc
 
 Two cheaper tools often remove the need to delegate. Default arguments collapse `Employee(name)` and `Employee(name, id)` into `Employee(std::string_view name, int id = 0)`; order the parameters so members the caller must supply come first and optional ones last, and declare the members in that same order. For shared body logic rather than shared initialization, a private helper member function called from each body avoids duplication without any constructor-to-constructor call.
 
+## Temporaries and the six initialization forms
+
+A temporary class object is written as the type followed by an initializer, `IntPair{5, 6}` or `Foo(1, 2)`, or as a bare braced list `{7, 8}` where the context fixes the type, such as a function argument or a return statement. Prefer the braced forms: `Foo()` and `Foo(x)` can be mistaken for declarations, and parentheses allow narrowing. `Foo()` and `Foo{}` both value-initialize. A temporary lives from its creation to the end of the full expression that contains it, so `print(IntPair{3, 4});` builds the pair, calls `print`, and destroys it at the semicolon. In an expression a temporary is a prvalue, which is why it cannot bind to a non-const lvalue reference parameter. `static_cast<T>(x)` also produces a temporary, direct-initialized from `x`; use it for narrowing and fundamental types, and `T{x}` for class types where narrowing protection and list constructors matter. The value-category details and lifetime extension by a `const&` are in [value_categories.md](value_categories.md) and [initialization_deduction.md](initialization_deduction.md).
+
+Class objects accept the same six initialization forms as fundamental types, and each one runs overload resolution over the constructors:
+
+```cpp
+Foo f1;           // default-initialization: default constructor
+Foo f2{};         // value-initialization: default constructor (preferred)
+Foo f3 = 3;       // copy-initialization: non-explicit Foo(int) only
+Foo f4(4);        // direct-initialization: any Foo(int), narrowing allowed
+Foo f5{5};        // direct-list-initialization: any Foo(int), no narrowing (preferred)
+Foo f6 = {6};     // copy-list-initialization: non-explicit Foo(int), no narrowing
+```
+
+The forms differ in three ways. List forms reject narrowing. Copy forms consider only non-explicit constructors. List forms prefer an `initializer_list` constructor when one matches, which is the `std::vector<int>{10, 1}` trap in [initialization_deduction.md](initialization_deduction.md). When the initializer is another `Foo`, every form calls the copy constructor: `Foo f7 = f3;`, `Foo f8(f3);`, `Foo f9{f3};`, and `Foo f10 = {f3};` are the same call.
+
+Copy elision lets the compiler skip a copy or move it would otherwise perform, even when the copy constructor has side effects such as printing, so counting constructor calls by output is unreliable. `Something s{Something{5}};` behaves as `Something s{5};`. Since C++17 the same-type prvalue cases are guaranteed rather than optional: `return Something{};` and initialization from a by-value return construct the destination directly, and the copy constructor need not even exist for them. Named return value optimization, `Something s; return s;`, remains optional, so a class that relies on it still needs an accessible copy or move constructor. The rules are in [functions_scope_lambdas.md](functions_scope_lambdas.md).
+
+## The copy constructor
+
+A copy constructor initializes a new object from an existing object of the same type. If the class declares none, the compiler generates a public one that copies member by member, which is correct for types whose members own themselves and wrong for a raw owning pointer, as the `B = A` question above shows for its assignment twin. The user-written form takes a `const Fraction&` and initializes each member in the initializer list. The parameter must be a reference: a by-value parameter would need to be copied in, which calls the copy constructor, which needs to copy its parameter, and so on without end, and compilers reject it. Use a const lvalue reference so temporaries and const objects can be copied.
+
+The copy constructor runs whenever a new object is made from an existing one: `Fraction fCopy{f};`, passing a `Fraction` by value, and, absent elision, returning one by value. It should have no side effects beyond producing an equal copy, and the implicit one is preferred unless the class owns a resource. `Fraction(const Fraction&) = default;` requests the generated one explicitly, which is useful when another declaration would suppress it. `Fraction(const Fraction&) = delete;` makes the type non-copyable, so `Fraction fCopy{f};` and pass-by-value are compile errors. A class that needs a user-written copy constructor almost always also needs a user-written destructor and copy assignment operator, the rule of three, extended to five by the move operations; that discussion lives in [smart_pointers_move.md](smart_pointers_move.md).
+
+## Converting constructors and `explicit`
+
+Any constructor that can be called with one argument is a converting constructor by default: the compiler may use it for an implicit conversion, so with `Foo(int)` the call `printFoo(5)` builds a `Foo` from `5` on its own. Only one user-defined conversion may take part in any implicit conversion sequence. Given `Employee(std::string_view)`, the call `printEmployee("Joe")` fails, because it would need `const char*` to `string_view` and then `string_view` to `Employee`, which is two. `printEmployee("Joe"sv)` or `printEmployee(Employee{"Joe"})` each leave one conversion for the compiler and compile.
+
+Marking a constructor `explicit` removes it from implicit conversions. It can then still be used by direct-initialization `Dollars d(5)`, direct-list-initialization `Dollars d{5}`, explicit construction of a temporary `print(Dollars{5})`, and `static_cast<Dollars>(5)`. It is not considered for copy-initialization `Dollars d = 5;`, copy-list-initialization `Dollars d = {5};`, an argument `print(5)`, or a return statement `return 5;` or `return {5};` in a function returning `Dollars`. Note that `return {};` in a function returning a type with an explicit default constructor is also an error; `return Dollars{};` is required.
+
+Make single-argument constructors explicit by default. The exception is when the constructed object is semantically the same thing as the argument and the conversion is cheap, as with `std::string_view` from a C string; `std::string` from a C string is also implicit for convenience, even though it allocates. Copy and move constructors perform no conversion and are never marked explicit. Default and multi-argument constructors are usually left implicit too, though `explicit` on a multi-argument constructor blocks `Foo f = {1, 2};` and `return {1, 2};` and is occasionally wanted for that.
+
+## Destructors
+
+A destructor is the member function that runs automatically when an object's lifetime ends: at the closing brace for a local, at `delete` for a heap object, at the end of the full expression for a temporary, and when the enclosing object is destroyed for a member. It is named with a tilde and the class name, takes no parameters, has no return type, and a class has exactly one. Locals in one scope are destroyed in reverse order of construction. If the class declares no destructor the compiler generates one with an empty body, which then runs the destructors of the members and bases, so a class made of `std::string` and `std::vector` members needs nothing written.
+
+Write a destructor only when the object holds something that must be released or finished: memory acquired with `new`, a file handle, a socket, a queue that should be flushed on close. Doing the cleanup in the destructor means every path out of a scope, including early returns and exceptions, releases the resource without the caller remembering anything. That pattern is RAII, and it is why owning a resource through a member with its own destructor is preferred to writing cleanup by hand. A class that manages a resource in its destructor also needs correct copy and move behavior, which is the rule of five again.
+
+Two things skip destructors. `std::exit()` terminates the program without unwinding the stack, so no local's destructor runs; only static-storage objects are destroyed. An exception that is never caught may terminate without unwinding, and whether destructors run first is implementation-defined. Destructors should not let exceptions escape; the reasoning and the `noexcept` interaction are in [error_handling.md](error_handling.md).
+
 ## What can overload a member function
 
 A function is identified by its name plus its signature, and a member function's signature has more parts than a free function's. Each of the following can differ between two member functions with the same name and produce a distinct overload:
@@ -304,6 +345,11 @@ On the Itanium ABI a pointer to member function is two words (a function address
 - **Invalid: two default constructors.** `Foo()` alongside `Foo(int = 1)` makes `Foo{}` ambiguous.
 - **Invalid: a delegating constructor that also initializes a member.** `Foo() : Foo(1), m_y{2} {}` is rejected; delegate or initialize, not both.
 - **Undefined behavior: initializer list order that reads an uninitialized member.** Members initialize in declaration order, so `: m_y{...}, m_x{m_y}` with `m_x` declared first reads an indeterminate `m_y`.
+- **Invalid: a by-value copy constructor.** `Fraction(Fraction f)` would need to copy its own parameter; the language rejects it.
+- **Invalid: two user-defined conversions in one implicit sequence.** `printEmployee("Joe")` with `Employee(std::string_view)` fails; pass `"Joe"sv` or `Employee{"Joe"}`.
+- **Invalid: copy-initialization through an explicit constructor.** `Dollars d = 5;`, `print(5)`, and `return {5};` all fail; `Dollars d{5}` and `Dollars{5}` work.
+- **Logical error: counting copies by printing from the copy constructor.** Elision may remove the call, and since C++17 the prvalue cases are guaranteed to.
+- **Logical error: expecting destructors after `std::exit`.** Locals are not unwound; only static-storage objects are destroyed.
 - **Logical error: calling a constructor from a constructor body.** `Employee(name, id);` builds and destroys a temporary; the object being constructed is unchanged.
 - **Undefined behavior: default member initializer reading a later member.** Members initialize in declaration order, so `int a{ b }; int b{ 5 };` reads an uninitialized `b`.
 - **Invalid: returning a non-const reference from a const member function.** `int& get() const` fails because the member is const through `this`; return `const int&`.
@@ -388,6 +434,18 @@ No. Copy-initialization from an object of the same type is one call to the copy 
 
 The implicitly generated copy assignment does a memberwise copy, so `B.ptr = A.ptr` and `B.size = A.size`. B's old array is leaked because its only pointer was overwritten, and A and B now share one array while each believes it owns it. Nothing fails on that line. Later, writes through either object show up in the other, and at scope exit both destructors `delete[]` the same pointer, which is undefined behavior and usually a double-free abort. The fix is a user-written copy assignment that allocates and copies, or better, holding the array in a type that already does this, such as `std::vector` or `std::unique_ptr<int[]>`. See [smart_pointers_move.md](smart_pointers_move.md) for the rule of five and why raw owning pointers fail.
 
+### Why must the copy constructor take its parameter by reference?
+
+Because passing by value is itself a copy. To call `Fraction(Fraction f)` the compiler would have to copy the argument into `f`, and the only way to do that is the copy constructor being defined, so the call never bottoms out. The standard makes the by-value form ill-formed. `const Fraction&` is the right parameter: it binds to lvalues, temporaries, and const objects alike, and the copy constructor has no business modifying its source.
+
+### What does `explicit` on a constructor actually block?
+
+Implicit conversion through that constructor. Concretely, copy-initialization `T t = arg;`, copy-list-initialization `T t = {arg};`, passing `arg` where a `T` parameter is expected, and `return arg;` or `return {arg};` from a function returning `T`. It leaves direct-initialization, direct-list-initialization, explicit temporaries `T{arg}`, and `static_cast<T>(arg)` available, so the caller can always convert by saying so. The default rule is to mark single-argument constructors explicit unless the argument really is the same value in a different type and the conversion is cheap.
+
+### When does a destructor not run?
+
+When the program leaves through `std::exit` or `std::abort` rather than by unwinding, when an uncaught exception terminates without unwinding, when an object was allocated with `new` and never deleted, and when a constructor throws partway through, in which case the object's own destructor never runs though its completed members are destroyed. A moved-from object still gets its destructor, which is why move operations must leave the source in a state its destructor can handle.
+
 ### Can a member function access the private members of another object of the same class?
 
 Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
@@ -402,10 +460,11 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 
 ## Practice history
 
-- 12/09/2026: read learncpp 14.9 (constructors), 14.10 (member initializer lists), 14.11 (default constructors and default arguments), 14.12 (delegating constructors). 14.13 through 14.16 and 15.4 (temporaries, copy constructor, copy elision, converting constructors and explicit, destructors) still to read under the Special Member Functions node.
+- 12/09/2026: read learncpp 14.9 (constructors), 14.10 (member initializer lists), 14.11 (default constructors and default arguments), 14.12 (delegating constructors).
+- 13/09/2026: read learncpp 14.13 (temporary class objects), 14.14 (copy constructor), 14.15 (class initialization and copy elision), 14.16 (converting constructors and explicit), 15.4 (destructors). Special Member Functions node reading complete; its 12 questions not yet attempted.
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
 - 12/09/2026 getcracked, per platform record (rescraped 13/09): Class vs Struct ok, Struct over Class ok, X ways (four overload aspects) ok, skibidi pointer ok, & and && (`A().doSomething()` picks `&&`, named object picks `&`, prints 21) ok. MISSED: Class inStruction (`class A; struct A {}` compiles, definition sets access). MISSED: wtf const (`const C c;` with `C() = default` and uninitialized `int i` is a compile error, not junk; const-default-constructible rule). MISSED: Haha… (`Y y(X());` most vexing parse, error at `y.f()`). MISSED: Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`). MISSED: Drop these. (out-of-class definition may drop top-level parameter const and the default argument). Notes on the platform's explanations: for Invoke me., `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong; for Drop these., `int* const` is top-level const and is dropped from the signature like `const int`, only `const int*` and `const int&` are part of the type.
-- Anki: members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- Anki: copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
