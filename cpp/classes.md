@@ -161,6 +161,16 @@ Members are initialized in the order they are declared in the class, not the ord
 
 Three sources compete for a member's initial value, and the priority is fixed. An entry in the member initializer list wins. Otherwise the member's default member initializer, the `{}` or `= value` written at the declaration, is used. Otherwise the member is default-initialized, which for a scalar means indeterminate. So in a class with `int m_x{}; int m_y{2}; int m_z;` and a constructor `Foo(int x) : m_x{x} {}`, `Foo foo{6};` gives `m_x == 6`, `m_y == 2`, and `m_z` uninitialized. This is the same rule that made `Bad` earlier in this file undefined: a default member initializer is just the fallback for a member the constructor did not list.
 
+Three more rules from the same section, each of which the platform tests. First, a constructor parameter that has the same name as a member shadows it inside the body. In the initializer list `x(x + 2)` the outer `x` can only be the member and the inner one the parameter, so that works, but in the body an unqualified `x` is the parameter, and `z = x + y` computes from the arguments, not from the members just initialized. With `Dummy(int x = 0, int y = 1) : x(x + 2), y(y + 3) { z = x + y; }` and `Dummy d(7);`, the members are 9 and 4 while `z` is 7 + 1, so printing `z`, `x`, `y` gives `894`. Write `this->x` or use an `m_` prefix and the ambiguity disappears. Second, a reference member has no fallback: it must appear in the member initializer list or have a default member initializer, and `z = x;` in the body is an assignment through a reference that was never bound, so the constructor does not compile. Third, `const` does not stop the list from winning over a default member initializer. `const int z = 2;` together with `z(x + 4)` in the list initializes `z` once, to `x + 4`; the `= 2` is only the fallback for constructors that do not mention `z`. So `Dummy(int x) : x(x + 2), y(x + 3), z(x + 4) {}` with `Dummy d(1)` prints `345`.
+
+```cpp
+class Dummy {
+    int x, y, &z;
+public:
+    Dummy(int x) : x(x + 2), y(x + 3) { z = x; }   // error: reference member z is not initialized
+};
+```
+
 ## Default constructors, default arguments, and `= default`
 
 A default constructor is one that can be called with no arguments. It runs for both `Foo foo{};` and `Foo foo;`, though value-initialization with empty braces is the form to prefer for class types, for a reason below. A constructor whose parameters all have default arguments is also a default constructor, so `Foo(int x = 0, int y = 0)` serves `Foo{}` and `Foo{6, 7}` alike. A class may have only one default constructor: declaring both `Foo()` and `Foo(int x = 1, int y = 2)` compiles, but `Foo foo{};` is then ambiguous and fails.
@@ -419,6 +429,8 @@ On the Itanium ABI a pointer to member function is two words (a function address
 - **Invalid: two default constructors.** `Foo()` alongside `Foo(int = 1)` makes `Foo{}` ambiguous.
 - **Invalid: a delegating constructor that also initializes a member.** `Foo() : Foo(1), m_y{2} {}` is rejected; delegate or initialize, not both.
 - **Undefined behavior: initializer list order that reads an uninitialized member.** Members initialize in declaration order, so `: m_y{...}, m_x{m_y}` with `m_x` declared first reads an indeterminate `m_y`.
+- **Invalid: a reference member left out of the member initializer list.** `int& z;` cannot be default-initialized and cannot be assigned in the body before it is bound; list it, or give it a default member initializer.
+- **Logical error: a constructor parameter shadowing a member.** In the body, `z = x + y` uses the parameters `x` and `y`, not the members the list just set. Use `this->x` or an `m_` prefix.
 - **Invalid: a by-value copy constructor.** `Fraction(Fraction f)` would need to copy its own parameter; the language rejects it.
 - **Invalid: two user-defined conversions in one implicit sequence.** `printEmployee("Joe")` with `Employee(std::string_view)` fails; pass `"Joe"sv` or `Employee{"Joe"}`.
 - **Invalid: copy-initialization through an explicit constructor.** `Dollars d = 5;`, `print(5)`, and `return {5};` all fail; `Dollars d{5}` and `Dollars{5}` work.
@@ -567,6 +579,18 @@ int main() {
 
 The three places people slip. First, `a = A()` is three events, not one: the temporary is constructed, move-assigned from, and destroyed at the end of the full expression. Second, `return std::move(a)` from a by-value parameter runs the move constructor: named return value optimization never applies to parameters, so `return a;` would also have moved, and the explicit `std::move` changes nothing here but would defeat elision for a local. Third, two objects die when the call `foo(*p)` completes, the parameter and the unnamed return value that nobody bound; the parameter may be destroyed at function exit or at the end of the calling full expression, which is implementation-defined, but either way both `f`s print before the next statement. `A b = A();` prints only `a` because since C++17 the prvalue initializes `b` directly and no copy or move constructor is involved, however loudly they print.
 
+### `Dummy(int x = 0, int y = 1) : x(x + 2), y(y + 3) { z = x + y; }` and `Dummy d(7); d.print();` printing `z`, `x`, `y`. What comes out?
+
+`894`. In the initializer list the outer name is the member and the inner one the parameter, so `x` becomes 9 and `y` becomes 4. In the body the unqualified `x` and `y` are the parameters, which shadow the members, so `z` is 7 + 1. The members would only be reached as `this->x`.
+
+### A class has `int x, y, &z;` and the constructor initializes `x` and `y` in the list and assigns `z = x;` in the body. What happens?
+
+It does not compile. A reference member must be bound when the object is created, which means in the member initializer list or by a default member initializer. Assignment in the body writes through the reference, and there is nothing to write through. The same rule applies to `const` members.
+
+### `const int z = 2;` and a constructor with `z(x + 4)` in its initializer list. Legal, and which value wins?
+
+Legal, and the list wins. A default member initializer is only the fallback used when a constructor does not name the member. `const` restricts assignment after initialization, not the choice of initializer. `Dummy(int x) : x(x + 2), y(x + 3), z(x + 4) {}` with `Dummy d(1)` prints `345`.
+
 ### What does friendship grant, and what does it not?
 
 A friend function or class gets access to the private and protected members of the granting class, nothing more: it does not become a member, gets no implicit object, and takes on none of the class's interface. Friendship is one-directional, not transitive, and not inherited, so befriending `Display` gives `Storage` no access to `Display`, a friend of `Display` gets nothing from `Storage`, and a class derived from `Display` is not a friend. The practical guidance is to keep friends few, let them use the public interface where they can, and reach for a non-friend plus an accessor when that suffices.
@@ -591,7 +615,8 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 - 13/09/2026 Special Member Functions node, per platform record: Don't end me. ok, It's hidden ok, Not this, again. ok, Do it for you. ok, I'm here! Now I'm gone. ok. Wrong first attempt (retest in a week): Stop! Don't move! (declaring an ordinary constructor does not suppress the implicit move constructor; copy ctor, copy assignment, and destructor do). Copying and Not Copying (`std::initializer_list<A> i{a}` copies the element once; `f(i)` copies only the handle; prints `1`). r-expression (`Car(Car&& other) : Vehicle(other)` copies the base because `other` is an lvalue; prints AD). Tear it out root and stem (`a.~A()` on an automatic object then scope exit destroys twice; UB). ? 1 : 2 -> auto (conditional with different class types converts toward the one reachable type; `auto` deduces `D`; prints cD2d2). 96% of you will fail this. (six init forms plus `obj c();` vexing parse and `obj(i);` declaration; prints 112312221). Who'd you call? wrong first attempt (full special-member trace; `a = A()` is ctor + move assign + dtor, `return std::move(param)` move-constructs since parameters are never elided, parameter and discarded return value both die at the call; prints abaefHcffaadffKf).
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
 - 12/09/2026 getcracked, per platform record (rescraped 13/09): Class vs Struct ok, Struct over Class ok, X ways (four overload aspects) ok, skibidi pointer ok, & and && (`A().doSomething()` picks `&&`, named object picks `&`, prints 21) ok. MISSED: Class inStruction (`class A; struct A {}` compiles, definition sets access). MISSED: wtf const (`const C c;` with `C() = default` and uninitialized `int i` is a compile error, not junk; const-default-constructible rule). MISSED: Haha… (`Y y(X());` most vexing parse, error at `y.f()`). MISSED: Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`). MISSED: Drop these. (out-of-class definition may drop top-level parameter const and the default argument). Notes on the platform's explanations: for Invoke me., `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong; for Drop these., `int* const` is top-level const and is dropped from the signature like `const int`, only `const int*` and `const int&` are part of the type.
-- Anki: `x = T()` is three events (ctor, move assign, dtor); returning a by-value parameter always moves, never elides; a named rvalue reference is an lvalue, so `Base(other)` in a move ctor copies; explicit destructor call on an automatic object is UB (double destruction); `obj(i);` declares `i`; `?:` with two class types picks the one the other converts to; copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- 13/09/2026 Construction Order node (the single-class part; the inheritance part is in [inheritance.md](inheritance.md)), per platform record: Under the Shadow (`z = x + y` in the body uses the shadowing parameters, prints 894) ok. Wrong first attempt (retest in a week): References in Class (a reference member must be in the initializer list; `z = x` in the body is an error). Is it const? (initializer list beats the default member initializer even for a `const` member; prints 345).
+- Anki: `x = T()` is three events (ctor, move assign, dtor); returning a by-value parameter always moves, never elides; a named rvalue reference is an lvalue, so `Base(other)` in a move ctor copies; explicit destructor call on an automatic object is UB (double destruction); `obj(i);` declares `i`; `?:` with two class types picks the one the other converts to; copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; a parameter with a member's name shadows the member in the body; reference and const members must be in the initializer list, and the list beats the default member initializer; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
@@ -628,5 +653,17 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
 - ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
 - ✗ [Who'd you call?](https://getcracked.io/question/1233) — Hard
+
+### Access Modifiers
+- ✓ [private, public, protected](https://getcracked.io/question/862) — Easy
+
+### Construction Order
+- ✓ [Constructing it, with it.](https://getcracked.io/question/705) — Easy
+- ✓ [Constructing it.](https://getcracked.io/question/706) — Easy
+- ✓ [Do you understand creation?](https://getcracked.io/question/703) — Easy
+- ✗ [Is it const?](https://getcracked.io/question/735) — Easy
+- ✓ [Parents are always right?](https://getcracked.io/question/1081) — Easy
+- ✗ [References in Class](https://getcracked.io/question/734) — Easy
+- ✓ [A mix of creations.](https://getcracked.io/question/704) — Hard
 
 <!-- gc-questions:end -->

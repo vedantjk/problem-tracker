@@ -101,6 +101,16 @@ NODE_TO_FILES = {
     "Special Member Functions": ["smart_pointers_move", "classes"],
     "Friends and Enemies": ["classes", "expressions"],
     "Universal References & Perfect Forwarding": ["value_categories"],
+    "Internals": ["containers"],
+    "Iterator Categories": ["iterators_algorithms"],
+    "STL Algorithms": ["iterators_algorithms"],
+    "Hashing": ["associative_containers"],
+    "std::unordered_map & std::map": ["associative_containers"],
+    "std::set & std::unordered_set": ["associative_containers"],
+    "Access Modifiers": ["inheritance", "classes"],
+    "Construction Order": ["inheritance", "classes"],
+    "Adding & Hiding Functionality": ["inheritance"],
+    "Pure Virtual Functions and Abstract Classes": ["inheritance"],
 }
 
 

@@ -106,6 +106,8 @@ class C2 { int i1, i2, i3; long l; short s; char c; };   // repacked
 
 class Base    { virtual void f(); int a; };                // A common x86-64 ABI layout is 16 bytes.
 class Derived : public Base { virtual void g(); int b; };  // Some ABIs reuse tail padding; inspect this target.
+// Itanium (GCC/Clang): class A { int i1; virtual void foo(); }; class B : A { int i2; };  sizeof(A) == sizeof(B) == 16,
+// i2 sits in A's 4 bytes of tail padding because A is not POD-for-layout. MSVC never reuses it: 24.
 
 class ABase { int m; };
 class BBase : public virtual ABase { int m; };  // Virtual-base metadata is ABI-specific.

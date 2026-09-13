@@ -36,8 +36,28 @@ Returning a vector by value is fine, and the reason is move semantics. Copy sema
 
 Used as a stack, a vector grows with `push_back` and `emplace_back` and shrinks with `pop_back`, with `back()` reading the top and `size()` the depth. A push past the capacity reallocates, and each such reallocation reserves extra room, doubling on GCC and Clang and growing by half on MSVC, so pushes are amortized constant. To avoid the early reallocations, `reserve(n)` raises the capacity without touching the length; `resize(n)` or the length constructor would also create `n` elements, which is wrong for a stack. `push_back(x)` copies or moves an existing object in; `emplace_back(args...)` forwards the arguments and constructs the element in place, which avoids a temporary when the element is built at the call site. `emplace_back` will use explicit constructors and, before C++20, cannot aggregate-initialize, so prefer `push_back` when the object already exists and `emplace_back` only for in-place construction. A vector of function pointers or lambdas behaves like any other: `functions.push_back(functions.front())` copies the first pointer, and iterating the vector calls each in turn, so a print, an increment, and the print again yields `01`.
 
+## std::vector internals
+
+A `std::vector` is three pointers of type `T*`: `first`, the start of the allocation, `last`, one past the last live element, and `end`, one past the end of the allocated storage. `size()` is `last - first`, `capacity()` is `end - first`, the region up to `last` holds constructed objects, and the region between `last` and `end` is raw storage with nothing constructed in it. The allocator is conceptually a fourth member, but the default allocator is an empty class stored in a compressed pair with one of the pointers, so it takes no space and `sizeof(std::vector<int>)` is 24 on a 64-bit system whatever the element type and whatever `reserve` was called with; the elements live on the heap, not in the object. libstdc++ names the members `_M_start`, `_M_finish`, and `_M_end_of_storage`; libc++ uses `__begin_`, `__end_`, and `__end_cap_`; MSVC uses `_Myfirst`, `_Mylast`, and `_Myend` inside `_Mypair._Myval2`. There is no small-vector optimization because the standard requires that moving a vector leaves iterators and references to its elements valid, which an inline buffer would break; `std::string` may use SSO because a string move is allowed to invalidate.
+
+When `push_back` finds `last == end`, the vector allocates a larger block, moves or copies every element across, destroys the old ones, and frees the old block. libstdc++ and libc++ double the capacity; MSVC grows by one and a half times, which lets freed blocks be reused for a later growth because the sum of the earlier blocks exceeds the new one once the factor is below the golden ratio. Any factor above one gives amortized constant `push_back`. Elements are moved only if `T`'s move constructor is `noexcept`, through `std::move_if_noexcept`; otherwise they are copied to keep the strong exception guarantee, which is the practical reason to mark move constructors `noexcept`. Reallocation invalidates every iterator, pointer, and reference: `auto b = v.begin(); v.push_back(3); *b` on a two-element vector reads freed memory and is undefined behavior, while the same sequence after `v.reserve(3)` prints `1` because nothing moved. `std::vector<Bar> bar(5)` value-initializes five elements by calling the default constructor five times; since C++11 no prototype element is copied, so a `Bar` that prints `1` on default construction and `2` on copy prints `11111`. Pre-C++11 the same line printed `12222`.
+
+`std::vector<bool>` is a mandated specialization that packs one bit per element and is therefore not a container of `bool`: `operator[]` returns a proxy `reference`, not `bool&`, `data()` does not exist, `auto x = v[i]` deduces the proxy, and writes to different elements from different threads race on the shared byte. Use `std::vector<char>` or `std::vector<std::uint8_t>` for a real element container, `std::bitset<N>` for a fixed size, and `std::deque<bool>` when an actual `bool` container of dynamic size is required.
+
+```cpp
+template <typename T> struct vector { T* first; T* last; T* end; };   // 24 bytes, allocator compressed away
+std::vector<int> v{ 1, 2 };
+auto b = v.begin();
+v.push_back(3);           // capacity 2 exceeded: reallocate, b dangles, *b is UB
+v.reserve(3); auto c = v.begin(); v.push_back(4); *c;   // still 1: no reallocation
+```
+
 ## Errors and pitfalls
 
+- **Undefined behavior: an iterator, pointer, or reference held across a `push_back` that exceeds capacity.** Reallocation moves everything; `reserve` first if the handle must survive.
+- **Logical error: expecting `sizeof(v)` to change with `reserve` or elements.** The object is three pointers, 24 bytes; the buffer is on the heap.
+- **Logical error: a throwing move constructor.** The vector copies on reallocation instead of moving; mark moves `noexcept`.
+- **Logical error: treating `std::vector<bool>` as a container of `bool`.** Proxy references, no `data()`, no `bool&`.
 - **Invalid: `std::vector<int> v = 10;`** The length constructor is explicit; write `v(10)`.
 - **Invalid: `std::vector<const int>`.** Make the vector const instead.
 - **Invalid: a `std::array` whose length is a runtime value**, or single braces on an array of structs without naming the element type.
@@ -75,6 +95,26 @@ std::ssize(w);                 // C++20, signed
 
 ## Interview Q&A
 
+### What is `sizeof(std::vector<int>)` after `reserve(3)` on a 64-bit system?
+
+24. The object is three pointers, begin, end of elements, and end of storage, with the empty default allocator compressed to zero bytes. Capacity and elements live on the heap and never change the object's size.
+
+### `std::vector<Bar> bar(5);` where `Bar` prints `1` on default construction and `2` on copy. Output?
+
+`11111`. Since C++11 the count constructor value-initializes each element in place; no prototype is built and copied. Pre-C++11 the signature took a `const T&` default argument and printed `12222`.
+
+### `auto b = v.begin(); v.push_back(3); std::cout << *b;` on `std::vector<int> v{ 1, 2 }`. And after `v.reserve(3)` first?
+
+Junk and undefined behavior in the first case: capacity is 2, the push reallocates, and `b` points into freed memory. With the reserve the push stays inside capacity, nothing moves, and it prints `1`.
+
+### Why does `std::vector` have no small-buffer optimization when `std::string` does?
+
+Moving a vector must keep iterators and references to its elements valid, so the elements cannot live inside the object and move with it. A string move is permitted to invalidate, so SSO is allowed.
+
+### Why should a move constructor be `noexcept` if the type goes into a vector?
+
+Reallocation uses `std::move_if_noexcept`. A move that might throw would leave the old buffer half-moved with no way to restore it, so the vector copies instead to keep the strong guarantee, and the move constructor is never used.
+
 ### What is the one real difference between `v[i]` and `v.at(i)`?
 
 Bounds checking. `at()` validates the index at runtime and throws `std::out_of_range`; `operator[]` does not check and an invalid index is undefined behavior. Both return references, both have const overloads, and `at()` is the slower one because of the check. In practice validate the index first and use `operator[]`.
@@ -103,12 +143,14 @@ Because `std::array` is a struct with one member, the C-style array. Single brac
 
 ### Reading
 
+- 13/09/2026 (later): Raymond Chen, Inside STL: the vector; the Medium vector guide returned 403 and was not read, growth factors and `vector<bool>` are from the standard and library sources. Implement vector problem not attempted.
 - 13/09/2026: learncpp 17.1 (introduction to std::array), 17.2 (length and indexing), 17.3 (passing and returning), 17.4 (arrays of class types and brace elision), 17.6 (std::array and enumerations); Raymond Chen, Inside STL: the array. learncpp 16.1 (containers and arrays), 16.2 (std::vector and list constructors), 16.3 (unsigned length and subscript problem), 16.4 (passing std::vector), 16.5 (returning std::vector and move semantics), 16.10 (resizing and capacity), 16.11 (stack behavior). Bo Qian STL videos not watched.
 
 ### Questions (getcracked)
 
 - Per platform record, rescraped 13/09/2026. std::vector: Don't @ me (`at()` bounds-checks, `[]` does not) ok. Containers for containers. (vector of function pointers, prints 01) ok. A, B, C, initializer_list (`c({a(), b()})` prints ab; braced-list elements evaluate left to right) wrong first attempt, retest in a week. Build a Histogram and Yeah, I know what a call stack is. problems not attempted. std::array: Array extensioooooons (a variable-length array is a compiler extension that adjusts the stack pointer at runtime, no malloc or new; filed in [arrays.md](arrays.md)) wrong first attempt, retest in a week.
-- Anki: braced list evaluates in order, function arguments do not; `{10}` is one element, `(10)` is ten; `reserve` is capacity only; `at()` throws, `[]` is UB; `std::array` of structs needs double braces without element type; `std::get` is compile-time checked.
+- 13/09/2026 Internals node, per platform record: How does it allocate? (`vector<Bar>(5)` default-constructs five times, 11111) ok, Vector growth 2 (after `reserve(3)` the push does not reallocate, prints 1) ok; wrong first attempt (retest in a week): Vector growth 1 (push past capacity reallocates, the old iterator is UB), So, how big is vector? (`sizeof` is 24, three pointers, reserve does not change it).
+- Anki: vector is three pointers, 24 bytes; push past capacity invalidates everything, reserve prevents it; count constructor default-constructs in place since C++11; moves happen only if noexcept; braced list evaluates in order, function arguments do not; `{10}` is one element, `(10)` is ten; `reserve` is capacity only; `at()` throws, `[]` is UB; `std::array` of structs needs double braces without element type; `std::get` is compile-time checked.
 
 <!-- gc-questions:start -->
 
@@ -125,5 +167,12 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [Containers for containers.](https://getcracked.io/question/1100) — Easy
 - ○ [Build a Histogram](https://getcracked.io/problem/46/build-a-histogram) — problem
 - ○ [Yeah, I know what a call stack is.](https://getcracked.io/problem/19/yeah-i-know-what-a-call-stack-is) — problem
+
+### Internals
+- ✓ [How does it allocate?](https://getcracked.io/question/849) — Cooked
+- ✓ [Vector growth 2](https://getcracked.io/question/544) — Cooked
+- ✗ [Vector growth 1](https://getcracked.io/question/543) — Easy
+- ✗ [So, how big is vector?](https://getcracked.io/question/764) — Medium
+- ○ [Implement vector](https://getcracked.io/problem/1/implement-vector) — problem
 
 <!-- gc-questions:end -->

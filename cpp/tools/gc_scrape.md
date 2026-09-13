@@ -1,6 +1,6 @@
 # Re-scraping the getcracked progress tree
 
-The tree at `https://getcracked.io/progress-tree/beginner-cpp` is a React Flow graph. Clicking a node opens a side panel whose rows are `<tr>` elements with a link, difficulty cells, and lucide status icons (`lucide-check` correct, `lucide-x` missed, neither means not attempted). Run this in the page (Playwright MCP `browser_evaluate`, logged in) in slices of about 45 nodes, then concatenate the arrays into `gc_tree_items.json` and run `python3 cpp/tools/gc_links.py`.
+The tree at `https://getcracked.io/progress-tree/beginner-cpp` is a React Flow graph. Clicking a node opens a side panel whose rows are `<tr>` elements with a link, difficulty cells, and lucide status icons (`lucide-check` correct, `lucide-x` missed, neither means not attempted). Run this in the page (Playwright MCP `browser_evaluate`, logged in; save each slice with `filename` under `~/.playwright-mcp/`, the only writable root besides `~`) in slices of about 45 nodes, then concatenate the arrays into `gc_tree_items.json` and run `python3 cpp/tools/gc_links.py`.
 
 ```js
 () => new Promise(async r => {
