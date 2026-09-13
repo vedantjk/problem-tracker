@@ -56,9 +56,18 @@ Comparison operators do lexicographic comparison by `char` value, so uppercase s
 
 `std::stoi`, `std::stol`, `std::stod`, and relatives parse from a `std::string`, skip leading whitespace, stop at the first invalid character, and throw `std::invalid_argument` when nothing parses or `std::out_of_range` on overflow. An optional second argument receives the index where parsing stopped. `std::to_string` converts numbers to a string using the C locale's `printf` formatting, so `to_string(0.1)` is `"0.100000"`.
 
-`std::from_chars`, from `<charconv>` in C++17, is the fast, locale-independent, non-throwing alternative: it takes a character range and a reference to the result, returns a struct with a pointer to where it stopped and an error code, and does not skip whitespace or accept a leading plus sign. `std::to_chars` is its inverse into a caller-provided buffer. In a parser on a hot path, `from_chars` on a `string_view` is the right tool; `stoi` is for convenience code.
+`std::from_chars`, from `<charconv>` in C++17, is the fast, locale-independent, non-throwing alternative: it takes a half-open character range and a reference to the result, and does not skip whitespace or accept a leading plus sign. Integer overloads accept bases 2 through 36; floating-point overloads accept `general`, `fixed`, `scientific`, or `hex` format. `std::to_chars` is its inverse into a caller-provided buffer. In a parser on a hot path, `from_chars` on a `string_view` is the right tool; `stoi` is for convenience code.
 
-`std::stringstream` parses or formats with the stream operators, so `iss >> a >> b` splits on whitespace and `oss << x << ' ' << y` builds a string via `oss.str()`. It is flexible and slow: each stream carries locale and formatting state, and constructing one costs an allocation. Use it for one-off formatting, `getline` with a delimiter for simple splitting, and `from_chars` where speed matters.
+The result is `{ ptr, ec }`. On success, `ec` is clear and `ptr` points one past the parsed prefix; success alone does not mean the whole range was valid, so require `ptr == last` for full-input validation. If no prefix can be parsed, `ec == std::errc::invalid_argument`; if the value will not fit, it is `std::errc::result_out_of_range`. In both error cases the destination is unchanged. C++23 made the integer overloads `constexpr`. C++26 gives the result an explicit boolean conversion, so `if (result)` is the short form of testing whether `ec` is clear.
+
+`<sstream>` supplies `std::istringstream` for reading, `std::ostringstream` for writing, and `std::stringstream` for both; the `w...` counterparts operate on wide characters. These are streams backed by an internal string rather than a keyboard, file, or other I/O channel. Insert with `<<` or replace the buffer with `str(text)`; retrieve the entire buffer with `str()`. Extraction is sequential, so repeated `iss >> a >> b` reads successive whitespace-delimited values, while `str()` still returns the whole buffer. Because stream operators understand the built-in types, `oss << number` formats a number as text and `iss >> number` parses text into a number.
+
+String streams are convenient but relatively slow: each carries locale, formatting, position, and error state, and constructing one typically allocates. Use them for one-off formatting, delayed output, line-oriented processing, or `getline` with a delimiter; use `from_chars` where conversion speed and allocation control matter. To reuse a string stream, reset both independent kinds of state: `stream.str("")` empties the buffer and `stream.clear()` removes EOF/failure flags.
+
+### Reading
+
+- [C++ Stories: `std::from_chars`, C++17 through C++26](https://www.cppstories.com/2018/12/fromchars/)
+- [LearnCpp: Stream classes for strings](https://www.learncpp.com/cpp-tutorial/stream-classes-for-strings/)
 
 ## std::string_view
 
