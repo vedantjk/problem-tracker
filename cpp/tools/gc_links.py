@@ -88,7 +88,7 @@ NODE_TO_FILES = {
     "Classes and Structs": ["classes"],
     "Member Functions": ["classes"],
     "Const Classes and Functions & Access Specifiers": ["classes"],
-    "Special Member Functions": ["smart_pointers_move"],
+    "Special Member Functions": ["smart_pointers_move", "classes"],
     "Friends and Enemies": ["expressions"],
     "Universal References & Perfect Forwarding": ["value_categories"],
 }

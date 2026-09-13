@@ -29,7 +29,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
 | [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
-| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
+| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, access specifiers (per-class rule), access functions, returning references to members (dangling from temporaries), data hiding vs encapsulation, prefer non-member functions, constructors (non-aggregate, never const), member initializer lists (declaration order, three-source priority, body assignment is worse), default constructors (one only, implicit vs = default vs user-provided and zero-init), delegating constructors, the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
 
 ## Where is...? (every concept, A-Z)
 
@@ -83,9 +83,11 @@ For a missed question, make an Anki card with the question on the front and a sh
 - consteval / immediate functions (must be compile time, functions only, no address) → initialization_deduction
 - constexpr functions (may run at compile time or run time; constexpr vs const member functions) → initialization_deduction
 - constexpr variables (must have constant initializer, implicitly const, not part of the type, any literal type, no params, string/vector limits) → initialization_deduction
+- constructor basics (runs after storage exists; class name, no return type; never const; any ctor makes non-aggregate) → classes
 - continue (runs for's end-expression; while-loop infinite-loop trap) → control_flow
 - conversion vs promotion ranks (overloads) → types_conversions
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
+- copy-initialization `C c2 = c1;` is one copy-constructor call, not construct-then-assign → classes
 - cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
 - cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - dangling pointer (distinguish ended lifetime from released storage) → pointers_references
@@ -93,7 +95,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 - data races → ub_catalog (pointer)
 - declaration vs out-of-class definition (names, top-level const incl. `int* const`, default argument once, cv/ref/noexcept must match) → classes
 - default args don't apply through function pointers → pointers_references
+- default constructor (only one allowed; all-defaulted params count; implicit one suppressed by any ctor; `= default` vs empty body zero-init difference) → classes
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
+- delegating constructors (`: Foo{...}` in the initializer list; delegate or initialize, not both; body-call makes a temporary) → classes
 - designated initializers (all 6 CE cases) → initialization_deduction
 - destructor exception specifications (implicit noexcept and termination cases) → error_handling
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
@@ -127,6 +131,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
 - if (x) non-bool condition conversion → control_flow
 - if-else vs switch (when to use which) → control_flow
+- implicit copy assignment on an owning raw pointer (`B = A` leaks B's array, shares A's, double delete) → classes (Q&A), smart_pointers_move
 - implicit move on return (local lvalue treated as rvalue; don't write return std::move) → smart_pointers_move, value_categories
 - implicit move operations (suppressed by any user-declared copy/move/dtor; memberwise; raw pointer copied not nulled) → smart_pointers_move
 - implicit object / this / member access before declaration → classes
@@ -152,6 +157,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - maximal munch (x+++++y, a+++b, >>) → expressions
 - member function defined in-class is implicitly inline → classes
 - member functions: overload aspects (arity, param types, cv-qualifier, ref-qualifier; top-level const dropped) → classes
+- member initializer list (colon syntax, braces not `=`; declaration order not list order; list > default member initializer > default-init) → classes
 - memcpy as blessed pun → bits_punning
 - memory errors, the OSTEP seven (overflow, leak, dangling, double/invalid free) → memory_layout, ub_catalog
 - memory leaks: pointers vs pointees → functions_scope_lambdas traps
@@ -288,6 +294,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class vs Struct ok, Struct over Class ok; Class inStruction MISSED, wtf const MISSED |
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
 | Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
+| Special Member Functions (learncpp 14.9-14.12 — read 12/09; 14.13-14.16, 15.4 pending) | classes + smart_pointers_move | (pending, 12 questions) |
 
 ## Quizzes
 

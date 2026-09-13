@@ -134,6 +134,61 @@ The rule is to use the result of a reference-returning member immediately, or co
 
 Never return a non-const reference to a private member from a public function. `int& value() { return m_value; }` lets any caller write `f.value() = 5;`, which is public access to a private member with extra steps and defeats every benefit of data hiding. A const member function cannot return a non-const reference to a member at all, because `this` is a `const X*` and the member is const through it; `const int& getValue() const` is the version that compiles.
 
+## Constructors
+
+A constructor is a special member function that runs automatically after storage for a non-aggregate class object has been obtained. It does not create the object; the storage exists first, and the constructor's job is to turn indeterminate storage into a valid object, which is where class invariants get established. A constructor has the class's name, exactly as capitalized, and no return type, not even `void`. It is almost always public, because it is how outside code makes objects. Constructors are never `const`: the object is exempt from const restrictions until construction finishes, so even a `const Something s;` runs a constructor that writes to members.
+
+Declaring any constructor makes the type a non-aggregate, so aggregate initialization stops working. That is also the practical reason a class with private members needs a constructor: `class Foo { int m_x{}; int m_y{}; };` cannot be written as `Foo foo{6, 7};`, because the private members disqualify it as an aggregate, and only a `Foo(int x, int y)` constructor gives callers a way to supply values. Constructor parameters are ordinary parameters. The compiler applies the usual implicit conversions to arguments, so `Foo foo{'a', true};` matches `Foo(int, int)` with `'a'` promoted to 97 and `true` to 1, subject to the narrowing rules of brace initialization.
+
+A constructor initializes the whole object at the moment it comes into existence. A setter modifies one member of an object that already exists. Those are different operations, and the difference is the subject of the next section.
+
+## Member initializer lists
+
+The member initializer list sits between the parameter list and the body, introduced by a colon, and names each member with its initializer in braces or parentheses. Copy-initialization with `=` is not allowed there. Members are initialized by the list before the body runs; by the time the body starts, every member already exists.
+
+```cpp
+class Foo {
+    int m_x{};
+    int m_y{};
+public:
+    Foo(int x, int y) : m_x{x}, m_y{y} { }
+};
+```
+
+Assigning in the body instead is worse in three ways. It is two operations per member, a default initialization followed by an assignment, which for a `std::string` means constructing an empty string and then overwriting it. It cannot work at all for `const` members and reference members, which must be initialized and cannot be assigned. And it leaves a window in which the object is half-built. The standard's wording is that an object is initialized once the member initializer list has finished, and constructed once the body has finished. Prefer the initializer list for every member that takes a value from the constructor.
+
+Members are initialized in the order they are declared in the class, not the order they appear in the initializer list. Writing `Foo(int x, int y) : m_y{std::max(x, y)}, m_x{m_y} {}` with `m_x` declared first initializes `m_x` from an `m_y` that does not exist yet, which is undefined behavior, and the list order gives no hint that anything is wrong. Compilers warn under `-Wreorder`. List members in declaration order and avoid initializing one member from another.
+
+Three sources compete for a member's initial value, and the priority is fixed. An entry in the member initializer list wins. Otherwise the member's default member initializer, the `{}` or `= value` written at the declaration, is used. Otherwise the member is default-initialized, which for a scalar means indeterminate. So in a class with `int m_x{}; int m_y{2}; int m_z;` and a constructor `Foo(int x) : m_x{x} {}`, `Foo foo{6};` gives `m_x == 6`, `m_y == 2`, and `m_z` uninitialized. This is the same rule that made `Bad` earlier in this file undefined: a default member initializer is just the fallback for a member the constructor did not list.
+
+## Default constructors, default arguments, and `= default`
+
+A default constructor is one that can be called with no arguments. It runs for both `Foo foo{};` and `Foo foo;`, though value-initialization with empty braces is the form to prefer for class types, for a reason below. A constructor whose parameters all have default arguments is also a default constructor, so `Foo(int x = 0, int y = 0)` serves `Foo{}` and `Foo{6, 7}` alike. A class may have only one default constructor: declaring both `Foo()` and `Foo(int x = 1, int y = 2)` compiles, but `Foo foo{};` is then ambiguous and fails.
+
+If a non-aggregate class declares no constructors at all, the compiler generates an implicit default constructor with no parameters, no initializer list, and an empty body, so members get their default member initializers or are left default-initialized. Declaring any constructor suppresses it, which is why a class with `Foo(int, int)` and nothing else cannot be written `Foo foo{};`. To get the generated one back alongside other constructors, write `Foo() = default;`. Prefer that over an empty-bodied `Foo() {}`, and not only for brevity: a defaulted constructor is not user-provided, so value-initialization `Foo foo{};` zero-initializes the object before running it, while a user-provided empty body skips the zeroing. With `int m_a;` and no initializer, `Default d{};` gives `m_a == 0` and `User u{};` leaves it indeterminate. The same user-provided distinction decides whether `const Foo f;` compiles, as covered in the const section.
+
+Only provide a default constructor when an object made of default values is meaningful. A `Fraction` defaulting to zero over one is; an `Employee` with an empty name and id zero is not, and leaving out the default constructor forces callers to supply real data.
+
+## Delegating constructors
+
+Several constructors of one class often repeat the same initializer entries. Calling one constructor from the body of another does not fix this: `Employee(name, id);` inside a body is an expression that creates and immediately destroys a temporary `Employee`, and the members of the object under construction are untouched. Since C++11 a constructor may instead delegate by naming another constructor of the same class in its member initializer list.
+
+```cpp
+class Employee {
+    std::string m_name{"???"};
+    int m_id{0};
+public:
+    Employee(std::string_view name) : Employee{name, 0} { }     // delegates
+    Employee(std::string_view name, int id) : m_name{name}, m_id{id} {
+        std::cout << "Employee " << m_name << " created\n";
+    }
+};
+```
+
+A delegating constructor may do nothing else in its initializer list: a constructor either delegates or initializes members, not both, though it may still have a body that runs after the target constructor returns. Delegation must terminate in a non-delegating constructor; a cycle is ill-formed, and compilers reject the obvious cases. The target's body runs before the delegating constructor's body, and the object counts as constructed once the target returns, which matters for exception handling: if the delegating constructor's body throws, the destructor runs.
+
+Two cheaper tools often remove the need to delegate. Default arguments collapse `Employee(name)` and `Employee(name, id)` into `Employee(std::string_view name, int id = 0)`; order the parameters so members the caller must supply come first and optional ones last, and declare the members in that same order. For shared body logic rather than shared initialization, a private helper member function called from each body avoids duplication without any constructor-to-constructor call.
+
 ## What can overload a member function
 
 A function is identified by its name plus its signature, and a member function's signature has more parts than a free function's. Each of the following can differ between two member functions with the same name and produce a distinct overload:
@@ -245,6 +300,11 @@ On the Itanium ABI a pointer to member function is two words (a function address
 - **Invalid: calling a `&&` member on an lvalue.** `A a; a.foo(1);` where `foo` is `&&`-qualified is an error; `std::move(a).foo(1)` or `A{}.foo(1)` is required.
 - **Invalid: `mf(x, 42)` on a pointer to member.** Use `(x.*mf)(42)` or `std::invoke(mf, x, 42)`.
 - **Invalid: the most vexing parse.** `Y y(X());` declares a function named `y` returning `Y` and taking a pointer to a function returning `X`. Nothing prints, and the error surfaces later at `y.f()`, where `y` is a function, not a `Y`. See [initialization_deduction.md](initialization_deduction.md) for the rule and the fixes; `Y y{X{}};` is the idiomatic one.
+- **Invalid: `=` in a member initializer list.** `Foo() : m_x = 5 {}` is a syntax error; use braces or parentheses.
+- **Invalid: two default constructors.** `Foo()` alongside `Foo(int = 1)` makes `Foo{}` ambiguous.
+- **Invalid: a delegating constructor that also initializes a member.** `Foo() : Foo(1), m_y{2} {}` is rejected; delegate or initialize, not both.
+- **Undefined behavior: initializer list order that reads an uninitialized member.** Members initialize in declaration order, so `: m_y{...}, m_x{m_y}` with `m_x` declared first reads an indeterminate `m_y`.
+- **Logical error: calling a constructor from a constructor body.** `Employee(name, id);` builds and destroys a temporary; the object being constructed is unchanged.
 - **Undefined behavior: default member initializer reading a later member.** Members initialize in declaration order, so `int a{ b }; int b{ 5 };` reads an uninitialized `b`.
 - **Invalid: returning a non-const reference from a const member function.** `int& get() const` fails because the member is const through `this`; return `const int&`.
 - **Undefined behavior: saving a reference returned from a member of a temporary.** `const auto& r = make().name();` dangles at the semicolon; use it in the same expression or copy it.
@@ -320,6 +380,14 @@ When the same operation should behave differently on a temporary and on a named 
 
 No. A const object must be fully initialized at creation, and default-initializing this `C` would leave `i` indeterminate, so the language requires the class to be const-default-constructible: a user-provided default constructor, or default member initializers on every member that would otherwise be uninitialized. A defaulted constructor is not user-provided, so the declaration is rejected. Change it to `const C c{};` and `i` is value-initialized to zero, or write `C() {}` by hand and the program compiles and then reads an indeterminate `i`, which is undefined behavior.
 
+### Is `C c2 = c1;` two operations, a construction and then a copy?
+
+No. Copy-initialization from an object of the same type is one call to the copy constructor, which builds `c2` directly from `c1`. The `=` is initialization syntax; `operator=` never runs. The two-operation form is `C c3; c3 = c1;`, where `c3` is default-constructed and then copy-assigned. `C c2 = c1;` and `C c2(c1);` behave identically when the source is already a `C`; they differ only when a conversion is needed, because copy-initialization will not consider an `explicit` constructor. Before C++17, `C c = C(other);` could construct a temporary and copy it; since C++17 that elision is guaranteed and the temporary never exists.
+
+### A class owns a `new[]` array with no user-declared copy operations. What does `B = A;` do?
+
+The implicitly generated copy assignment does a memberwise copy, so `B.ptr = A.ptr` and `B.size = A.size`. B's old array is leaked because its only pointer was overwritten, and A and B now share one array while each believes it owns it. Nothing fails on that line. Later, writes through either object show up in the other, and at scope exit both destructors `delete[]` the same pointer, which is undefined behavior and usually a double-free abort. The fix is a user-written copy assignment that allocates and copies, or better, holding the array in a type that already does this, such as `std::vector` or `std::unique_ptr<int[]>`. See [smart_pointers_move.md](smart_pointers_move.md) for the rule of five and why raw owning pointers fail.
+
 ### Can a member function access the private members of another object of the same class?
 
 Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
@@ -334,9 +402,10 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 
 ## Practice history
 
+- 12/09/2026: read learncpp 14.9 (constructors), 14.10 (member initializer lists), 14.11 (default constructors and default arguments), 14.12 (delegating constructors). 14.13 through 14.16 and 15.4 (temporaries, copy constructor, copy elision, converting constructors and explicit, destructors) still to read under the Special Member Functions node.
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
 - 12/09/2026 getcracked, per platform record (rescraped 13/09): Class vs Struct ok, Struct over Class ok, X ways (four overload aspects) ok, skibidi pointer ok, & and && (`A().doSomething()` picks `&&`, named object picks `&`, prints 21) ok. MISSED: Class inStruction (`class A; struct A {}` compiles, definition sets access). MISSED: wtf const (`const C c;` with `C() = default` and uninitialized `int i` is a compile error, not junk; const-default-constructible rule). MISSED: Haha… (`Y y(X());` most vexing parse, error at `y.f()`). MISSED: Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`). MISSED: Drop these. (out-of-class definition may drop top-level parameter const and the default argument). Notes on the platform's explanations: for Invoke me., `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong; for Drop these., `int* const` is top-level const and is dropped from the signature like `const int`, only `const int*` and `const int&` are part of the type.
-- Anki: `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- Anki: members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
@@ -359,5 +428,19 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 ### Const Classes and Functions & Access Specifiers
 - ✓ [& and &&](https://getcracked.io/question/827) — Cooked
 - ✗ [Drop these.](https://getcracked.io/question/1066) — Medium
+
+### Special Member Functions
+- ○ [Don't end me.](https://getcracked.io/question/447) — Easy
+- ○ [It's hidden](https://getcracked.io/question/738) — Easy
+- ○ [Not this, again.](https://getcracked.io/question/871) — Easy
+- ○ [Stop! Don’t move!](https://getcracked.io/question/986) — Easy
+- ○ [Copying and Not Copying](https://getcracked.io/question/964) — Medium
+- ○ [Do it for you.](https://getcracked.io/question/985) — Medium
+- ○ [I'm here! Now I'm gone.](https://getcracked.io/question/822) — Medium
+- ○ [r-expression](https://getcracked.io/question/683) — Medium
+- ○ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
+- ○ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
+- ○ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
+- ○ [Who'd you call?](https://getcracked.io/question/1233) — Hard
 
 <!-- gc-questions:end -->
