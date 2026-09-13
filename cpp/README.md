@@ -90,6 +90,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - dangling pointer (distinguish ended lifetime from released storage) → pointers_references
 - data hiding vs encapsulation (five benefits; public-first member order; prefer non-member functions) → classes
 - data races → ub_catalog (pointer)
+- declaration vs out-of-class definition (names, top-level const incl. `int* const`, default argument once, cv/ref/noexcept must match) → classes
 - default args don't apply through function pointers → pointers_references
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
@@ -285,7 +286,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | std::filesystem (C++ Stories — read 12/09) | iostreams | no questions |
 | Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class inStruction ok |
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, Haha… ok, Invoke me. ok |
-| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | (pending) |
+| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | Drop these. ok |
 
 ## Quizzes
 

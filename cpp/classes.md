@@ -156,6 +156,31 @@ class A {
 };
 ```
 
+### What must match between a declaration and an out-of-class definition
+
+The header holds the declaration inside the class and the implementation file holds the definition with a qualified name. The two must agree on everything that is part of the signature or the function type: the parameter types after top-level const is stripped, the cv-qualifier, the ref-qualifier, and the exception specification. Three things may differ or be dropped without changing which function is being defined:
+
+- **Parameter names.** They are not part of the signature. The definition may rename them or omit any it does not use, so `int A::add(int, int) const &&` is a valid definition of a member declared with named parameters.
+- **Top-level const on parameters.** `const int a` and `int a` are the same parameter type, and so are `int* const p` and `int* p`, because the const applies to the parameter object itself rather than to what it refers to. Whether to keep the const in the definition is a body-only choice about whether the parameter may be reassigned. Const that sits under a reference or pointer, as in `const int&` or `const int*`, is part of the type and must match.
+- **Default arguments.** A default argument is a property of a declaration, not of the function, and each parameter may receive its default exactly once in a given scope. Repeating `= 3` in the definition is an error even though the value is identical. The default belongs in the header, where every caller can see it; a default written only in the implementation file would be invisible to code that includes the header. A definition may add a default for a parameter that had none, though that is a maintenance trap, and defaults must be trailing: once a parameter has a default, every parameter after it needs one.
+
+```cpp
+// a.hpp
+struct A {
+    int add(const int a, const int b = 3) const &&;
+};
+
+// a.cpp
+int A::add(int a, int b) const && {     // const dropped, default dropped, same function
+    const auto c = a + b;
+    return c;
+}
+// int A::add(int a, int b = 3) const && {}   // error: default argument repeated
+// int A::add(int a, int b) const &  {}       // error: ref-qualifier differs, no such member declared
+```
+
+A stray semicolon after the closing brace of a function definition is an empty declaration, allowed at namespace scope since C++11 and harmless, though some compilers warn under `-Wextra-semi`.
+
 ## Ref-qualifiers
 
 A ref-qualifier restricts the value category of the implicit object. A member function declared with `&` after the parameter list can only be called on an lvalue, and one declared with `&&` can only be called on an rvalue, typically a temporary or a moved-from expression. A member function with no ref-qualifier accepts both. Within one overload set with the same parameter list and cv-qualifiers, either every overload has a ref-qualifier or none does; mixing `void f();` with `void f() &;` is an error.
@@ -305,8 +330,8 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 ## Practice history
 
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
-- 12/09/2026 getcracked: Class inStruction (`class A; struct A {}` compiles, definition sets access) ok. X ways (four overload aspects incl. ref-qualifier) ok. Haha… (`Y y(X());` most vexing parse, compilation error at `y.f()`) ok. Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`) ok. Note for the platform's explanation of Invoke me.: `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong.
-- Anki: top-level const on a parameter is not part of the signature; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- 12/09/2026 getcracked: Class inStruction (`class A; struct A {}` compiles, definition sets access) ok. X ways (four overload aspects incl. ref-qualifier) ok. Haha… (`Y y(X());` most vexing parse, compilation error at `y.f()`) ok. Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`) ok. Note for the platform's explanation of Invoke me.: `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong. Drop these. (out-of-class definition may drop top-level parameter const and the default argument) ok; the platform's explanation lists `int* const` as const that must match, but that is top-level const on the parameter and is dropped from the signature like `const int`; only `const int*` and `const int&` are part of the type.
+- Anki: top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
