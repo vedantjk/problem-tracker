@@ -265,6 +265,6 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [So close to unwinding.](https://getcracked.io/question/1008) — Cracked
 
 ### std::optional and nullopt
-- ✗ [Divided Result](https://getcracked.io/question/2054) — Hard
+- ✗ [Divided Result](https://getcracked.io/question/2054) — Medium
 
 <!-- gc-questions:end -->

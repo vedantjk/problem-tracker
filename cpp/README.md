@@ -77,6 +77,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction
 - const vs constexpr vs constinit (globals) → initialization_deduction
 - const × pointer matrix (ptr-to-const vs const-ptr, right-to-left) → pointers_references
+- const-default-constructible (`const C c;` needs user-provided ctor or member initializers; `= default` is not user-provided) → classes
 - constant expressions (what qualifies, required contexts, as-if optional folding, const-integral exception vs const double) → initialization_deduction
 - constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
 - consteval / immediate functions (must be compile time, functions only, no address) → initialization_deduction
@@ -281,12 +282,12 @@ For a missed question, make an Anki card with the question on the front and a sh
 | if / switch / loops (learncpp 4.10, 8.5-8.6, 8.8-8.10 — read 01/09) | control_flow | (pending) |
 | Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | &x+1 vs x+1 ok |
 | Dev problem: Bump Memory Allocator (07/09) | allocators | solved with guidance; 1 hidden-test fail on Deallocate(nullptr) |
-| I/O Streams: Console (learncpp 28.1-28.3 — read 12/09) | iostreams | (pending) |
+| I/O Streams: Console (learncpp 28.1-28.3 — read 12/09) | iostreams | 4/5 ok; 1s in chat if you're cooked MISSED (uint8_t extraction) |
 | I/O Streams: File (learncpp 28.6 — read 12/09) | iostreams | no questions |
 | std::filesystem (C++ Stories — read 12/09) | iostreams | no questions |
-| Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class inStruction ok |
-| Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, Haha… ok, Invoke me. ok |
-| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | Drop these. ok |
+| Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class vs Struct ok, Struct over Class ok; Class inStruction MISSED, wtf const MISSED |
+| Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
+| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
 
 ## Quizzes
 

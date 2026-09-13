@@ -300,8 +300,8 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [Where'd it go?](https://getcracked.io/question/792) — Cooked
 - ✓ [& through me.](https://getcracked.io/question/974) — Easy
 - ✗ [In one out the other.](https://getcracked.io/question/857) — Easy
+- ✓ [You don't get references.](https://getcracked.io/question/510) — Easy
 - ✗ [I min-maxed my character.](https://getcracked.io/question/967) — Medium
-- ✓ [You don't get references.](https://getcracked.io/question/510) — Medium
 
 ### stringstream, string_view, and from_chars
 - ✓ [Returned View](https://getcracked.io/question/2051) — Medium

@@ -414,6 +414,10 @@ The order is unspecified, entries can disappear or change during traversal, and 
 - [LearnCpp 28.6: Basic file I/O](https://www.learncpp.com/cpp-tutorial/basic-file-io/)
 - [C++ Stories: C++17 filesystem in the standard library](https://www.cppstories.com/2017/08/cpp17-details-filesystem/)
 
+### Questions (getcracked)
+
+- 12/09/2026 per platform record (rescraped 13/09): Double flushing? ok, std::cout vs std::cerr ok, Streams ok, Streams of strings. ok. MISSED: 1s in chat if you're cooked (`uint8_t y; std::cin >> y;` with input `11` extracts one character, `'1'` = 49, so `10 * 49` prints 490; extraction is type-directed and `uint8_t` is `unsigned char`).
+
 <!-- gc-questions:start -->
 
 ## Related getcracked questions
@@ -421,10 +425,10 @@ The order is unspecified, entries can disappear or change during traversal, and 
 Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
 
 ### I/O Streams: Console
-- ○ [Double flushing?](https://getcracked.io/question/751) — Cooked
-- ○ [std::cout vs std::cerr](https://getcracked.io/question/1283) — Easy
-- ○ [Streams of strings.](https://getcracked.io/question/968) — Easy
-- ○ [Streams](https://getcracked.io/question/1348) — Medium
-- ○ [1s in chat if you're cooked](https://getcracked.io/question/1222) — Hard
+- ✓ [Double flushing?](https://getcracked.io/question/751) — Cooked
+- ✓ [std::cout vs std::cerr](https://getcracked.io/question/1283) — Easy
+- ✓ [Streams](https://getcracked.io/question/1348) — Medium
+- ✓ [Streams of strings.](https://getcracked.io/question/968) — Medium
+- ✗ [1s in chat if you're cooked](https://getcracked.io/question/1222) — Hard
 
 <!-- gc-questions:end -->

@@ -64,7 +64,7 @@ Two conventions follow from the struct-versus-class split. A struct should avoid
 
 ## Const objects and const member functions
 
-A const object of class type must be initialized when created and cannot be modified afterwards, so `const Date today{2020, 10, 14};` is fine while `today.day += 1;` is an error. The rule extends to member functions: a const object may only call member functions marked `const` after the parameter list, because the compiler cannot tell from outside whether an unmarked function modifies the object. `today.print()` fails on a const `today` if `print` is not const, even when the body only reads. Passing by const reference has the same effect inside the callee, so a `void doSomething(const Date& d)` can only call const members of `d`. Since almost every type is at some point handled through a `const T&`, a class whose readers are not const is unusable in practice.
+A const object of class type must be initialized when created and cannot be modified afterwards, so `const Date today{2020, 10, 14};` is fine while `today.day += 1;` is an error. The initialization requirement has a sharp edge for default initialization. `const C c;` with no initializer is only allowed if `C` is const-default-constructible, which means either its default constructor is user-provided (written by you, not `= default` on first declaration) or every non-static member that would otherwise be left indeterminate has a default member initializer. A class such as `struct C { C() = default; int i; };` fails both tests, so `const C c;` is a compile error ("uninitialized const"), not a read of junk. Give `i` an initializer, write `C() {}` by hand, or use `const C c{};`, which value-initializes and zeroes `i`. The rule exists because a const object can never be assigned later, so an indeterminate member in it could never become valid. The rule extends to member functions: a const object may only call member functions marked `const` after the parameter list, because the compiler cannot tell from outside whether an unmarked function modifies the object. `today.print()` fails on a const `today` if `print` is not const, even when the body only reads. Passing by const reference has the same effect inside the callee, so a `void doSomething(const Date& d)` can only call const members of `d`. Since almost every type is at some point handled through a `const T&`, a class whose readers are not const is unusable in practice.
 
 Inside a const member function `this` has type `const X*`. The function cannot modify a data member, cannot call a non-const member function on the implicit object, and cannot return a non-const reference to a member. It can still modify locals and parameters, call other const members, and call non-member functions. A `mutable` member is exempt and may be modified from a const member function; it exists for caches, counters, and mutexes that are not part of the logical state. A const member function is callable on both const and non-const objects, so mark every member that does not modify the observable state as `const`.
 
@@ -240,6 +240,7 @@ On the Itanium ABI a pointer to member function is two words (a function address
 
 - **Invalid: redefining on top-level const.** `void foo(int);` and `void foo(const int);` declare one function. Two definitions are a redefinition error, and the parameter's const only affects the body of whichever definition exists.
 - **Invalid: mixing ref-qualified and unqualified overloads.** `void f();` and `void f() &;` with the same parameters and cv-qualifiers cannot coexist.
+- **Invalid: default-initializing a const object of a class that is not const-default-constructible.** `struct C { C() = default; int i; }; const C c;` does not compile; `const C c{};` does and zeroes `i`.
 - **Invalid: calling a non-const member on a const object.** `const X x; x.mutate();` is an error even though the body might not modify anything; the compiler trusts the declaration, not the body.
 - **Invalid: calling a `&&` member on an lvalue.** `A a; a.foo(1);` where `foo` is `&&`-qualified is an error; `std::move(a).foo(1)` or `A{}.foo(1)` is required.
 - **Invalid: `mf(x, 42)` on a pointer to member.** Use `(x.*mf)(42)` or `std::invoke(mf, x, 42)`.
@@ -315,6 +316,10 @@ Because anything that can be parsed as a function declaration is. `X()` in that 
 
 When the same operation should behave differently on a temporary and on a named object, most often to move a member out of a temporary while returning a reference from an lvalue, as `std::optional::value()` does. Also to make an operation consume-only with a `&&`-only overload, so calling it on a named object is a compile error rather than a silent use-after-move later.
 
+### Does `struct C { C() = default; int i; }; const C c;` compile?
+
+No. A const object must be fully initialized at creation, and default-initializing this `C` would leave `i` indeterminate, so the language requires the class to be const-default-constructible: a user-provided default constructor, or default member initializers on every member that would otherwise be uninitialized. A defaulted constructor is not user-provided, so the declaration is rejected. Change it to `const C c{};` and `i` is value-initialized to zero, or write `C() {}` by hand and the program compiles and then reads an indeterminate `i`, which is undefined behavior.
+
 ### Can a member function access the private members of another object of the same class?
 
 Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
@@ -330,8 +335,8 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 ## Practice history
 
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
-- 12/09/2026 getcracked: Class inStruction (`class A; struct A {}` compiles, definition sets access) ok. X ways (four overload aspects incl. ref-qualifier) ok. Haha… (`Y y(X());` most vexing parse, compilation error at `y.f()`) ok. Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`) ok. Note for the platform's explanation of Invoke me.: `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong. Drop these. (out-of-class definition may drop top-level parameter const and the default argument) ok; the platform's explanation lists `int* const` as const that must match, but that is top-level const on the parameter and is dropped from the signature like `const int`; only `const int*` and `const int&` are part of the type.
-- Anki: top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- 12/09/2026 getcracked, per platform record (rescraped 13/09): Class vs Struct ok, Struct over Class ok, X ways (four overload aspects) ok, skibidi pointer ok, & and && (`A().doSomething()` picks `&&`, named object picks `&`, prints 21) ok. MISSED: Class inStruction (`class A; struct A {}` compiles, definition sets access). MISSED: wtf const (`const C c;` with `C() = default` and uninitialized `int i` is a compile error, not junk; const-default-constructible rule). MISSED: Haha… (`Y y(X());` most vexing parse, error at `y.f()`). MISSED: Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`). MISSED: Drop these. (out-of-class definition may drop top-level parameter const and the default argument). Notes on the platform's explanations: for Invoke me., `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong; for Drop these., `int* const` is top-level const and is dropped from the signature like `const int`, only `const int*` and `const int&` are part of the type.
+- Anki: `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
@@ -340,19 +345,19 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
 
 ### Classes and Structs
-- ○ [Class vs Struct](https://getcracked.io/question/372) — Cooked
-- ○ [Class inStruction](https://getcracked.io/question/1329) — Easy
-- ○ [Struct over Class](https://getcracked.io/question/373) — Easy
-- ○ [wtf const](https://getcracked.io/question/969) — Medium
+- ✓ [Class vs Struct](https://getcracked.io/question/372) — Cooked
+- ✗ [Class inStruction](https://getcracked.io/question/1329) — Easy
+- ✓ [Struct over Class](https://getcracked.io/question/373) — Easy
+- ✗ [wtf const](https://getcracked.io/question/969) — Medium
 
 ### Member Functions
-- ○ [Invoke me.](https://getcracked.io/question/1398) — Easy
-- ○ [skibidi pointer](https://getcracked.io/question/1265) — Easy
-- ○ [X ways](https://getcracked.io/question/1062) — Easy
-- ○ [Haha…](https://getcracked.io/question/802) — Medium
+- ✗ [Invoke me.](https://getcracked.io/question/1398) — Easy
+- ✓ [skibidi pointer](https://getcracked.io/question/1265) — Easy
+- ✗ [Haha…](https://getcracked.io/question/802) — Medium
+- ✓ [X ways](https://getcracked.io/question/1062) — Medium
 
 ### Const Classes and Functions & Access Specifiers
-- ○ [& and &&](https://getcracked.io/question/827) — Cooked
-- ○ [Drop these.](https://getcracked.io/question/1066) — Medium
+- ✓ [& and &&](https://getcracked.io/question/827) — Cooked
+- ✗ [Drop these.](https://getcracked.io/question/1066) — Medium
 
 <!-- gc-questions:end -->

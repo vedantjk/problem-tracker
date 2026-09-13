@@ -275,7 +275,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 
 ### Ending Early
 - ✓ [3 exits](https://getcracked.io/question/1063) — Easy
-- ✓ [Exit the function early.](https://getcracked.io/question/1015) — Medium
+- ✓ [Exit the function early.](https://getcracked.io/question/1015) — Easy
 
 ### Recursion
 - ✓ [A Loop Without A Loop](https://getcracked.io/question/771) — Easy

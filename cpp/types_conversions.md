@@ -156,7 +156,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 
 ### static_cast
 - ✓ [Null and void.](https://getcracked.io/question/1005) — Easy
-- ✗ [Castaway](https://getcracked.io/question/1260) — Medium
+- ✗ [Castaway](https://getcracked.io/question/1260) — Hard
 
 ### Bitwise Operators and Bit Masks
 - ✓ [Shifting off the edge](https://getcracked.io/question/1267) — Cooked
