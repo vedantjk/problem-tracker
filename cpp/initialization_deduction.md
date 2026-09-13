@@ -30,6 +30,8 @@ Braces are useful, but their constructor-selection rules matter. `std::vector<in
 
 If a declaration can be parsed as a function declaration, it is parsed that way. `std::string s();` declares a function instead of constructing an empty string. This is the most vexing parse; `std::string s{};` makes the object intent clear. The same issue arises with forms such as `Double d(MyInt(i));`.
 
+The two-type form is the classic interview version. Given `struct X { X(); };` and `struct Y { Y(const X&); void f(); };`, the line `Y y(X());` declares a function named `y` that returns `Y` and takes one parameter of type "function returning `X`", which adjusts to the pointer type `X(*)()`. No `X` or `Y` is constructed, nothing prints, and the error appears later at `y.f()` because a function has no members. `Y y{X{}};` cannot be a declaration and constructs the object; `Y y((X()));`, `Y y(X{});`, and `auto y = Y(X());` also work. With any of these the program prints the constructors' output followed by `f`. See [classes.md](classes.md) for the member-function side.
+
 A functional conversion expression requires the appropriate type spelling. `unsigned int{5}` is not valid expression syntax; use a type alias such as `using UInt = unsigned int;` followed by `UInt{5}`, or use `static_cast<unsigned int>(5)`.
 
 ## Aggregates and designated initializers

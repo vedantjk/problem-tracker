@@ -29,15 +29,18 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
 | [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
+| [classes.md](classes.md) | procedural vs OOP, class invariants, struct vs class (defaults only, class-key mismatch legal), member functions and the implicit object / this, in-class = inline, declaration-order init UB, const member functions / mutable, the four overload aspects (arity, param types w/o top-level const, cv-qualifier, ref-qualifier), & / && ref-qualifiers, pointers to member functions (.* ->* std::invoke std::mem_fn, C++23 explicit object parameter) |
 
 ## Where is...? (every concept, A-Z)
 
+- [[fallthrough]] attribute / fallthrough rules → control_flow
+- [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
 - ABI / RAX:RDX struct return → functions_scope_lambdas
 - ADL (friend found only by) → expressions (operator overloading)
 - aggregate rules → initialization_deduction
+- aliasing (strict) rule + audit checklist → bits_punning
 - alignment / alignof / alignas → memory_layout (data), bits_punning (casts)
 - alignment in allocators (align the address not the size; user-address-first with headers; round-up sentence; std::align) → allocators
-- aliasing (strict) rule + audit checklist → bits_punning
 - allocator taxonomy: bump (bulk reclamation) vs stack (pop top only) vs general-purpose (reuse freed blocks) → allocators
 - Anki-priority repeat miss: auto& keeps const → initialization_deduction
 - anonymous namespace / internal linkage → build_linkage
@@ -47,41 +50,47 @@ For a missed question, make an Anki card with the question on the front and a sh
 - assignment vs initialization → initialization_deduction (+ build_linkage traps)
 - auto / auto& / const auto& / auto&& (legal-binding model) → initialization_deduction
 - auto_ptr (copy-as-move, pass-by-value steals, delete not delete[], deprecated C++11 / removed C++17) → smart_pointers_move
-- bump allocator (cursor allocation; optional headers and deallocation without individual space reclamation) → allocators
+- basic_string template / char types / raw string literals R"()" → strings
 - bit_cast → bits_punning
 - bitset (set/reset/flip/test, sizeof, [] vs test) → bits_punning
 - bool (boolalpha, cin failure, non-0/1 byte UB) → types_conversions
+- braces: auto x{1,2} / initializer_list → initialization_deduction
 - break vs return (switch + loops, innermost-only, no labeled break) → control_flow
-- continue (runs for's end-expression; while-loop infinite-loop trap) → control_flow
+- bump allocator (cursor allocation; optional headers and deallocation without individual space reclamation) → allocators
 - case labels (constant, unique, '6'==54 collision) → control_flow
 - case scoping / init-in-case CE / explicit block fix → control_flow
 - catch matching (no conversions, derived→base, const&) / catch-all must be last → error_handling
-- braces: auto x{1,2} / initializer_list → initialization_deduction
 - char arithmetic & promotion → types_conversions
 - CHAR_BIT / byte width (≥8 through C++23, exactly 8 in C++26; digits vs CHAR_BIT; exact-width types optional, least/fast always) → types_conversions
 - circular reference / shared_ptr cycle leak (self-reference case; fix with weak_ptr one direction) → smart_pointers_move
+- class invariant (why classes over structs) → classes
+- class vs struct (only default access differs; `class A; struct A{}` same entity, -Wmismatched-tags) → classes
 - comma operator (precedence, return a,b) → expressions
-- conditional operator value category (lvalue only if both branches same-type lvalues; mixed → prvalue copy, const& binds temporary not x) → expressions
 - comments don't nest / #if 0 → build_linkage
+- conditional operator value category (lvalue only if both branches same-type lvalues; mixed → prvalue copy, const& binds temporary not x) → expressions
+- const / constexpr / consteval / constinit four-way table; constinit not usable in constant expressions; keyword combinations → initialization_deduction
+- const member functions / mutable / this is const X* → classes
+- const ref = read-only view not immutability (aliasing writes visible) → pointers_references
 - const return-by-value can block moves (distinguish direct prvalue construction) → initialization_deduction
 - const value param: top-level const not in signature (header/impl mismatch legal) → initialization_deduction
 - const vs constexpr vs constinit (globals) → initialization_deduction
+- const × pointer matrix (ptr-to-const vs const-ptr, right-to-left) → pointers_references
 - constant expressions (what qualifies, required contexts, as-if optional folding, const-integral exception vs const double) → initialization_deduction
-- constexpr functions (may run at compile time or run time; constexpr vs const member functions) → initialization_deduction
-- consteval / immediate functions (must be compile time, functions only, no address) → initialization_deduction
-- const / constexpr / consteval / constinit four-way table; constinit not usable in constant expressions; keyword combinations → initialization_deduction
-- constexpr variables (must have constant initializer, implicitly const, not part of the type, any literal type, no params, string/vector limits) → initialization_deduction
-- cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - constant-init / zero-init / dynamic-init phases (statics) → initialization_deduction
+- consteval / immediate functions (must be compile time, functions only, no address) → initialization_deduction
+- constexpr functions (may run at compile time or run time; constexpr vs const member functions) → initialization_deduction
+- constexpr variables (must have constant initializer, implicitly const, not part of the type, any literal type, no params, string/vector limits) → initialization_deduction
+- continue (runs for's end-expression; while-loop infinite-loop trap) → control_flow
 - conversion vs promotion ranks (overloads) → types_conversions
 - copy elision (guaranteed) vs NRVO → functions_scope_lambdas
-- const × pointer matrix (ptr-to-const vs const-ptr, right-to-left) → pointers_references
-- const ref = read-only view not immutability (aliasing writes visible) → pointers_references
+- cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
+- cv-qualified / cv-unqualified vocabulary; volatile ≠ threads → initialization_deduction
 - dangling pointer (distinguish ended lifetime from released storage) → pointers_references
 - data races → ub_catalog (pointer)
 - default args don't apply through function pointers → pointers_references
 - default-init vs value-init (uninitialized scalar vs zero) → initialization_deduction
 - designated initializers (all 6 CE cases) → initialization_deduction
+- destructor exception specifications (implicit noexcept and termination cases) → error_handling
 - do-while (semicolon, scope-outside-block gotcha) → control_flow
 - double delete from shallow-copied owning pointer → smart_pointers_move
 - early return → control_flow
@@ -91,126 +100,130 @@ For a missed question, make an Anki card with the question on the front and a sh
 - epsilon vs denorm_min vs min vs lowest → floating_point
 - erroneous behavior (C++26) → ub_catalog, types_conversions
 - exceptions (all of it: throw/try/catch, unwinding, terminate, cost model) → error_handling
-- [except.ctor] return-object-destroyed-by-unwinding rule (bcad; compilers non-conforming) → error_handling
-- expected (std::expected/unexpected/unexpect, error(), transform_error) → error_handling
 - EXIT_SUCCESS / status codes → build_linkage
-- [[fallthrough]] attribute / fallthrough rules → control_flow
-- fixed-point prices ×10^4 (ITCH/venues) → floating_point traps
+- expected (std::expected/unexpected/unexpect, error(), transform_error) → error_handling
+- explicit object parameter (C++23 `this X& self`; member pointer becomes plain function pointer) → classes
 - file streams (ifstream/ofstream/fstream, RAII, open modes, text vs binary, buffering, safe read loops) → iostreams
 - filesystem (path composition/decomposition, queries and mutations, error_code overloads, directory traversal, race/symlink pitfalls) → iostreams
+- fixed-point prices ×10^4 (ITCH/venues) → floating_point traps
 - fixed-width ints / size_t / ptrdiff_t / uint8_t-prints-as-char → types_conversions
 - float→int out-of-range UB → floating_point
 - fold expressions (quiz miss context) → README quiz table
 - for loop (order of parts, omitted parts, multi-counter comma, != vs <) → control_flow
 - forward declarations → build_linkage
-- forwarding references / std::forward / reference collapsing → value_categories
 - forward progress rule (including the C++26 trivial-loop exception) → control_flow, ub_catalog
+- forwarding references / std::forward / reference collapsing → value_categories
 - function pointers (syntax, decay, overload disambiguation, no void* conversion) → pointers_references
 - function try blocks (ctor init-list catches, implicit rethrow) → error_handling
-- halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - function-like macros (paste, double-eval, SQUARE=11) → build_linkage
+- halts: std::exit / atexit / abort / terminate / quick_exit (cleanup matrix, RAII break) → control_flow
 - header guards / #pragma once → build_linkage
 - IEEE-754 layout, bias, hidden bit, subnormals, Inf/NaN, round-to-even → floating_point
 - if (x) non-bool condition conversion → control_flow
 - if-else vs switch (when to use which) → control_flow
-- input/output streams (hierarchy, cin/cout/cerr/clog, >> vs get/getline, ignore/peek/unget/putback, flags/manipulators, precision/width/fill/alignment, flush/endl) → iostreams
+- implicit move on return (local lvalue treated as rvalue; don't write return std::move) → smart_pointers_move, value_categories
+- implicit move operations (suppressed by any user-declared copy/move/dtor; memberwise; raw pointer copied not nulled) → smart_pointers_move
+- implicit object / this / member access before declaration → classes
 - infinite loops (while(true) idiom, semicolon null-body, unsigned counter wrap) → control_flow
 - inline (ODR meaning, requirements, why not everything) → build_linkage
+- input/output streams (hierarchy, cin/cout/cerr/clog, >> vs get/getline, ignore/peek/unget/putback, flags/manipulators, precision/width/fill/alignment, flush/endl) → iostreams
 - integral promotion (sub-int → signed int) → types_conversions
 - jump table (one possible switch implementation) → control_flow
 - keywords & special identifiers → build_linkage
 - lambdas (captures, mutable, sizes, passing, generic, constexpr) → functions_scope_lambdas
 - lifetime extension (eligible temporary bindings; does not renew through a reference return) → initialization_deduction, pointers_references
+- linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
+- loop counters (signed! unsigned >= 0 bug) → control_flow
 - lvalue / xvalue / prvalue and glvalue / rvalue diagram → value_categories
 - lvalue references (no reseat, binding rules, conversion-temporary trap) → pointers_references
-- loop counters (signed! unsigned >= 0 bug) → control_flow
-- linkage (none/internal/external) → functions_scope_lambdas (+ build_linkage)
 - lvalue ternary / prefix++ returns lvalue → expressions
-- magic number / canary in allocator headers (constant tag, double-free detection, address-dependent strengthening, bitmap for exactness) → allocators
 - macro scope (none) → build_linkage
-- make_unique (type once, no naked new, pre-C++17 argument exception-safety hole) → smart_pointers_move
-- max/min tie-breaking (first arg) + const& return dangling → pointers_references
-- monadic optional ops and_then/transform/or_else, nested-optional trap → error_handling
-- malloc/free (size tracked by allocator, brk/sbrk/mmap, calloc/realloc) → memory_layout
-- memory errors, the OSTEP seven (overflow, leak, dangling, double/invalid free) → memory_layout, ub_catalog
+- magic number / canary in allocator headers (constant tag, double-free detection, address-dependent strengthening, bitmap for exactness) → allocators
 - main() specialness → build_linkage
+- make_unique (type once, no naked new, pre-C++17 argument exception-safety hole) → smart_pointers_move
+- malloc/free (size tracked by allocator, brk/sbrk/mmap, calloc/realloc) → memory_layout
+- max/min tie-breaking (first arg) + const& return dangling → pointers_references
 - maximal munch (x+++++y, a+++b, >>) → expressions
+- member function defined in-class is implicitly inline → classes
+- member functions: overload aspects (arity, param types, cv-qualifier, ref-qualifier; top-level const dropped) → classes
 - memcpy as blessed pun → bits_punning
-- memory segments (code/data/BSS/heap/stack) → memory_layout
+- memory errors, the OSTEP seven (overflow, leak, dangling, double/invalid free) → memory_layout, ub_catalog
 - memory leaks: pointers vs pointees → functions_scope_lambdas traps
+- memory segments (code/data/BSS/heap/stack) → memory_layout
+- monadic optional ops and_then/transform/or_else, nested-optional trap → error_handling
+- most vexing parse `Y y(X());` (function taking X(*)(), error at y.f()) → initialization_deduction (+ classes Q&A)
 - most vexing parse → initialization_deduction
-- placement new (construct in existing storage; keep its returned pointer; buffer owner releases storage) → allocators
-- pointer validation on free (uintptr_t explained, range/alignment/magic checks, null contract, exactness limits) → allocators
-- moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - move constructor / move assignment (syntax, steal-and-null, when selected, self-move check, swap recursion trap) → smart_pointers_move
-- implicit move operations (suppressed by any user-declared copy/move/dtor; memberwise; raw pointer copied not nulled) → smart_pointers_move
-- implicit move on return (local lvalue treated as rvalue; don't write return std::move) → smart_pointers_move, value_categories
+- moved-from state ("valid but unspecified"; unique_ptr guaranteed null; SSO copy) → ub_catalog
 - NaN != NaN / signed zero → floating_point
 - narrowing (list-init CE, value-checked) → initialization_deduction
-- noexcept on move operations (vector reallocation, move_if_noexcept, strong exception guarantee) → smart_pointers_move
 - NDR (ill-formed, no diagnostic) → ub_catalog, build_linkage
-- cout << functionName prints 1 (fp→bool, no void* conversion) → pointers_references
-- nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t (prvalue, not a pointer type) → pointers_references
-- destructor exception specifications (implicit noexcept and termination cases) → error_handling
+- noexcept on move operations (vector reallocation, move_if_noexcept, strong exception guarantee) → smart_pointers_move
 - nullopt / bad_optional_access / value_or / in_place / emplace → error_handling
-- optional (std::optional, all of it) → error_handling
+- nullptr vs NULL vs 0 (overload resolution) / std::nullptr_t (prvalue, not a pointer type) → pointers_references
 - numeric_limits quartet → floating_point
 - ODR rules 1/2/3 → build_linkage
 - operator overloading (homes, can't-overload list, && short-circuit loss, <=>) → expressions
 - operator void() oddity → initialization_deduction
+- optional (std::optional, all of it) → error_handling
+- out params / in-out params (why discouraged) → pointers_references
 - overload ambiguity foo(-1.5) → types_conversions
 - padding / tail padding / offsets / pahole → memory_layout
 - pass by address (null-check patterns, optional params, int*& reseating) → pointers_references
 - pass by value vs const& (2×pointer cheap-to-copy rule, string_view by value) → pointers_references
-- out params / in-out params (why discouraged) → pointers_references
+- placement new (construct in existing storage; keep its returned pointer; buffer owner releases storage) → allocators
 - pointer indirection cost x->foo() vs y.foo() (locality, SROA/aliasing) → memory_layout
+- pointer to member function (`&X::foo`, `(x.*mf)(42)`, `(px->*mf)(42)`, type `void (X::*)(int)`, 16 bytes Itanium) → classes
+- pointer validation on free (uintptr_t explained, range/alignment/magic checks, null contract, exactness limits) → allocators
 - pointers vs references (object vs name; the 5 differences) → pointers_references
 - pointers-to-int (uintptr_t round-trip) → bits_punning
 - popcount / <bit> / countl_zero → bits_punning
 - prefix vs postfix ++ (lvalue/rvalue, class-type cost) → expressions
-- range-based for (auto/auto&/const auto&, decayed-array CE, no index, views::reverse, C++23 temporary fix) → control_flow
-- recursion (stack depth, static-local memo, no guaranteed TCO, --x sequencing trap) → functions_scope_lambdas
 - preprocessor pipeline & translation phases → build_linkage
 - promotion flips comparison (unsigned short a-b) → types_conversions
+- RAII for heap memory (why smart pointers exist; early return / exception skips delete) → smart_pointers_move (unwinding: error_handling)
+- range-based for (auto/auto&/const auto&, decayed-array CE, no index, views::reverse, C++23 temporary fix) → control_flow
+- recursion (stack depth, static-local memo, no guaranteed TCO, --x sequencing trap) → functions_scope_lambdas
+- ref-qualifiers `&` / `&&` on member functions (optional::value overloads, consume-only members) → classes
 - references: sizeof(int&) vs reference members → memory_layout
 - reinterpret_cast legal-pattern checklist → bits_punning
-- RAII for heap memory (why smart pointers exist; early return / exception skips delete) → smart_pointers_move (unwinding: error_handling)
-- rule of five / rule of zero (declare one special member, decide all five; deleted move blocks copy fallback) → smart_pointers_move
-- rvalue references (syntax, binding rules, lifetime extension, modify through non-const, named is lvalue, don't return one) → value_categories
-- reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
 - reserved identifiers (_x, _X, __) → build_linkage
 - rethrow (bare throw vs throw e slicing) → error_handling
 - return by reference / address (lifetime conditions, static-local aliasing, assignment through T&) → pointers_references
+- reverse iteration (views::reverse, rbegin/rend, base() off-by-one, i-- > 0 idiom) → control_flow
+- rule of five / rule of zero (declare one special member, decide all five; deleted move blocks copy fallback) → smart_pointers_move
+- rvalue references (syntax, binding rules, lifetime extension, modify through non-const, named is lvalue, don't return one) → value_categories
 - RVO / NRVO / -fno-elide-constructors → functions_scope_lambdas
 - scope vs duration vs lifetime → functions_scope_lambdas
 - sequencing (C++14 vs C++17 table) → expressions
 - sequential/stacked case labels (≠ fallthrough) → control_flow
 - shadowing / -Wshadow → functions_scope_lambdas
+- shared_ptr (control block, two-raw-pointer double delete, make_shared single allocation + weak_ptr caveat, 16 bytes, deleter in block not type, atomic count = thread-safe count not object, pass by const& or T*, unique→shared only) → smart_pointers_move
+- shared_ptr<void> / type erasure of pointee and deleter (why it works, why unique_ptr<void> doesn't, no CTAD from raw pointer) → smart_pointers_move
 - shifts (count rule, value rules, x86 masking) → types_conversions
 - signature (excludes return type) → build_linkage
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
 - smart pointers: copyable-with-count vs move-only fork (shared_ptr vs unique_ptr), why C++11 needed rvalue refs → smart_pointers_move
-- shared_ptr<void> / type erasure of pointee and deleter (why it works, why unique_ptr<void> doesn't, no CTAD from raw pointer) → smart_pointers_move
-- shared_ptr (control block, two-raw-pointer double delete, make_shared single allocation + weak_ptr caveat, 16 bytes, deleter in block not type, atomic count = thread-safe count not object, pass by const& or T*, unique→shared only) → smart_pointers_move
+- SSO (small string optimization; data() inside the object) → memory_layout
 - stack unwinding (search-then-unwind, dtors per frame, zero-cost tables) → error_handling
 - stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
 - static init order fiasco → functions_scope_lambdas (+ build_linkage)
 - static local in generic lambda (per-instantiation) → functions_scope_lambdas
 - static members (not in sizeof) → memory_layout
-- std::function costs / bad_function_call → functions_scope_lambdas
-- std::move (expression cast versus actual move; named rvalue references) → value_categories, smart_pointers_move
-- string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
-- strings: literals deduce const char*, ""s/""sv → initialization_deduction
-- std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → strings (table), initialization_deduction
-- std::string API (size/capacity/reserve/resize, [] vs at, data/c_str invalidation, append/insert/erase/replace, substr, starts_with/contains, find/npos, compare/<=>) → strings
-- string_view (pointer + length, by value, implicit from literal/string, explicit back; remove_prefix/suffix and substr O(1); NOT null-terminated; lifetime tied to source) → strings (parameters: pointers_references)
-- strings on the hot path (SSO limits per lib 15/22, growth, fixed char arrays in messages, string_view + from_chars zero-alloc parse, heterogeneous lookup is_transparent) → strings
-- basic_string template / char types / raw string literals R"()" → strings
-- string ↔ number (stoi family throws; from_chars/to_chars non-throwing, locale-free, hot-path; to_string formatting; stringstream cost) → strings
-- SSO (small string optimization; data() inside the object) → memory_layout
 - std::align (rounds pointer up, shrinks space by padding, nullptr if no fit) → allocators
 - std::byte (raw-memory type, bitwise operations, representation access, byte-stride pointer) → allocators
+- std::function costs / bad_function_call → functions_scope_lambdas
+- std::invoke / std::mem_fn / reference_wrapper is callable → classes
+- std::move (expression cast versus actual move; named rvalue references) → value_categories, smart_pointers_move
+- std::string API (size/capacity/reserve/resize, [] vs at, data/c_str invalidation, append/insert/erase/replace, substr, starts_with/contains, find/npos, compare/<=>) → strings
+- std::string constructor overloads (const char* + count vs std::string + pos; (5,'a') vs ('a',5); prefer substr / iterator pair) → strings (table), initialization_deduction
+- string literal = lvalue in .rodata; std::string temporary = prvalue (stack object, SSO/heap payload) → memory_layout
+- string ↔ number (stoi family throws; from_chars/to_chars non-throwing, locale-free, hot-path; to_string formatting; stringstream cost) → strings
+- string_view (pointer + length, by value, implicit from literal/string, explicit back; remove_prefix/suffix and substr O(1); NOT null-terminated; lifetime tied to source) → strings (parameters: pointers_references)
+- strings on the hot path (SSO limits per lib 15/22, growth, fixed char arrays in messages, string_view + from_chars zero-alloc parse, heterogeneous lookup is_transparent) → strings
+- strings: literals deduce const char*, ""s/""sv → initialization_deduction
+- struct: no constructors (keeps aggregate); no-data class → namespace → classes
 - structured bindings / std::tie / std::ignore / tie-comparator → functions_scope_lambdas
 - switch (condition types, default, execution flow) → control_flow
 - tail call optimization (not guaranteed in C++) → functions_scope_lambdas
@@ -220,16 +233,16 @@ For a missed question, make an Anki card with the question on the front and a sh
 - top-level vs low-level const (deduction drop rules, auto* vs auto) → initialization_deduction
 - tuple (get rules, apply, CE list, forward_as_tuple dangling) → functions_scope_lambdas
 - UB taxonomy + master list → ub_catalog
-- unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
-- unique_ptr API (get/reset/release, bool, T[], returning by value, as member → move-only + pimpl, custom deleter and size, misuses) → smart_pointers_move
-- unique_ptr<std::byte[]> as buffer owner (verify 24-byte layout; matching delete[]; no ownership flag) → allocators
 - uninitialized reads → initialization_deduction, ub_catalog
+- unique_ptr API (get/reset/release, bool, T[], returning by value, as member → move-only + pimpl, custom deleter and size, misuses) → smart_pointers_move
+- unique_ptr ownership (sink vs borrow params, param-destruction timing) → pointers_references
+- unique_ptr<std::byte[]> as buffer owner (verify 24-byte layout; matching delete[]; no ownership flag) → allocators
 - unsigned wrap (arithmetic + conversion) → types_conversions
-- weak_ptr (cycle breaking, lock() over expired(), keeps control block not object, make_shared storage caveat, enable_shared_from_this / bad_weak_ptr) → smart_pointers_move
-- while / do-while / for (full loop notes) → control_flow
 - vexing parse → initialization_deduction
 - virtual inheritance sizes → memory_layout
 - vptr → memory_layout
+- weak_ptr (cycle breaking, lock() over expired(), keeps control block not object, make_shared storage caveat, enable_shared_from_this / bad_weak_ptr) → smart_pointers_move
+- while / do-while / for (full loop notes) → control_flow
 
 ## getcracked node → file map
 
@@ -265,6 +278,9 @@ For a missed question, make an Anki card with the question on the front and a sh
 | I/O Streams: Console (learncpp 28.1-28.3 — read 12/09) | iostreams | (pending) |
 | I/O Streams: File (learncpp 28.6 — read 12/09) | iostreams | no questions |
 | std::filesystem (C++ Stories — read 12/09) | iostreams | no questions |
+| Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class inStruction ok |
+| Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, Haha… ok, Invoke me. ok |
+| Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — not yet read) | classes | (pending) |
 
 ## Quizzes
 
@@ -318,9 +334,6 @@ The concept index and quiz tables are navigation and history, so their compact l
 
 Tree nodes not yet mapped to a concept file (mostly Intermediate material). When a file is created for one of these, add the mapping in `cpp/tools/gc_links.py`.
 
-- **Classes and Structs** — 0/4 attempted
-- **Member Functions** — 0/4 attempted
-- **Const Classes and Functions & Access Specifiers** — 0/2 attempted
 - **C-Style Arrays** — 3/9 attempted: ✓ [The headers you never knew](https://getcracked.io/question/423), ✓ [Allocation decisions](https://getcracked.io/question/787), ✓ [To delete or not to delete](https://getcracked.io/question/1024)
 - **Multidimensional C-Style Arrays** — 0/1 attempted
 - **std::array** — 0/1 attempted
