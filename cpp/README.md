@@ -27,7 +27,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | [ub_catalog.md](ub_catalog.md) | behavior taxonomy + master UB list with pointers |
 | [smart_pointers_move.md](smart_pointers_move.md) | why raw owning pointers fail, hand-rolled smart pointer, shallow copy → double delete, auto_ptr history (copy-as-move, removed C++17), why C++11 added rvalue references, unique_ptr move example, std::move versus the move operation (swap, push_back, when to use), move ctor/assign (steal-and-null, noexcept + vector), implicit move rules, rule of five/zero, implicit move on return, shared_ptr/weak_ptr overview |
 | [strings.md](strings.md) | literal vs const char* vs std::string vs string_view, constructor table and its traps, size/capacity/access, editing, find/npos, compare, stoi vs from_chars vs stringstream |
-| [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing |
+| [iostreams.md](iostreams.md) | stream hierarchy and standard streams, formatted vs unformatted input, getline/ignore/peek, flags and manipulators, precision, width/fill/alignment, flushing; file streams and modes; filesystem paths, queries, operations, and traversal |
 | [allocators.md](allocators.md) | bump vs stack vs general-purpose reclamation, address alignment with headers, std::align, placement new, std::byte, uintptr_t, 24-byte ownership, pointer validation on free |
 
 ## Where is...? (every concept, A-Z)
@@ -96,6 +96,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 - EXIT_SUCCESS / status codes → build_linkage
 - [[fallthrough]] attribute / fallthrough rules → control_flow
 - fixed-point prices ×10^4 (ITCH/venues) → floating_point traps
+- file streams (ifstream/ofstream/fstream, RAII, open modes, text vs binary, buffering, safe read loops) → iostreams
+- filesystem (path composition/decomposition, queries and mutations, error_code overloads, directory traversal, race/symlink pitfalls) → iostreams
 - fixed-width ints / size_t / ptrdiff_t / uint8_t-prints-as-char → types_conversions
 - float→int out-of-range UB → floating_point
 - fold expressions (quiz miss context) → README quiz table
@@ -261,6 +263,8 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Pointers / pass-by-address / function pointers (learncpp 12.7-12.11, 20.1 — read 02/09) | pointers_references | &x+1 vs x+1 ok |
 | Dev problem: Bump Memory Allocator (07/09) | allocators | solved with guidance; 1 hidden-test fail on Deallocate(nullptr) |
 | I/O Streams: Console (learncpp 28.1-28.3 — read 12/09) | iostreams | (pending) |
+| I/O Streams: File (learncpp 28.6 — read 12/09) | iostreams | no questions |
+| std::filesystem (C++ Stories — read 12/09) | iostreams | no questions |
 
 ## Quizzes
 

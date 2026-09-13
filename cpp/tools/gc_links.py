@@ -83,6 +83,8 @@ NODE_TO_FILES = {
     "stringstream, string_view, and from_chars": ["strings", "pointers_references"],
     "Small String Optimization": ["strings", "memory_layout"],
     "I/O Streams: Console": ["iostreams"],
+    "I/O Streams: File": ["iostreams"],
+    "std::filesystem": ["iostreams"],
     "Special Member Functions": ["smart_pointers_move"],
     "Friends and Enemies": ["expressions"],
     "Universal References & Perfect Forwarding": ["value_categories"],

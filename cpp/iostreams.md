@@ -1,4 +1,4 @@
-# Console I/O streams
+# I/O streams and filesystem
 
 For string-backed streams and their conversion trade-offs, see [strings](strings.md). For why `std::int8_t` and `std::uint8_t` often use the character overloads of `<<` and `>>`, see [types and conversions](types_conversions.md).
 
@@ -164,6 +164,181 @@ std::cout << std::setw(10) << std::internal << -12345 << '\n'; // -****12345
 
 Use `std::cerr` for diagnostics that should be emitted promptly and routed through standard error; use `std::clog` when buffered diagnostic output is acceptable.
 
+## File stream hierarchy and RAII
+
+`<fstream>` supplies streams whose buffers are connected to files. They extend the same interfaces used for console and string I/O:
+
+```text
+std::istream  <-  std::ifstream     file input
+std::ostream  <-  std::ofstream     file output
+std::iostream <-  std::fstream      file input and output
+```
+
+A file stream can be opened by its constructor or later with `open`. Since C++17, the constructors and `open` also accept `std::filesystem::path`. Always test the stream after opening: a path can be absent, inaccessible, a directory rather than a regular file, or rejected for many other environment-specific reasons.
+
+```cpp
+#include <fstream>
+#include <iostream>
+#include <string>
+
+std::ofstream out{"sample.txt"};
+if (!out) {
+    std::cerr << "could not open sample.txt for writing\n";
+    return 1;
+}
+
+out << "first line\nsecond line\n";
+```
+
+The file is relative to the process's current working directory, which need not be the source or executable directory. A file stream owns its file buffer and closes it in its destructor, so normal scope exit, returns, and exception unwinding provide RAII cleanup. Explicit `close()` is useful when the file must be closed before the end of the scope, the same stream will be reopened, or the program must detect a final flush/close failure.
+
+Read tokens with `>>`, lines with `std::getline`, or raw blocks with `read`. Drive the loop with the read operation itself; EOF becomes known only after an operation tries to read past the available input:
+
+```cpp
+std::ifstream in{"sample.txt"};
+if (!in) {
+    std::cerr << "could not open sample.txt for reading\n";
+    return 1;
+}
+
+std::string line;
+while (std::getline(in, line)) {
+    std::cout << line << '\n';
+}
+
+if (!in.eof()) {
+    std::cerr << "sample.txt could not be read completely\n";
+    return 1;
+}
+```
+
+`while (!in.eof())` is wrong because the flag describes the previous operation, not whether the next read will succeed; it commonly processes stale data once after the last successful read.
+
+## File open modes
+
+The second constructor or `open` argument is a bitmask of `std::ios::openmode` flags, combined with `|`.
+
+| Mode | Meaning |
+|---|---|
+| `std::ios::in` | Permit input. Added by default for `ifstream`. |
+| `std::ios::out` | Permit output. Added by default for `ofstream`. |
+| `std::ios::app` | Seek to the end before every write, so every write appends. |
+| `std::ios::ate` | Seek to the end once immediately after opening; later seeks may write elsewhere. |
+| `std::ios::trunc` | Truncate an existing file to zero length when opening. |
+| `std::ios::binary` | Suppress implementation-specific text translations and open as a binary stream. |
+
+`ofstream` with its default `out` mode normally creates a missing file and truncates an existing one. Add `app` to preserve existing contents and append. `fstream` defaults to `in | out`; that combination normally requires the file to exist and does not truncate it. `in | out | trunc` creates or replaces a file for bidirectional access.
+
+`app` and `ate` are not synonyms. `ate` establishes only the initial position, so a later seek can overwrite earlier bytes. `app` forces each write to the end even after seeking.
+
+```cpp
+std::ofstream log{"events.log", std::ios::app};
+if (log) {
+    log << "connected\n";
+}
+```
+
+## Text, binary, buffering, and durability
+
+Text mode may translate line endings or treat some byte values specially, depending on the platform. Binary mode suppresses those translations; it does not make `<<` and `>>` serialize numbers as their in-memory representation. Formatted operators still convert values to and from text.
+
+Use `write` and `read` for exact byte counts:
+
+```cpp
+std::array<std::byte, 4096> buffer{};
+in.read(reinterpret_cast<char*>(buffer.data()),
+        static_cast<std::streamsize>(buffer.size()));
+auto bytesRead = in.gcount();
+```
+
+Writing an object's raw memory is not a portable serialization format. Padding bytes, byte order, type sizes, floating-point representation, pointers, and version changes can all make the bytes unusable elsewhere. Define an explicit format and encode each field deliberately.
+
+File output is buffered. `flush()`, `std::flush`, and `close()` ask the stream buffer to hand pending data to the operating system, and normal destruction closes the file. `std::endl` inserts a newline and flushes, so using it on every line can be expensive. A successful stream flush or close does not necessarily mean the storage device has made the data durable against power loss; that requires platform-specific synchronization guarantees.
+
+`std::exit` does not destroy automatic file-stream objects, and abnormal termination may lose buffered output. Prefer returning through normal scopes. When reporting a successful file write matters, explicitly flush or close and then check the stream, because a destructor cannot report the failure to its caller.
+
+## `std::filesystem` paths
+
+C++17's `<filesystem>` library separates filesystem names and operations from file contents. Its central vocabulary types live in `std::filesystem`; a local alias keeps examples readable:
+
+```cpp
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
+fs::path config = fs::path{"etc"} / "app" / "config.toml";
+```
+
+A `path` is a structured, platform-aware sequence of path elements. Constructing or manipulating it is usually lexical and does not require the named file to exist. `/` and `/=` append a path component with an appropriate separator; `+=` concatenates raw path text without inserting a separator.
+
+Useful observers include:
+
+| Observer | Result |
+|---|---|
+| `root_name()`, `root_directory()`, `root_path()` | Root components, whose syntax is platform-dependent. |
+| `relative_path()` | Everything after the root path. |
+| `parent_path()` | All elements before the filename. |
+| `filename()` | Final path component. |
+| `stem()` | Filename without its final extension. |
+| `extension()` | Final extension, including its leading dot when present. |
+| `string()`, `native()` | A converted string or the native path representation. |
+
+Paths are iterable by lexical component. Operations such as `lexically_normal`, `lexically_relative`, and `lexically_proximate` manipulate spelling without consulting the filesystem. By contrast, `canonical` resolves an existing path through the filesystem and requires all components to exist; `weakly_canonical` can handle a non-existing suffix.
+
+Do not build portable paths by concatenating `"/"` or `"\\"` yourself. Use `path` composition, and convert to a string only at an API boundary that actually requires one.
+
+## Filesystem queries and mutations
+
+The library provides queries such as `exists`, `is_regular_file`, `is_directory`, `is_symlink`, `file_size`, `last_write_time`, `status`, `symlink_status`, and `space`. Mutating operations include `create_directory`, `create_directories`, `copy`, `copy_file`, `rename`, `permissions`, `remove`, and `remove_all`.
+
+Most filesystem operations have two error-reporting forms:
+
+- An overload without `std::error_code&` throws `std::filesystem::filesystem_error` on an operating-system error.
+- An overload with `std::error_code&` reports the error through that argument instead of throwing.
+
+```cpp
+std::error_code ec;
+auto size = fs::file_size("capture.bin", ec);
+if (ec) {
+    std::cerr << "file_size failed: " << ec.message() << '\n';
+}
+```
+
+The error-code form is useful in cleanup paths, directory scanners, and other code where an inaccessible entry is an expected event. The throwing form is often clearer when failure should abort the whole operation. Do not detect failure by comparing a result with a magic value if an error-code overload is available; inspect `ec`.
+
+Checking and then acting is subject to a race: another process can replace, remove, or change a path between `exists(p)` and `open(p)`. Use preliminary queries for presentation or policy, not as proof that a later operation will succeed. Attempt the real operation and handle its result.
+
+## Directory traversal
+
+`directory_iterator` visits the entries immediately inside one directory. `recursive_directory_iterator` descends into subdirectories. Both work in range-for loops and skip the synthetic `.` and `..` entries. Traversal order is unspecified, so sort collected paths when deterministic output matters.
+
+```cpp
+std::error_code ec;
+fs::directory_iterator it{"data", fs::directory_options::skip_permission_denied, ec};
+fs::directory_iterator end;
+
+for (; !ec && it != end; it.increment(ec)) {
+    const fs::directory_entry& entry = *it;
+    std::cout << entry.path().filename() << '\n';
+}
+
+if (ec) {
+    std::cerr << "directory traversal failed: " << ec.message() << '\n';
+}
+```
+
+Each iterator yields a `directory_entry`, which contains a `path` and may cache file metadata. Queries can still fail because files disappear, permissions change, or symlinks become invalid during traversal. `status` follows a symlink; `symlink_status` describes the link itself. Recursive traversal does not follow directory symlinks by default; enabling that option can introduce cycles, so code must defend against revisiting directories.
+
+## File-I/O and filesystem pitfalls
+
+Relative paths are interpreted from the process's current working directory. Log or report the resolved path when “file not found” would otherwise be mysterious.
+
+Opening a stream and writing successfully are separate events. Check after opening and after the final write/close when output correctness matters. Never use `while (!eof())` to drive reads.
+
+`binary` controls text translation only. It neither removes formatted conversion nor defines a portable object format.
+
+Filesystem calls are snapshots of mutable external state. Results can become stale immediately, iteration order is not portable, and permissions or symlinks can make any step fail. Choose throwing or error-code overloads deliberately and handle the operation that actually matters.
+
 ## Errors and pitfalls
 
 Formatting belongs to the stream, not to a single statement. A function that inserts `std::hex`, `std::fixed`, a fill character, or an alignment changes later output through that same stream unless it restores the old state. Width alone resets after one field.
@@ -204,6 +379,30 @@ With defaultfloat it controls significant digits. With fixed or scientific it co
 
 On common implementations `uint8_t` is an alias for `unsigned char`, so overload resolution selects character extraction. It reads one character because of the type, not because the object occupies one byte. I read into a wider unsigned integer, validate the range, and then cast.
 
+### How do ifstream, ofstream, and fstream relate to the ordinary stream classes?
+
+`ifstream` derives from `istream`, `ofstream` from `ostream`, and `fstream` from `iostream`. They use the same extraction, insertion, formatting, and state interfaces; their distinguishing feature is a stream buffer connected to a file. The file stream owns that buffer and closes it through RAII.
+
+### What is the difference between app and ate?
+
+Both initially position output at the end. `ate` does that once, after which seeking elsewhere and overwriting is allowed. `app` forces every write to the end, even after a seek, so it is the mode that guarantees appending.
+
+### Does opening a file with ios::binary serialize objects in binary form?
+
+No. It disables platform text translations such as newline conversion. Formatted `<<` and `>>` still produce and parse text, and dumping an object's bytes is not a portable format because of padding, byte order, sizes, representations, pointers, and versioning.
+
+### When should filesystem operations throw, and when should they use error_code?
+
+I use throwing overloads when an error should abort the whole operation and unwind to one handler. I use `error_code` overloads when failures are expected per entry, such as a directory scanner encountering inaccessible files, or when the code is already in a cleanup path where another exception would be harmful.
+
+### Why is exists(path) not proof that open(path) will succeed?
+
+The filesystem is shared mutable state. The path can be removed, replaced, or have its permissions changed between the check and the open. A preliminary query can inform a message or policy, but the program must attempt the real operation and handle that result.
+
+### What must code assume about directory iteration?
+
+The order is unspecified, entries can disappear or change during traversal, and metadata queries can fail. I collect and sort paths when deterministic order matters, choose an error policy explicitly, and treat symlinks carefully—especially if recursive traversal is configured to follow them.
+
 ## Practice history
 
 ### Reading
@@ -212,6 +411,8 @@ On common implementations `uint8_t` is an alias for `unsigned char`, so overload
 - [LearnCpp 28.1: Input and output (I/O) streams](https://www.learncpp.com/cpp-tutorial/input-and-output-io-streams/)
 - [LearnCpp 28.2: Input with istream](https://www.learncpp.com/cpp-tutorial/input-with-istream/)
 - [LearnCpp 28.3: Output with ostream and ios](https://www.learncpp.com/cpp-tutorial/output-with-ostream-and-ios/)
+- [LearnCpp 28.6: Basic file I/O](https://www.learncpp.com/cpp-tutorial/basic-file-io/)
+- [C++ Stories: C++17 filesystem in the standard library](https://www.cppstories.com/2017/08/cpp17-details-filesystem/)
 
 <!-- gc-questions:start -->
 
