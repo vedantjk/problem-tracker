@@ -488,6 +488,33 @@ The compiler tries to form an implicit conversion sequence from each operand to 
 
 Both are declarations. `obj c();` is the most vexing parse: a function named `c` returning `obj`, so no constructor runs and compilers warn. `obj(i);` is a declaration of a variable `i` of type `obj` with parentheses around the declarator, exactly like `int(x);`, so the default constructor runs. Neither creates a temporary. A temporary of type `obj` is spelled `obj{}` or `obj()` with nothing inside the parentheses at expression scope, such as `auto e = obj{};`.
 
+### Trace every special member call: which constructor, assignment, or destructor runs, and when?
+
+Given a class that prints a letter from each of its six special members (`a` default, `b` copy ctor, `c` move ctor, `d` copy assign, `e` move assign, `f` dtor), work through statements one at a time and account for every temporary.
+
+```cpp
+A foo(A a) {            // by-value parameter
+    a = A();            // a: default ctor for the temporary, e: move assign, f: temporary dies at the semicolon
+    std::cout << 'H';
+    return std::move(a); // c: move ctor into the return value; a parameter can never be elided
+}
+
+int main() {
+    A* p = new A;        // a
+    foo(*p);             // b: copy ctor for the parameter ... then after the call, f f: parameter and discarded return value
+    if (p) {
+        A b = A();       // a only: C++17 guaranteed elision, no copy or move
+        A c;             // a
+        b = c;           // d
+    }                    // f f: c then b, reverse order of construction
+    std::cout << 'K';
+    delete p;            // f
+}
+// prints abaefHcffaadffKf
+```
+
+The three places people slip. First, `a = A()` is three events, not one: the temporary is constructed, move-assigned from, and destroyed at the end of the full expression. Second, `return std::move(a)` from a by-value parameter runs the move constructor: named return value optimization never applies to parameters, so `return a;` would also have moved, and the explicit `std::move` changes nothing here but would defeat elision for a local. Third, two objects die when the call `foo(*p)` completes, the parameter and the unnamed return value that nobody bound; the parameter may be destroyed at function exit or at the end of the calling full expression, which is implementation-defined, but either way both `f`s print before the next statement. `A b = A();` prints only `a` because since C++17 the prvalue initializes `b` directly and no copy or move constructor is involved, however loudly they print.
+
 ### Can a member function access the private members of another object of the same class?
 
 Yes. Access control is per class, not per object. Any member function of `Person` can read and write `m_name` on any `Person` it holds a reference or pointer to, which is what makes member comparisons, copy constructors, and swaps writable without accessors. Access is about which code may touch a member, not which instance owns it.
@@ -504,10 +531,10 @@ Encapsulation is bundling data with the functions that operate on it into one ty
 
 - 12/09/2026: read learncpp 14.9 (constructors), 14.10 (member initializer lists), 14.11 (default constructors and default arguments), 14.12 (delegating constructors).
 - 13/09/2026: read learncpp 14.13 (temporary class objects), 14.14 (copy constructor), 14.15 (class initialization and copy elision), 14.16 (converting constructors and explicit), 15.4 (destructors).
-- 13/09/2026 Special Member Functions node, per platform record: Don't end me. ok, It's hidden ok, Not this, again. ok, Do it for you. ok, I'm here! Now I'm gone. ok. Wrong first attempt (retest in a week): Stop! Don't move! (declaring an ordinary constructor does not suppress the implicit move constructor; copy ctor, copy assignment, and destructor do). Copying and Not Copying (`std::initializer_list<A> i{a}` copies the element once; `f(i)` copies only the handle; prints `1`). r-expression (`Car(Car&& other) : Vehicle(other)` copies the base because `other` is an lvalue; prints AD). Tear it out root and stem (`a.~A()` on an automatic object then scope exit destroys twice; UB). ? 1 : 2 -> auto (conditional with different class types converts toward the one reachable type; `auto` deduces `D`; prints cD2d2). 96% of you will fail this. (six init forms plus `obj c();` vexing parse and `obj(i);` declaration; prints 112312221). Who'd you call? not attempted.
+- 13/09/2026 Special Member Functions node, per platform record: Don't end me. ok, It's hidden ok, Not this, again. ok, Do it for you. ok, I'm here! Now I'm gone. ok. Wrong first attempt (retest in a week): Stop! Don't move! (declaring an ordinary constructor does not suppress the implicit move constructor; copy ctor, copy assignment, and destructor do). Copying and Not Copying (`std::initializer_list<A> i{a}` copies the element once; `f(i)` copies only the handle; prints `1`). r-expression (`Car(Car&& other) : Vehicle(other)` copies the base because `other` is an lvalue; prints AD). Tear it out root and stem (`a.~A()` on an automatic object then scope exit destroys twice; UB). ? 1 : 2 -> auto (conditional with different class types converts toward the one reachable type; `auto` deduces `D`; prints cD2d2). 96% of you will fail this. (six init forms plus `obj c();` vexing parse and `obj(i);` declaration; prints 112312221). Who'd you call? wrong first attempt (full special-member trace; `a = A()` is ctor + move assign + dtor, `return std::move(param)` move-constructs since parameters are never elided, parameter and discarded return value both die at the call; prints abaefHcffaadffKf).
 - 12/09/2026: read learncpp 14.1 (intro to OOP), 14.2 (intro to classes), 14.3 (member functions), 14.4 (const objects and const member functions), 14.5 (access specifiers), 14.6 (access functions), 14.7 (returning references to data members), 14.8 (data hiding and encapsulation).
 - 12/09/2026 getcracked, per platform record (rescraped 13/09): Class vs Struct ok, Struct over Class ok, X ways (four overload aspects) ok, skibidi pointer ok, & and && (`A().doSomething()` picks `&&`, named object picks `&`, prints 21) ok. MISSED: Class inStruction (`class A; struct A {}` compiles, definition sets access). MISSED: wtf const (`const C c;` with `C() = default` and uninitialized `int i` is a compile error, not junk; const-default-constructible rule). MISSED: Haha… (`Y y(X());` most vexing parse, error at `y.f()`). MISSED: Invoke me. (`mf(x, 42)` invalid; `(x.*mf)(42)` or `std::invoke`). MISSED: Drop these. (out-of-class definition may drop top-level parameter const and the default argument). Notes on the platform's explanations: for Invoke me., `std::reference_wrapper` is callable, so its `ref(5)` "Wrong" example is itself wrong; for Drop these., `int* const` is top-level const and is dropped from the signature like `const int`, only `const int*` and `const int&` are part of the type.
-- Anki: a named rvalue reference is an lvalue, so `Base(other)` in a move ctor copies; explicit destructor call on an automatic object is UB (double destruction); `obj(i);` declares `i`; `?:` with two class types picks the one the other converts to; copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
+- Anki: `x = T()` is three events (ctor, move assign, dtor); returning a by-value parameter always moves, never elides; a named rvalue reference is an lvalue, so `Base(other)` in a move ctor copies; explicit destructor call on an automatic object is UB (double destruction); `obj(i);` declares `i`; `?:` with two class types picks the one the other converts to; copy constructor parameter must be a reference; explicit blocks `T t = x`, `f(x)`, and `return {x}` but not `T t{x}`; one user-defined conversion per implicit sequence; members initialize in declaration order, not initializer-list order; `Foo() = default` is not user-provided, so `Foo{}` zero-initializes first; a delegating constructor cannot also initialize members; `const C c;` needs a user-provided default constructor or initializers on every member; top-level const on a parameter (including `int* const`) is not part of the signature; a default argument is given once, in the declaration; `.*` needs parentheses around the call; `&&`-qualified member is rvalue-only; members initialize in declaration order.
 
 <!-- gc-questions:start -->
 
@@ -543,6 +570,6 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
 - ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
 - ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
-- ○ [Who'd you call?](https://getcracked.io/question/1233) — Hard
+- ✗ [Who'd you call?](https://getcracked.io/question/1233) — Hard
 
 <!-- gc-questions:end -->

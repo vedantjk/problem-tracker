@@ -452,6 +452,6 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
 - ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
 - ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
-- ○ [Who'd you call?](https://getcracked.io/question/1233) — Hard
+- ✗ [Who'd you call?](https://getcracked.io/question/1233) — Hard
 
 <!-- gc-questions:end -->

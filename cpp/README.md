@@ -228,6 +228,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 - size_t underflow loops → types_conversions
 - sizeof class rules / vptr / vbase / EBO / [[no_unique_address]] → memory_layout
 - smart pointers: copyable-with-count vs move-only fork (shared_ptr vs unique_ptr), why C++11 needed rvalue refs → smart_pointers_move
+- special-member call trace (`x = T()` = ctor+move-assign+dtor; `return std::move(param)` moves, params never elided; param + discarded return value die at the call; `A b = A()` = one ctor) → classes (Q&A)
 - SSO (small string optimization; data() inside the object) → memory_layout
 - stack unwinding (search-then-unwind, dtors per frame, zero-cost tables) → error_handling
 - stack vs heap (SP mechanics, frame contents, sizes, overflow, OSTEP 14.1) → memory_layout
@@ -305,7 +306,7 @@ For a missed question, make an Anki card with the question on the front and a sh
 | Classes and Structs (learncpp 14.1-14.2 — read 12/09) | classes | Class vs Struct ok, Struct over Class ok; Class inStruction MISSED, wtf const MISSED |
 | Member Functions (learncpp 14.3 — read 12/09) | classes | X ways ok, skibidi pointer ok; Haha… MISSED, Invoke me. MISSED |
 | Const Classes and Functions & Access Specifiers (learncpp 14.4-14.8 — read 12/09) | classes | & and && ok; Drop these. MISSED |
-| Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | 5 ok; wrong first attempt: Stop! Don't move!, Copying and Not Copying, r-expression, Tear it out root and stem, ? 1 : 2 -> auto, 96% of you will fail this.; Who'd you call? not attempted |
+| Special Member Functions (learncpp 14.9-14.16, 15.4 — read 12-13/09) | classes + smart_pointers_move | 5 ok; wrong first attempt: Stop! Don't move!, Copying and Not Copying, r-expression, Tear it out root and stem, ? 1 : 2 -> auto, 96% of you will fail this., Who'd you call? |
 
 ## Quizzes
 

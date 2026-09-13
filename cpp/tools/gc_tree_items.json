@@ -3779,7 +3779,7 @@
 "Hard",
 ""
 ],
-"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-minus size-3 text-text-secondary"
+"svgs": "lucide lucide-external-link size-3 shrink-0 opacity-50 lucide lucide-signal size-4 lucide lucide-x size-3 text-[#1e1e1e]"
 }
 ]
 },
