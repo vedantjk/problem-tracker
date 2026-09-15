@@ -6,7 +6,7 @@ Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest unt
 - [x] [Clone Graph](https://leetcode.com/problems/clone-graph/)
 - [x] [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/)
 - [x] [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)
-- [ ] [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/)
+- [x] [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/)
 - [ ] [Redundant Connection](https://leetcode.com/problems/redundant-connection/)
 - [ ] [Network Delay Time](https://leetcode.com/problems/network-delay-time/)
 - [ ] [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
