@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 130 Solved · most recent: *Rotting Oranges* (14/09/2026). **W2 LC CLOSED 18/18. W3 2/22.**
+**Progress:** 131 Solved · most recent: *Pacific Atlantic Water Flow* (14/09/2026). **W2 LC CLOSED 18/18. W3 3/22.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -184,7 +184,7 @@
 | Graphs | Clone Graph | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Map original→clone doubles as visited; create clone on first sight, wire edges as each node is processed. BFS (queue) and recursive DFS both written; try_emplace avoids the find+[] double hash. O(V+E). BFS avoids stack depth on a long chain. |
 | Graphs | Walls And Gates | Med | Todo | | | | NC250 |
 | Graphs | Rotting Oranges | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Multi-source BFS: seed all rotten at level 0, count fresh up front, level-by-level loop, minutes++ only when a level spread. Final fresh > 0 means -1. O(mn). Why BFS: multi-source shortest distance, DFS cannot give distances. |
-| Graphs | Pacific Atlantic Water Flow | Med | Todo | | | | NC250 |
+| Graphs | Pacific Atlantic Water Flow | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Reverse flood from each ocean's border, step only to height >= current, answer = cells marked by both. O(mn). Fixes: visited grids as locals not members (judge may reuse the object, resize does not zero), hoist dirs to static constexpr, collect answer in a final pass rather than inside the flood. |
 | Graphs | Surrounded Regions | Med | Todo | | | | NC250 |
 | Graphs | Open The Lock | Med | Todo | | | | NC250 |
 | Graphs | Graph Valid Tree | Med | Todo | | | | NC250 |

@@ -5,7 +5,7 @@ Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest unt
 ## Graphs (8)
 - [x] [Clone Graph](https://leetcode.com/problems/clone-graph/)
 - [x] [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/)
-- [ ] [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)
+- [x] [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)
 - [ ] [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/)
 - [ ] [Redundant Connection](https://leetcode.com/problems/redundant-connection/)
 - [ ] [Network Delay Time](https://leetcode.com/problems/network-delay-time/)
