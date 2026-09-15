@@ -1,6 +1,6 @@
-# W3 LC List — Sep 7–13, 2026 (22 NEW)
+# W3 LC List — Sep 7–13, 2026 (22 NEW) — SLIPPED, carried into W4 (Sep 14–20)
 
-Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
+W3 itself produced 0 solves (I-9 leave cancellation week). The list is being worked in W4 instead; ticks below are W4 solves. Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
 
 ## Graphs (8)
 - [x] [Clone Graph](https://leetcode.com/problems/clone-graph/)

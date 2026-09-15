@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 132 Solved · most recent: *Graph Valid Tree* (15/09/2026). **W2 LC CLOSED 18/18. W3 4/22.**
+**Progress:** 132 Solved · most recent: *Graph Valid Tree* (15/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20): 4/22.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -181,13 +181,13 @@
 | Graphs | Verifying An Alien Dictionary | Easy | Todo | | | | NC250 |
 | Graphs | Find the Town Judge | Easy | Todo | | | | NC250 |
 | Graphs | Max Area of Island | Med | Todo | | | | NC250 |
-| Graphs | Clone Graph | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Map original→clone doubles as visited; create clone on first sight, wire edges as each node is processed. BFS (queue) and recursive DFS both written; try_emplace avoids the find+[] double hash. O(V+E). BFS avoids stack depth on a long chain. |
+| Graphs | Clone Graph | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Map original→clone doubles as visited; create clone on first sight, wire edges as each node is processed. BFS (queue) and recursive DFS both written; try_emplace avoids the find+[] double hash. O(V+E). BFS avoids stack depth on a long chain. |
 | Graphs | Walls And Gates | Med | Todo | | | | NC250 |
-| Graphs | Rotting Oranges | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Multi-source BFS: seed all rotten at level 0, count fresh up front, level-by-level loop, minutes++ only when a level spread. Final fresh > 0 means -1. O(mn). Why BFS: multi-source shortest distance, DFS cannot give distances. |
-| Graphs | Pacific Atlantic Water Flow | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Reverse flood from each ocean's border, step only to height >= current, answer = cells marked by both. O(mn). Fixes: visited grids as locals not members (judge may reuse the object, resize does not zero), hoist dirs to static constexpr, collect answer in a final pass rather than inside the flood. |
+| Graphs | Rotting Oranges | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Multi-source BFS: seed all rotten at level 0, count fresh up front, level-by-level loop, minutes++ only when a level spread. Final fresh > 0 means -1. O(mn). Why BFS: multi-source shortest distance, DFS cannot give distances. |
+| Graphs | Pacific Atlantic Water Flow | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Reverse flood from each ocean's border, step only to height >= current, answer = cells marked by both. O(mn). Fixes: visited grids as locals not members (judge may reuse the object, resize does not zero), hoist dirs to static constexpr, collect answer in a final pass rather than inside the flood. |
 | Graphs | Surrounded Regions | Med | Todo | | | | NC250 |
 | Graphs | Open The Lock | Med | Todo | | | | NC250 |
-| Graphs | Graph Valid Tree | Med | Solved | 15/09/2026 | 20 | 4 | NC250. W3. Tree = connected + acyclic. BFS and DFS both written: traverse from 0 with parent, a visited non-parent neighbor is a cycle, then sweep visited for connectivity. Parent trick relies on no repeated edges (problem guarantees it). Shortcut: edges.size() == n-1 plus connectivity, no cycle search needed. Union-find version handles parallel edges and leads into Redundant Connection. |
+| Graphs | Graph Valid Tree | Med | Solved | 15/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Tree = connected + acyclic. BFS and DFS both written: traverse from 0 with parent, a visited non-parent neighbor is a cycle, then sweep visited for connectivity. Parent trick relies on no repeated edges (problem guarantees it). Shortcut: edges.size() == n-1 plus connectivity, no cycle search needed. Union-find version handles parallel edges and leads into Redundant Connection. |
 | Graphs | Course Schedule IV | Med | Todo | | | | NC250 |
 | Graphs | Number of Connected Components In An Undirected Graph | Med | Todo | | | | NC250 |
 | Graphs | Redundant Connection | Med | Todo | | | | NC250 |
