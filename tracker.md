@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 128 Solved · most recent: *K Closest Points to Origin* (06/09/2026). **W2 LC CLOSED 18/18.**
+**Progress:** 129 Solved · most recent: *Clone Graph* (14/09/2026). **W2 LC CLOSED 18/18. W3 1/22.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -181,7 +181,7 @@
 | Graphs | Verifying An Alien Dictionary | Easy | Todo | | | | NC250 |
 | Graphs | Find the Town Judge | Easy | Todo | | | | NC250 |
 | Graphs | Max Area of Island | Med | Todo | | | | NC250 |
-| Graphs | Clone Graph | Med | Todo | | | | NC250 |
+| Graphs | Clone Graph | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W3. Map original→clone doubles as visited; create clone on first sight, wire edges as each node is processed. BFS (queue) and recursive DFS both written; try_emplace avoids the find+[] double hash. O(V+E). BFS avoids stack depth on a long chain. |
 | Graphs | Walls And Gates | Med | Todo | | | | NC250 |
 | Graphs | Rotting Oranges | Med | Todo | | | | NC250 |
 | Graphs | Pacific Atlantic Water Flow | Med | Todo | | | | NC250 |

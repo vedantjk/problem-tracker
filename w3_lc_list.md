@@ -3,7 +3,7 @@
 Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
 
 ## Graphs (8)
-- [ ] [Clone Graph](https://leetcode.com/problems/clone-graph/)
+- [x] [Clone Graph](https://leetcode.com/problems/clone-graph/)
 - [ ] [Rotting Oranges](https://leetcode.com/problems/rotting-oranges/)
 - [ ] [Pacific Atlantic Water Flow](https://leetcode.com/problems/pacific-atlantic-water-flow/)
 - [ ] [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/)
