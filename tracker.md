@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 133 Solved · most recent: *Redundant Connection* (15/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20): 5/22.**
+**Progress:** 134 Solved · most recent: *Network Delay Time* (15/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20): 6/22.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -194,7 +194,7 @@
 | Graphs | Accounts Merge | Med | Todo | | | | NC250 |
 | Graphs | Minimum Height Trees | Med | Todo | | | | NC250 |
 | Graphs | Path with Minimum Effort | Med | Todo | | | | NC250 |
-| Graphs | Network Delay Time | Med | Todo | | | | NC250 |
+| Graphs | Network Delay Time | Med | Solved | 15/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Lazy Dijkstra: min-heap on (dist, node), skip stale pops with d > dist[u], relax on strictly smaller, answer = max finite dist or -1. O(E log E) because duplicates are pushed instead of decrease-key. Compute nd = d + w from the popped distance to avoid INT_MAX overflow reasoning. Negative weights -> Bellman-Ford. |
 | Graphs | Min Cost to Connect All Points | Med | Todo | | | | NC250 |
 | Graphs | Swim In Rising Water | Hard | Todo | | | | NC250 |
 | Graphs | Alien Dictionary | Hard | Todo | | | | NC250 |
