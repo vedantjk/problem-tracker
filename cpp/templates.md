@@ -91,17 +91,84 @@ A non-template is a separate function that overload resolution prefers and that 
 
 No, and yes. Virtual dispatch needs a vtable fixed at class compilation, which a member template would keep growing. A class template's virtual destructor is an ordinary virtual function of each instantiation.
 
+## 16/09 deep dive: deduction, packs, folds, and ordering
+
+### Common types and conversions after deduction
+
+Deduction itself does not convert, but expressions inside an instantiated function use ordinary conversion rules. Comparing an `int` with a `double` is valid: the usual arithmetic conversions temporarily convert the `int` to `double` for the comparison without changing the original object. `std::common_type_t<T, U>` from `<type_traits>` names a type both operands can generally convert to; it does not inspect the runtime answer. Thus `std::common_type_t<int, double>` is `double`.
+
+`auto max(T, U) -> std::common_type_t<T, U>;` can be forward-declared because its trailing return type is explicit. A declaration with a body-deduced return type, `auto max(T, U);`, is legal, but cannot be called until the compiler has seen the definition and deduced that return type.
+
+`std::is_same_v<T, U>` is a compile-time `bool` testing exact type identity, including references and cv-qualifiers. It abbreviates `std::is_same<T, U>::value`. Explicit template arguments fill parameters left to right, and the rest are still deduced. For `template <typename T, typename U> void f(T, U)`, calls `f(i, d)`, `f<int>(i, d)`, and `f<double>(i, d)` print `0`, `0`, and `1`: only the third fixes `T` to `double`, deduces `U` as `double`, and then converts the first `int` argument during the call.
+
+### Parameter packs and fold expressions
+
+`template <typename... Args>` declares a type parameter pack: `Args` represents zero or more types. In `void printAll(Args... args)`, `args` is the corresponding value pack, and `sizeof...(Args)` is its length.
+
+```cpp
+template <typename... Args>
+void printAll(Args... args)
+{
+    (std::cout << ... << args) << '\n';
+}
+```
+
+`printAll(42, " hello ", 3.14)` expands conceptually to `std::cout << 42 << " hello " << 3.14 << '\n';` and prints `42 hello 3.14`. To print one item per line, fold the comma operator: `((std::cout << args << '\n'), ...);`. Fold expressions require parentheses; `std::cout << args << ... << '\n';` is invalid syntax.
+
+Fold direction follows the pack's position:
+
+- `(args + ... + 0)` is a binary **right** fold: `a1 + (a2 + (... + (an + 0)))`.
+- `(0 + ... + args)` is a binary **left** fold: `(((0 + a1) + a2) + ... + an)`.
+- `(args + ...)` is a unary right fold and requires a non-empty pack.
+
+The `0` participates in every binary-fold expansion, but it is the additive identity and also makes an empty pack produce `0`. Direction can affect floating-point rounding and matters for non-associative or overloaded operators.
+
+Before C++17 folds, a pack was often processed recursively:
+
+```cpp
+template <typename T>
+T sum(T arg) { return arg; }
+
+template <typename T, typename... Args>
+T sum(T arg, Args... args)
+{
+    return arg + sum<T>(args...);
+}
+```
+
+The explicit `<T>` locks every recursive call to the original first argument's type. `sum(0.5, 2, 0.5, 2)` therefore returns `double{5.0}`; `sum(2, 0.5, 2, 0.5)` uses `int`, truncates each `0.5` to zero as it becomes a recursive call's first parameter, and returns `4`. Streaming both with no separator prints `54`.
+
+### Forwarding-reference deduction
+
+In the deduced form `template <typename T> void foo(T&&)`, `T&&` is a forwarding reference. Passing an lvalue `int i` deduces `T = int&`; substitution gives `int& &&`, which collapses to `int&`. Therefore, `T x;` inside that instance becomes the invalid uninitialized-reference declaration `int& x;`. Any reference combination containing `&` collapses to `&`; only `&&` plus `&&` remains `&&`. See `value_categories.md` for the full treatment and `std::forward`.
+
+### Return types in function-template signatures
+
+Ordinary functions cannot differ only by return type: `void foo();` and `double foo();` conflict. A function-template signature does include its return type, so `template <typename T> void f();` and `template <typename T> double f();` may coexist. A direct `f<int>()` call is still ambiguous because call overload resolution does not use the requested result type, even in `double x = f<int>();`. A target function-pointer type can distinguish them: `void (*p)() = f<int>;` selects the first, while `double (*q)() = f<int>;` selects the second. Declaration distinctness and call-site selection are separate questions.
+
+### “More specialized” means a subset of matches
+
+For class partial specializations, `Obj<T, T>` matches equal-type pairs and `Obj<T, int>` matches pairs whose second type is `int`. Both match `Obj<int, int>`, but neither matching set contains the other: `Obj<double, double>` matches only the first, while `Obj<double, int>` matches only the second. The specializations are incomparable, so `Obj<int, int>` is ambiguous unless an exact full specialization `template <> class Obj<int, int> { ... };` resolves their intersection.
+
+By contrast, `add<T>(T, T)` is more specialized than `add<T, U>(T, U)` because every same-type pair accepted by the first is also accepted by the second. “Looks more restrictive” is only a shortcut; the subset relationship is the useful mental model.
+
+### Explicit function specialization is not an overload
+
+An explicit function-template specialization belongs to a particular primary template and does not compete independently in overload resolution. C++ first selects the best non-template function or primary template, then checks whether that chosen primary has a matching specialization. Thus, if `foo<>(int*)` specializes an earlier `foo(T)`, but a later primary overload `foo(T*)` exists, `foo(p)` for an `int* p` chooses the more specialized `foo(T*)` primary and prints its result, not the specialization of `foo(T)`. This is another reason to prefer ordinary overloads over explicit function-template specializations.
+
 ## Practice history
 
 ### Reading
 
 - 13/09/2026: learncpp 11.6 (function templates), 11.7 (instantiation), 11.8 (multiple template types), 11.9 (non-type template parameters), 11.10 (templates in multiple files), 26.3 (function template specialization).
+- 16/09/2026: reviewed the sequence interactively and added the deduction, pack/fold, forwarding-reference, signature, recursive-sum, and specialization-ordering examples above.
 
 ### Questions (getcracked)
 
 - Per platform record, rescraped 13/09/2026. Templates: Functions: Virtually a template. (virtual destructor in a class template is valid, a virtual member function template is not) ok. Template sum 1 and 2, Templatey signatures., There is no free template., First or second?, Template Specializations 1 and 2 not attempted.
+- Worked through 16/09: Template sum (`54`), Templatey signatures, There is no free template, First or second?, and Template Specializations 1.
 - Baseline quiz 29/08: full-specialization member definition without `template<>` MISSED; covered in the specialization section.
-- Anki: deduction never converts; plain call prefers non-template; each instance has its own static locals; full specialization needs `template <>` and `inline` in headers; member function templates cannot be virtual.
+- Anki: deduction never converts; plain call prefers non-template; each instance has its own static locals; full specialization needs `template <>` and `inline` in headers; member function templates cannot be virtual; fold direction follows pack position; class partial ordering is a subset test; function specialization is considered only after its primary wins overload resolution.
 
 <!-- gc-questions:start -->
 
