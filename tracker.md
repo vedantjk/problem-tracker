@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 138 Solved · most recent: *Max Area of Island* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 4/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
+**Progress:** 139 Solved · most recent: *Surrounded Regions* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 5/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -185,7 +185,7 @@
 | Graphs | Walls And Gates | Med | Todo | | | | NC250 |
 | Graphs | Rotting Oranges | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Multi-source BFS: seed all rotten at level 0, count fresh up front, level-by-level loop, minutes++ only when a level spread. Final fresh > 0 means -1. O(mn). Why BFS: multi-source shortest distance, DFS cannot give distances. |
 | Graphs | Pacific Atlantic Water Flow | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Reverse flood from each ocean's border, step only to height >= current, answer = cells marked by both. O(mn). Fixes: visited grids as locals not members (judge may reuse the object, resize does not zero), hoist dirs to static constexpr, collect answer in a final pass rather than inside the flood. |
-| Graphs | Surrounded Regions | Med | Todo | | | | NC250 |
+| Graphs | Surrounded Regions | Med | Solved | 21/09/2026 | 10 | 4 | NC250. W5 graph week. Invert the question: instead of finding surrounded regions, find the ones that are not. Any O connected to the border can never be captured, so DFS from every border O and mark that component with a temporary letter (Y). Then one sweep over the board flips every remaining O to X (captured) and every Y back to O (safe). O(m*n), in place, no visited array because the temporary mark is the visited state. The final sweep uses two separate ifs, which is only correct in the order O-to-X first and Y-to-O second; reversed, a restored O would immediately be flipped to X, so else-if is the safer form. Same border-first idea as Pacific Atlantic Water Flow. |
 | Graphs | Open The Lock | Med | Todo | | | | NC250 |
 | Graphs | Graph Valid Tree | Med | Solved | 15/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Tree = connected + acyclic. BFS and DFS both written: traverse from 0 with parent, a visited non-parent neighbor is a cycle, then sweep visited for connectivity. Parent trick relies on no repeated edges (problem guarantees it). Shortcut: edges.size() == n-1 plus connectivity, no cycle search needed. Union-find version handles parallel edges and leads into Redundant Connection. |
 | Graphs | Course Schedule IV | Med | Todo | | | | NC250 |
