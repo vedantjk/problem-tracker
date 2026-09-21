@@ -1,6 +1,6 @@
 # W3 LC List — Sep 7–13, 2026 (22 NEW) — SLIPPED, carried into W4 (Sep 14–20)
 
-W3 itself produced 0 solves (I-9 leave cancellation week). The list is being worked in W4 instead; W4 closed at 6/22 (the six Graphs ticks through Network Delay Time) and the remaining 16 carry into W5 (Sep 21-27), so later ticks are W5 solves. Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
+W3 itself produced 0 solves (I-9 leave cancellation week). The list is being worked in W4 instead; W4 closed at 6/22 (the six Graphs ticks through Network Delay Time) and the remaining 16 carried into W5 (Sep 21-27). Two of them (Cheapest Flights, Word Ladder) were solved on 21/09, closing Graphs 8/8. W5 then became graph week (`w5_lc_list.md`), so the 14 still open below (DP, Backtracking, Trees, wildcards) move to W6. Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
 
 ## Graphs (8)
 - [x] [Clone Graph](https://leetcode.com/problems/clone-graph/)

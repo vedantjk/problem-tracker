@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 136 Solved · most recent: *Word Ladder* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carry into W5 (Sep 21-27): 2/16.**
+**Progress:** 136 Solved · most recent: *Word Ladder* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 2/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
