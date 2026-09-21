@@ -5,7 +5,7 @@ Decided 2026-09-21: spend W5 finishing the Graphs bucket instead of opening DP a
 Order runs pattern by pattern, template first and Hard last, so each bucket teaches the template before it is stressed. Budgets: Easy 10 min, Medium 30 min, Hard 45 min.
 
 ## 1. Grid BFS / DFS (4)
-- [ ] [Island Perimeter](https://leetcode.com/problems/island-perimeter/) (Easy)
+- [x] [Island Perimeter](https://leetcode.com/problems/island-perimeter/) (Easy)
 - [ ] [Max Area of Island](https://leetcode.com/problems/max-area-of-island/)
 - [ ] [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/)
 - [ ] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/)
