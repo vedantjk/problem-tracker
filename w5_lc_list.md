@@ -2,20 +2,20 @@
 
 Decided 2026-09-21: spend W5 finishing the Graphs bucket instead of opening DP and backtracking. This list is every unsolved LeetCode graph problem in `tracker.md` (24). With the two solved this morning from the carried W3 list (Cheapest Flights Within K Stops, Word Ladder) the week totals 26 against the plan's W5 target of 25 NEW. The 14 problems still open in `w3_lc_list.md` (DP, Backtracking, Trees, wildcards) move to W6.
 
-Order runs pattern by pattern, template first and Hard last, so each bucket teaches the template before it is stressed. Budgets: Easy 10 min, Medium 30 min, Hard 45 min. Problems marked (premium) are locked on LeetCode; the NeetCode link is the free version.
+Order runs pattern by pattern, template first and Hard last, so each bucket teaches the template before it is stressed. Budgets: Easy 10 min, Medium 30 min, Hard 45 min.
 
 ## 1. Grid BFS / DFS (4)
 - [ ] [Island Perimeter](https://leetcode.com/problems/island-perimeter/) (Easy)
 - [ ] [Max Area of Island](https://leetcode.com/problems/max-area-of-island/)
 - [ ] [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/)
-- [ ] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/) (premium, free as [Islands and Treasure](https://neetcode.io/problems/islands-and-treasure))
+- [ ] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/)
 
 ## 2. Warm-ups (2)
 - [ ] [Find the Town Judge](https://leetcode.com/problems/find-the-town-judge/) (Easy)
 - [ ] [Verifying An Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/) (Easy)
 
 ## 3. Union-find and components (4)
-- [ ] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/) (premium, free as [Count Connected Components](https://neetcode.io/problems/count-connected-components))
+- [ ] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 - [ ] [Accounts Merge](https://leetcode.com/problems/accounts-merge/)
 - [ ] [Couples Holding Hands](https://leetcode.com/problems/couples-holding-hands/) (Hard)
 - [ ] [Greatest Common Divisor Traversal](https://leetcode.com/problems/greatest-common-divisor-traversal/) (Hard)
@@ -34,7 +34,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 ## 7. Topological sort (6)
 - [ ] [Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)
 - [ ] [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/)
-- [ ] [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (Hard, premium, free as [Foreign Dictionary](https://neetcode.io/problems/foreign-dictionary))
+- [ ] [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (Hard)
 - [ ] [Parallel Courses III](https://leetcode.com/problems/parallel-courses-iii/) (Hard)
 - [ ] [Build a Matrix With Conditions](https://leetcode.com/problems/build-a-matrix-with-conditions/) (Hard)
 - [ ] [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/) (Hard)
@@ -42,7 +42,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 ## 8. Remaining Hards (3)
 - [ ] [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/) (Hard)
 - [ ] [Word Ladder II](https://leetcode.com/problems/word-ladder-ii/) (Hard)
-- [ ] [Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/) (Hard, premium)
+- [ ] [Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/) (Hard)
 
 ## Resolves (REVISE slots, Fri and Sun): graph problems at confidence 3 or below
 - [ ] [Evaluate Division](https://leetcode.com/problems/evaluate-division/) (conf 2, 16/07)
