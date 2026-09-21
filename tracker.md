@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 134 Solved · most recent: *Network Delay Time* (15/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20): 6/22.**
+**Progress:** 135 Solved · most recent: *Cheapest Flights Within K Stops* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carry into W5 (Sep 21-27): 1/16.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -198,7 +198,7 @@
 | Graphs | Min Cost to Connect All Points | Med | Todo | | | | NC250 |
 | Graphs | Swim In Rising Water | Hard | Todo | | | | NC250 |
 | Graphs | Alien Dictionary | Hard | Todo | | | | NC250 |
-| Graphs | Cheapest Flights Within K Stops | Med | Todo | | | | NC250 |
+| Graphs | Cheapest Flights Within K Stops | Med | Solved | 21/09/2026 | 20 | 4 | NC250. W5 (W3 list carried). Solved three ways. Bellman-Ford: run k+1 rounds, and in each round relax every edge from the previous round's dist into a copy, so one round can only extend paths by one edge; O(k*E). Level BFS: the queue holds (node, cost at push time), each level is one more flight, stop after k+1 levels, and prune when the new cost is not strictly below dist[nbr]; the cost must come from the queue entry, not from dist[], or a level leaks into the next. Dijkstra on (cost, node, steps): plain dist[] pruning is wrong here because a costlier path with fewer stops can still be the only one that reaches dst, so prune on stops[node] instead (skip a pop when steps >= stops[node] or steps > k+1); the first pop of dst is the answer. Heap entries should be tuple or array<int,3>, not vector<int>, to avoid a heap allocation per push. |
 | Graphs | Find Critical and Pseudo Critical Edges in Minimum Spanning Tree | Hard | Todo | | | | NC250 |
 | Graphs | Build a Matrix With Conditions | Hard | Todo | | | | NC250 |
 | Graphs | Greatest Common Divisor Traversal | Hard | Todo | | | | NC250 |

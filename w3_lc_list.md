@@ -1,6 +1,6 @@
 # W3 LC List — Sep 7–13, 2026 (22 NEW) — SLIPPED, carried into W4 (Sep 14–20)
 
-W3 itself produced 0 solves (I-9 leave cancellation week). The list is being worked in W4 instead; ticks below are W4 solves. Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
+W3 itself produced 0 solves (I-9 leave cancellation week). The list is being worked in W4 instead; W4 closed at 6/22 (the six Graphs ticks through Network Delay Time) and the remaining 16 carry into W5 (Sep 21-27), so later ticks are W5 solves. Picked 2026-09-07 from the pending Medium/Hard pool, weighted to the largest untouched buckets (Graphs, DP, Backtracking, Trees). Within a bucket, order runs from template to harder. Resolves come from `resolve_queue.md` in order as time allows.
 
 ## Graphs (8)
 - [x] [Clone Graph](https://leetcode.com/problems/clone-graph/)
@@ -9,7 +9,7 @@ W3 itself produced 0 solves (I-9 leave cancellation week). The list is being wor
 - [x] [Graph Valid Tree](https://leetcode.com/problems/graph-valid-tree/)
 - [x] [Redundant Connection](https://leetcode.com/problems/redundant-connection/)
 - [x] [Network Delay Time](https://leetcode.com/problems/network-delay-time/)
-- [ ] [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
+- [x] [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
 - [ ] [Word Ladder](https://leetcode.com/problems/word-ladder/)
 
 ## DP (5)
