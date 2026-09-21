@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 137 Solved · most recent: *Island Perimeter* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 3/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
+**Progress:** 138 Solved · most recent: *Max Area of Island* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 4/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -180,7 +180,7 @@
 | Graphs | Island Perimeter | Easy | Solved | 21/09/2026 | 15 | 4 | NC250. W5 graph week. Solved with a DFS plus visited grid, where each land cell adds 4 minus its number of land neighbours. That works but the traversal is unnecessary: the per-cell formula does not depend on visit order or connectivity, so a plain double loop over the grid gives the same sum in O(m*n) with no recursion and no visited array. Equivalent closed form: 4 * land cells minus 2 * adjacent land pairs, counting only right and down neighbours so each pair is seen once. |
 | Graphs | Verifying An Alien Dictionary | Easy | Todo | | | | NC250 |
 | Graphs | Find the Town Judge | Easy | Todo | | | | NC250 |
-| Graphs | Max Area of Island | Med | Todo | | | | NC250 |
+| Graphs | Max Area of Island | Med | Solved | 21/09/2026 | 15 | 4 | NC250. W5 graph week. DFS flood fill that returns the size of the component: mark the cell by writing 0 into the grid before recursing (this is the visited mark, so no extra array), then return 1 plus the sum of the recursive calls on in-bounds land neighbours; the answer is the max over all start cells. O(m*n) time because each cell is sunk once. Mutating the input is fine on LeetCode but say it out loud in an interview, and offer a visited array or restoring the grid if the caller needs it intact. Recursion depth can reach m*n on a snake-shaped island, so an explicit stack or BFS is the safe version for large grids. |
 | Graphs | Clone Graph | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Map original→clone doubles as visited; create clone on first sight, wire edges as each node is processed. BFS (queue) and recursive DFS both written; try_emplace avoids the find+[] double hash. O(V+E). BFS avoids stack depth on a long chain. |
 | Graphs | Walls And Gates | Med | Todo | | | | NC250 |
 | Graphs | Rotting Oranges | Med | Solved | 14/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Multi-source BFS: seed all rotten at level 0, count fresh up front, level-by-level loop, minutes++ only when a level spread. Final fresh > 0 means -1. O(mn). Why BFS: multi-source shortest distance, DFS cannot give distances. |

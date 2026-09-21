@@ -6,7 +6,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## 1. Grid BFS / DFS (4)
 - [x] [Island Perimeter](https://leetcode.com/problems/island-perimeter/) (Easy)
-- [ ] [Max Area of Island](https://leetcode.com/problems/max-area-of-island/)
+- [x] [Max Area of Island](https://leetcode.com/problems/max-area-of-island/)
 - [ ] [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/)
 - [ ] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/)
 
