@@ -10,7 +10,7 @@ W3 itself produced 0 solves (I-9 leave cancellation week). The list is being wor
 - [x] [Redundant Connection](https://leetcode.com/problems/redundant-connection/)
 - [x] [Network Delay Time](https://leetcode.com/problems/network-delay-time/)
 - [x] [Cheapest Flights Within K Stops](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
-- [ ] [Word Ladder](https://leetcode.com/problems/word-ladder/)
+- [x] [Word Ladder](https://leetcode.com/problems/word-ladder/)
 
 ## DP (5)
 - [ ] [Coin Change](https://leetcode.com/problems/coin-change/)

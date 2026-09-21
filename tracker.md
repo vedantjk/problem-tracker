@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 135 Solved · most recent: *Cheapest Flights Within K Stops* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carry into W5 (Sep 21-27): 1/16.**
+**Progress:** 136 Solved · most recent: *Word Ladder* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carry into W5 (Sep 21-27): 2/16.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -167,7 +167,7 @@
 | Graphs | Course Schedule | Med | Solved | 15/07/2026 | 15 | 3 | Topological sort. BFS (Kahn): compute in-degrees, queue all 0-in-degree nodes, pop and decrement neighbors; if every node gets processed (valid ordering) → true. DFS: cycle detection with 3 colors (white=unprocessed, gray=processing, black=done); a gray hit = cycle → false. Loop DFS over ALL nodes (graph may be disconnected); push a node once fully processed — topo order comes out reversed. |
 | Graphs | Course Schedule II | Med | Solved | 15/07/2026 | 15 | 3 | Slight modification of Course Schedule — return the actual topological ordering (empty array if a cycle exists). |
 | Graphs | Number of Provinces | Med | Solved | 16/07/2026 | 15 | 3 | DFS with a visited array to avoid infinite loops; start from every unvisited node since the graph may be disconnected — each DFS launch = one province. |
-| Graphs | Word Ladder | Hard | Todo | | | | |
+| Graphs | Word Ladder | Hard | Solved | 21/09/2026 | 8 | 4 | W5 (W3 list carried). Level BFS over words: put the word list in an unordered_set, and for each popped word try all 26 letters at every position, keeping a candidate only if it is in the set. Erasing a word from the set at push time doubles as the visited mark, so no word is queued twice. The answer counts words, not edges, so return level + 1 when the end word is popped. Cost is O(N * L * 26) candidates with an O(L) hash each, so O(N * L^2 * 26). Cheap extras: return 0 up front if the end word is not in the list, and move the string out of the queue instead of copying. Bidirectional BFS (always expand the smaller frontier) is the standard speed-up to mention. |
 | Graphs | Word Ladder II | Hard | Todo | | | | |
 | Graphs | Reconstruct Itinerary | Hard | Todo | | | | |
 | Graphs | Evaluate Division | Med | Solved | 16/07/2026 | 30 | 2 | Brute force: build a weighted graph and BFS each query. Optimal: weighted Union-Find storing the ratio to each node's parent — needs path compression to be near-O(1); without it, it degrades to plain graph traversal. |
