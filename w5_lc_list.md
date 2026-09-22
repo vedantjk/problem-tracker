@@ -12,7 +12,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## 2. Warm-ups (2)
 - [x] [Find the Town Judge](https://leetcode.com/problems/find-the-town-judge/) (Easy)
-- [ ] [Verifying An Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/) (Easy)
+- [x] [Verifying An Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/) (Easy)
 
 ## 3. Union-find and components (4)
 - [ ] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
