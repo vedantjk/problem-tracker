@@ -11,7 +11,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/)
 
 ## 2. Warm-ups (2)
-- [ ] [Find the Town Judge](https://leetcode.com/problems/find-the-town-judge/) (Easy)
+- [x] [Find the Town Judge](https://leetcode.com/problems/find-the-town-judge/) (Easy)
 - [ ] [Verifying An Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/) (Easy)
 
 ## 3. Union-find and components (4)
