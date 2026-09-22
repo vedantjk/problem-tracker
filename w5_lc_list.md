@@ -8,7 +8,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Island Perimeter](https://leetcode.com/problems/island-perimeter/) (Easy)
 - [x] [Max Area of Island](https://leetcode.com/problems/max-area-of-island/)
 - [x] [Surrounded Regions](https://leetcode.com/problems/surrounded-regions/)
-- [ ] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/)
+- [x] [Walls And Gates](https://leetcode.com/problems/walls-and-gates/)
 
 ## 2. Warm-ups (2)
 - [ ] [Find the Town Judge](https://leetcode.com/problems/find-the-town-judge/) (Easy)
