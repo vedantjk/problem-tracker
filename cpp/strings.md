@@ -173,7 +173,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ○ [Implement std::string](https://getcracked.io/problem/90/implement-std-string) — problem
 
 ### stringstream, string_view, and from_chars
-- ✓ [Returned View](https://getcracked.io/question/2051) — Medium
+- ✓ [Returned View](https://getcracked.io/question/2051) — Easy
 
 ### Small String Optimization
 - ✓ [SOO, about that object.](https://getcracked.io/question/1206) — Easy

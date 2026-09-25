@@ -304,7 +304,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [I min-maxed my character.](https://getcracked.io/question/967) — Medium
 
 ### stringstream, string_view, and from_chars
-- ✓ [Returned View](https://getcracked.io/question/2051) — Medium
+- ✓ [Returned View](https://getcracked.io/question/2051) — Easy
 
 ### C-Style Arrays
 - ✓ [#square](https://getcracked.io/question/517) — Cooked

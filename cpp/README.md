@@ -470,12 +470,12 @@ The concept index and quiz tables are navigation and history, so their compact l
 Tree nodes not yet mapped to a concept file (mostly Intermediate material). When a file is created for one of these, add the mapping in `cpp/tools/gc_links.py`.
 
 - **std::queue, std::deque & std::priority_queue** — 0/1 attempted
-- **Templates: Classes** — 0/6 attempted
-- **Class Template Argument Deduction** — 0/2 attempted
+- **Templates: Classes** — 6/6 attempted: ✓ [If you've used templates, you've run into this.](https://getcracked.io/question/946), ✓ [structs of structs of structs](https://getcracked.io/question/1269), ✓ [structs of structs of structs 2](https://getcracked.io/question/1270), ✗ [To <T> or not to <T>](https://getcracked.io/question/690), ✓ [Copy constructor, maybe.](https://getcracked.io/question/1221), ✓ [structs of structs of structs 3](https://getcracked.io/question/1271)
+- **Class Template Argument Deduction** — 2/2 attempted: ✓ [CTAD](https://getcracked.io/question/844), ✗ [A template, or not not?](https://getcracked.io/question/686)
 - **Template Non-Type Parameters** — 0/1 attempted
-- **Class Template Specialization** — 0/1 attempted
+- **Class Template Specialization** — 1/1 attempted: ✗ [Specialize me.](https://getcracked.io/question/959)
 - **Partial Class Template Specialization** — 0/1 attempted
-- **Variadic Templates** — 0/1 attempted
-- **Templates and Pointers** — 0/1 attempted
+- **Variadic Templates** — 1/1 attempted: ✓ [This scares me.](https://getcracked.io/question/962)
+- **Templates and Pointers** — 1/1 attempted: ✓ [Overloading the overload.](https://getcracked.io/question/957)
 
 <!-- gc-questions:end -->

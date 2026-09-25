@@ -417,14 +417,14 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 
 ### Move Semantics
 - ✗ [Moved from.](https://getcracked.io/question/682) — Easy
-- ○ [We're moving.](https://getcracked.io/problem/5/we-re-moving) — problem
+- ✓ [We're moving.](https://getcracked.io/problem/5/we-re-moving) — problem
 
 ### std::unique_ptr
 - ✓ [It's unique, but is it big?](https://getcracked.io/question/823) — Cooked
 - ✗ [Have him play with it.](https://getcracked.io/question/1259) — Easy
 - ✗ [I'm moving in.](https://getcracked.io/question/1027) — Medium
 - ✓ [Implement unique_ptr](https://getcracked.io/problem/2/implement-unique-ptr) — problem
-- ○ [Implement make_unique](https://getcracked.io/problem/3/implement-make-unique) — problem
+- ✓ [Implement make_unique](https://getcracked.io/problem/3/implement-make-unique) — problem
 
 ### std::shared_ptr
 - ✗ [A tale of two pointers!](https://getcracked.io/question/1328) — Easy
@@ -452,6 +452,6 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
 - ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
 - ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
-- ✗ [Who'd you call?](https://getcracked.io/question/1233) — Hard
+- ✗ [Who'd you call?](https://getcracked.io/question/1233) — Cracked
 
 <!-- gc-questions:end -->

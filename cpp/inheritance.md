@@ -318,8 +318,8 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [A mix of creations.](https://getcracked.io/question/704) — Hard
 
 ### Adding & Hiding Functionality
-- ✗ [Where are we?](https://getcracked.io/question/913) — Easy
 - ✗ [I'm printing mom...](https://getcracked.io/question/1721) — Medium
+- ✗ [Where are we?](https://getcracked.io/question/913) — Medium
 - ✓ [Under the Shadow](https://getcracked.io/question/716) — Hard
 
 ### Multiple Inheritance (Issues)

@@ -128,7 +128,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [Double trouble?](https://getcracked.io/question/796) — Easy
 - ✗ [To sign or not to sign?](https://getcracked.io/question/700) — Easy
 - ✓ [Whatever floats your cope.](https://getcracked.io/question/1064) — Easy
+- ✗ [A very small value](https://getcracked.io/question/1020) — Medium
 - ✓ [I don't give a flying float](https://getcracked.io/question/987) — Medium
-- ✗ [A very small value](https://getcracked.io/question/1020) — Hard
 
 <!-- gc-questions:end -->

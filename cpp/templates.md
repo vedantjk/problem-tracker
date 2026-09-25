@@ -177,13 +177,13 @@ An explicit function-template specialization belongs to a particular primary tem
 Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
 
 ### Templates: Functions
-- ○ [Template sum 2](https://getcracked.io/question/876) — Easy
-- ○ [Templatey signatures.](https://getcracked.io/question/958) — Easy
-- ○ [There is no free template.](https://getcracked.io/question/944) — Easy
+- ✓ [Template sum 2](https://getcracked.io/question/876) — Easy
+- ✗ [Templatey signatures.](https://getcracked.io/question/958) — Easy
+- ✓ [There is no free template.](https://getcracked.io/question/944) — Easy
 - ✓ [Virtually a template.](https://getcracked.io/question/953) — Easy
-- ○ [First or second?](https://getcracked.io/question/966) — Medium
-- ○ [Template Specializations 1](https://getcracked.io/question/692) — Medium
-- ○ [Template Specializations 2](https://getcracked.io/question/694) — Medium
-- ○ [Template sum 1](https://getcracked.io/question/875) — Medium
+- ✓ [First or second?](https://getcracked.io/question/966) — Medium
+- ✗ [Template Specializations 1](https://getcracked.io/question/692) — Medium
+- ✓ [Template Specializations 2](https://getcracked.io/question/694) — Medium
+- ✓ [Template sum 1](https://getcracked.io/question/875) — Medium
 
 <!-- gc-questions:end -->

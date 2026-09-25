@@ -124,11 +124,11 @@ When `size()` would exceed `max_load_factor() * bucket_count()` after an inserti
 Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempted and missed, ○ not attempted yet. Regenerate with `python3 cpp/tools/gc_links.py` after re-scraping.
 
 ### Hashing
-- ✗ [Where are we?](https://getcracked.io/question/913) — Easy
+- ✗ [Where are we?](https://getcracked.io/question/913) — Medium
 
 ### std::unordered_map & std::map
-- ✓ [Fifty shades of '2'](https://getcracked.io/question/1843) — Easy
-- ✗ [Wrong map, bro.](https://getcracked.io/question/1003) — Cracked
+- ✓ [Fifty shades of '2'](https://getcracked.io/question/1843) — Medium
+- ✗ [Wrong map, bro.](https://getcracked.io/question/1003) — Hard
 - ○ [Implement LRU Cache](https://getcracked.io/problem/70/implement-lru-cache) — problem
 
 ### std::set & std::unordered_set

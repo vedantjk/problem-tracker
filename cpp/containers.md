@@ -165,14 +165,14 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✓ [Don't @ me](https://getcracked.io/question/843) — Cooked
 - ✗ [A, B, C, initializer_list](https://getcracked.io/question/820) — Easy
 - ✓ [Containers for containers.](https://getcracked.io/question/1100) — Easy
-- ○ [Build a Histogram](https://getcracked.io/problem/46/build-a-histogram) — problem
-- ○ [Yeah, I know what a call stack is.](https://getcracked.io/problem/19/yeah-i-know-what-a-call-stack-is) — problem
+- ✓ [Build a Histogram](https://getcracked.io/problem/46/build-a-histogram) — problem
+- ✓ [Yeah, I know what a call stack is.](https://getcracked.io/problem/19/yeah-i-know-what-a-call-stack-is) — problem
 
 ### Internals
 - ✓ [How does it allocate?](https://getcracked.io/question/849) — Cooked
 - ✓ [Vector growth 2](https://getcracked.io/question/544) — Cooked
 - ✗ [Vector growth 1](https://getcracked.io/question/543) — Easy
 - ✗ [So, how big is vector?](https://getcracked.io/question/764) — Medium
-- ○ [Implement vector](https://getcracked.io/problem/1/implement-vector) — problem
+- ✓ [Implement vector](https://getcracked.io/problem/1/implement-vector) — problem
 
 <!-- gc-questions:end -->

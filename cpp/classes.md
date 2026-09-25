@@ -626,8 +626,8 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 
 ### Classes and Structs
 - ✓ [Class vs Struct](https://getcracked.io/question/372) — Cooked
-- ✗ [Class inStruction](https://getcracked.io/question/1329) — Easy
 - ✓ [Struct over Class](https://getcracked.io/question/373) — Easy
+- ✗ [Class inStruction](https://getcracked.io/question/1329) — Medium
 - ✗ [wtf const](https://getcracked.io/question/969) — Medium
 
 ### Member Functions
@@ -652,7 +652,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 - ✗ [Tear it out root and stem](https://getcracked.io/question/1299) — Medium
 - ✗ [? 1 : 2 -> auto](https://getcracked.io/question/1006) — Hard
 - ✗ [96% of you will fail this.](https://getcracked.io/question/418) — Hard
-- ✗ [Who'd you call?](https://getcracked.io/question/1233) — Hard
+- ✗ [Who'd you call?](https://getcracked.io/question/1233) — Cracked
 
 ### Access Modifiers
 - ✓ [private, public, protected](https://getcracked.io/question/862) — Easy

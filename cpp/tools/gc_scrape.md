@@ -21,3 +21,6 @@ The tree at `https://getcracked.io/progress-tree/beginner-cpp` is a React Flow g
   r(JSON.stringify(out));
 })
 ```
+
+
+**Icon change noticed 2026-09-24:** resource rows now show `lucide-x` when READ (it is a mark-unread button), and no icon when unread; `lucide-check` no longer appears on resources. Questions and problems keep the old meaning (check = correct, x = missed, minus = not attempted). Update the status function accordingly before diffing against an older cache.

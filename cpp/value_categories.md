@@ -218,15 +218,15 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 
 ### Move Semantics
 - ✗ [Moved from.](https://getcracked.io/question/682) — Easy
-- ○ [We're moving.](https://getcracked.io/problem/5/we-re-moving) — problem
+- ✓ [We're moving.](https://getcracked.io/problem/5/we-re-moving) — problem
 
 ### lvalue, rvalue, xvalue, prvalue, glvalue
 - ✗ [What-value](https://getcracked.io/question/1724) — Cracked
 
 ### Universal References & Perfect Forwarding
-- ○ [auto&& T&& <T>&&](https://getcracked.io/question/828) — Easy
-- ○ [std::forward](https://getcracked.io/question/955) — Easy
-- ○ [You're still not real.](https://getcracked.io/question/939) — Medium
-- ○ [r-value confusion.](https://getcracked.io/question/1001) — Hard
+- ✓ [auto&& T&& <T>&&](https://getcracked.io/question/828) — Easy
+- ✓ [std::forward](https://getcracked.io/question/955) — Easy
+- ✓ [You're still not real.](https://getcracked.io/question/939) — Medium
+- ✓ [r-value confusion.](https://getcracked.io/question/1001) — Hard
 
 <!-- gc-questions:end -->

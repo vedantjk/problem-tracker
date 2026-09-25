@@ -427,7 +427,7 @@ Pulled from the Beginner C++ progress tree. ✓ answered correctly, ✗ attempte
 ### I/O Streams: Console
 - ✓ [Double flushing?](https://getcracked.io/question/751) — Cooked
 - ✓ [std::cout vs std::cerr](https://getcracked.io/question/1283) — Easy
-- ✓ [Streams](https://getcracked.io/question/1348) — Medium
+- ✓ [Streams](https://getcracked.io/question/1348) — Easy
 - ✓ [Streams of strings.](https://getcracked.io/question/968) — Medium
 - ✗ [1s in chat if you're cooked](https://getcracked.io/question/1222) — Hard
 
