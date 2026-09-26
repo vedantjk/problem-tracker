@@ -159,3 +159,31 @@
 ## Class Template Specialization (1)
 - [ ] [Specialize me.](https://getcracked.io/question/959) (Medium)
 
+
+
+# Operating Systems - Virtualization tree (scraped 2026-09-25 evening)
+
+## Problems
+- [ ] [Scheduling in Strides!](https://getcracked.io/problem/145/scheduling-in-strides) (Medium, The Alternative to MLFQ) - not attempted
+- [ ] [Base and Many Bounds](https://getcracked.io/problem/144/base-and-many-bounds) (Easy, Base and Bounds) - not attempted
+- [x] [Implement an allocator](https://getcracked.io/problem/18/implement-an-allocator) (Medium, Chunk Cutting Strategies)
+- [ ] [Implement a pool allocator](https://getcracked.io/problem/215/implement-a-pool-allocator) (Hard, Chunk Cutting Strategies) - not attempted
+- [ ] [Address Translation 1](https://getcracked.io/problem/132/address-translation-1) (Easy, Translation Lookaside Buffer (TLB)) - not attempted
+- [ ] [Address Translation 2](https://getcracked.io/problem/133/address-translation-2) (Medium, TLB Contents and Limitations) - not attempted
+- [ ] [Address Translation 3](https://getcracked.io/problem/136/address-translation-3) (Medium, Page Fault & Page Replacement) - not attempted
+
+## Questions not yet correct
+- [ ] [Join me](https://getcracked.io/question/619) (Cooked, The API) - missed
+- [ ] [The birth of the process](https://getcracked.io/question/618) (Cooked, The API) - missed
+- [ ] [Interrupting an interrupt.](https://getcracked.io/question/483) (Easy, Issues with LDE) - missed
+- [ ] [P switch T switch.](https://getcracked.io/question/1072) (Cooked, Basic Rules and Altering Priority) - missed
+- [ ] [Simple system call overhead](https://getcracked.io/question/917) (Medium, Tuning the MLFQ) - not attempted
+- [ ] [Ding ding ding!](https://getcracked.io/question/486) (Cooked, The Alternative to MLFQ) - missed
+- [ ] [Who can share?](https://getcracked.io/question/513) (Medium, A Process' Address Space) - missed
+- [ ] [Kcats](https://getcracked.io/question/1482) (Easy, Address Locations (Stack, Heap, and the C API)) - missed
+- [ ] [They're stacked.](https://getcracked.io/question/1277) (Easy, Address Locations (Stack, Heap, and the C API)) - missed
+- [ ] [That's BS!](https://getcracked.io/question/1327) (Medium, Address Locations (Stack, Heap, and the C API)) - missed
+- [ ] [The fundemental page](https://getcracked.io/question/602) (Cooked, Fixed Size Chunks and Page Tables) - missed
+- [ ] [TLB Miss Handling](https://getcracked.io/question/605) (Easy, TLB Contents and Limitations) - missed
+- [ ] [PML4](https://getcracked.io/question/765) (Easy, Big Pages) - not attempted
+- [ ] [Inverted Page Tables](https://getcracked.io/question/607) (Cooked, Shrinking Page Tables) - missed
