@@ -16,7 +16,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## 3. Union-find and components (4)
 - [x] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
-- [ ] [Accounts Merge](https://leetcode.com/problems/accounts-merge/)
+- [x] [Accounts Merge](https://leetcode.com/problems/accounts-merge/)
 - [ ] [Couples Holding Hands](https://leetcode.com/problems/couples-holding-hands/) (Hard)
 - [ ] [Greatest Common Divisor Traversal](https://leetcode.com/problems/greatest-common-divisor-traversal/) (Hard)
 
