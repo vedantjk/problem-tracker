@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 142 Solved · most recent: *Verifying An Alien Dictionary* (21/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 8/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
+**Progress:** 143 Solved · most recent: *Number of Connected Components In An Undirected Graph* (28/09/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 9/26. The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -189,7 +189,7 @@
 | Graphs | Open The Lock | Med | Todo | | | | NC250 |
 | Graphs | Graph Valid Tree | Med | Solved | 15/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Tree = connected + acyclic. BFS and DFS both written: traverse from 0 with parent, a visited non-parent neighbor is a cycle, then sweep visited for connectivity. Parent trick relies on no repeated edges (problem guarantees it). Shortcut: edges.size() == n-1 plus connectivity, no cycle search needed. Union-find version handles parallel edges and leads into Redundant Connection. |
 | Graphs | Course Schedule IV | Med | Todo | | | | NC250 |
-| Graphs | Number of Connected Components In An Undirected Graph | Med | Todo | | | | NC250 |
+| Graphs | Number of Connected Components In An Undirected Graph | Med | Solved | 28/09/2026 | 5 | 4 | NC250. W5 graph list, solved in W6. Build an adjacency list, then loop over every node: each unvisited node is the start of a new component, so increment the count and BFS from it to mark everything reachable. Marking visited at push time (not pop time) means no node is queued twice. O(n + E) time and space. The list files this under union-find, and that version needs no adjacency list: start with components = n, and for each edge call unite(a, b), decrementing components only when the two roots differ; with path compression and union by size it is O(E * alpha(n)). Union-find is the better answer when edges arrive as a stream or the count is queried between insertions, since BFS would have to rerun from scratch. Small tidy-up: initialise vector<bool> with false rather than 0. |
 | Graphs | Redundant Connection | Med | Solved | 15/09/2026 | 20 | 4 | NC250. W4 (W3 list carried). Union-find over edges in order; first edge whose endpoints share a root is the answer. First version had no path compression (O(n) find); fixed with p[i] = find(p[i]). Optimal: path halving (iterative) + union by size (swap so smaller root hangs under larger), unite returns bool as the cycle signal, O(n α(n)). Depth-doubling argument for the log n bound. |
 | Graphs | Accounts Merge | Med | Todo | | | | NC250 |
 | Graphs | Minimum Height Trees | Med | Todo | | | | NC250 |

@@ -15,7 +15,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Verifying An Alien Dictionary](https://leetcode.com/problems/verifying-an-alien-dictionary/) (Easy)
 
 ## 3. Union-find and components (4)
-- [ ] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
+- [x] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 - [ ] [Accounts Merge](https://leetcode.com/problems/accounts-merge/)
 - [ ] [Couples Holding Hands](https://leetcode.com/problems/couples-holding-hands/) (Hard)
 - [ ] [Greatest Common Divisor Traversal](https://leetcode.com/problems/greatest-common-divisor-traversal/) (Hard)
