@@ -187,3 +187,64 @@
 - [ ] [TLB Miss Handling](https://getcracked.io/question/605) (Easy, TLB Contents and Limitations) - missed
 - [ ] [PML4](https://getcracked.io/question/765) (Easy, Big Pages) - not attempted
 - [ ] [Inverted Page Tables](https://getcracked.io/question/607) (Cooked, Shrinking Page Tables) - missed
+
+
+# C++ Concurrency tree (scraped 2026-09-28 evening)
+
+Platform record: 1/10 problems solved, 22/40 questions correct, 6 missed, 12 not attempted.
+
+## Problems
+- [ ] [Implement SPSC Queue](https://getcracked.io/problem/52/implement-spsc-queue) (Easy, std::condition_variable) - not attempted
+- [ ] [Implement Reader-Writer Lock](https://getcracked.io/problem/12/implement-reader-writer-lock) (Hard, std::condition_variable) - not attempted
+- [ ] [Implement std::jthread](https://getcracked.io/problem/49/implement-std-jthread) (Hard, Interrupting Threads) - not attempted
+- [ ] [Implement mutex](https://getcracked.io/problem/11/implement-mutex) (Medium, test_and_set, exchange and compare_exchange) - not attempted
+- [ ] [Implement stop_token](https://getcracked.io/problem/50/implement-stop-token) (Easy, Load, Store, and the 2 Relationships) - not attempted
+- [ ] [Implement Lock-Free SPSC Queue](https://getcracked.io/problem/10/implement-lock-free-spsc-queue) (Medium, Non-Blocking Data Structures) - not attempted
+- [ ] [Write-supremacy concurrent data structure.](https://getcracked.io/problem/13/write-supremacy-concurrent-data-structure) (Hard, Non-Blocking Data Structures) - not attempted
+- [ ] [Implement thread pool](https://getcracked.io/problem/51/implement-thread-pool) (Medium, Oversubscribing) - not attempted
+- [ ] [Parallel tracks](https://getcracked.io/problem/24/parallel-tracks) (Medium, Dividing Data) - not attempted
+- [x] [Implement shared_ptr](https://getcracked.io/problem/4/implement-shared-ptr) (Medium, Thread-safe Sometimes.)
+
+## Questions correct
+- [x] [2 Types of Parallelism](https://getcracked.io/question/452) (Easy, Concurrency Use Cases)
+- [x] [Joined together.](https://getcracked.io/question/653) (Easy, Thread Ownership & Completion)
+- [x] [What's suspect?](https://getcracked.io/question/652) (Easy, Thread Ownership & Completion)
+- [x] [Sharing data the nice way.](https://getcracked.io/question/654) (Cooked, Issues with Shared Data Access)
+- [x] [When are we racing, and what is the condition?](https://getcracked.io/question/650) (Easy, Issues with Shared Data Access)
+- [x] [What am I guarding?](https://getcracked.io/question/648) (Cooked, std::mutex and std::lock_guard)
+- [x] [Bypass the mutex, or not?](https://getcracked.io/question/656) (Easy, std::mutex and std::lock_guard)
+- [x] [Hey, I'm waiting to be unlocked.](https://getcracked.io/question/1399) (Easy, std::recursive_mutex)
+- [x] [Spin what lock?](https://getcracked.io/question/622) (Cooked, std::scoped_lock)
+- [x] [You're not part of our group.](https://getcracked.io/question/1400) (Medium, std::scoped_lock)
+- [x] [No progress.](https://getcracked.io/question/453) (Easy, Issues with Locks)
+- [x] [Parallel pitfalls](https://getcracked.io/question/672) (Easy, Issues with Locks)
+- [x] [Locked up, they won't let me out.](https://getcracked.io/question/1198) (Easy, The Appropriate Granularity and Scope)
+- [x] [Locking Granularity Tradeoffs](https://getcracked.io/question/659) (Easy, The Appropriate Granularity and Scope)
+- [x] [Something is wrong.](https://getcracked.io/question/658) (Easy, Thread-safe API & Design)
+- [x] [A onephore](https://getcracked.io/question/451) (Cooked, The std::semaphores)
+- [x] [Wait, I'm sleeping](https://getcracked.io/question/1330) (Easy, The std::semaphores)
+- [x] [Cross-thread Exception Handling](https://getcracked.io/question/671) (Cooked, std::async and std::future)
+- [x] [Async surprise party](https://getcracked.io/question/1281) (Easy, std::async and std::future)
+- [x] [Are they always like this?](https://getcracked.io/question/1617) (Easy, Atomics)
+- [x] [Cache Coherence](https://getcracked.io/question/438) (Cooked, False Sharing and Cache Ping Pong)
+- [x] [Cache Coherence Optimization](https://getcracked.io/question/668) (Cooked, False Sharing and Cache Ping Pong)
+
+## Questions not yet correct
+- [ ] [Transferring ownership.](https://getcracked.io/question/649) (Easy, Thread Ownership & Completion) - missed
+- [ ] [I really want to be with you.](https://getcracked.io/question/1031) (Medium, Thread Ownership & Completion) - missed
+- [ ] [How does it mutex?](https://getcracked.io/question/454) (Medium, std::mutex and std::lock_guard) - missed
+- [ ] [Accumulate it all in parallel.](https://getcracked.io/question/655) (Easy, The Appropriate Granularity and Scope) - missed
+- [ ] [A thread-safe stack.](https://getcracked.io/question/660) (Easy, Thread-safe API & Design) - missed
+- [ ] [How fine is the grain?](https://getcracked.io/question/661) (Easy, std::condition_variable) - missed
+- [ ] [We're both from the future!](https://getcracked.io/question/1158) (Medium, std::promise) - not attempted
+- [ ] [Memory order I](https://getcracked.io/question/815) (Easy, Load, Store, and the 2 Relationships) - not attempted
+- [ ] [Spin wars](https://getcracked.io/question/1333) (Easy, Load, Store, and the 2 Relationships) - not attempted
+- [ ] [What pointer?](https://getcracked.io/question/665) (Easy, Load, Store, and the 2 Relationships) - not attempted
+- [ ] [Lock-free Memory Management](https://getcracked.io/question/664) (Easy, Non-Blocking Data Structures) - not attempted
+- [ ] [ABA Problem in Lock-free Code](https://getcracked.io/question/663) (Cooked, Lock-Free versus Wait-Free) - not attempted
+- [ ] [Lock Free vs Wait Free](https://getcracked.io/question/662) (Easy, Lock-Free versus Wait-Free) - not attempted
+- [ ] [Amdahl's Law Application](https://getcracked.io/question/666) (Cooked, Scalability and Performance) - not attempted
+- [ ] [Peas in a pod.](https://getcracked.io/question/942) (Easy, False Sharing and Cache Ping Pong) - not attempted
+- [ ] [How many kids do I want?](https://getcracked.io/question/651) (Cooked, Oversubscribing) - not attempted
+- [ ] [Workload Distribution](https://getcracked.io/question/667) (Easy, Dividing Data) - not attempted
+- [ ] [How do I test ts 1?](https://getcracked.io/question/1401) (Medium, Utilizing Event Observers) - not attempted
