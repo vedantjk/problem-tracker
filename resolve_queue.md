@@ -26,5 +26,7 @@ Left out on purpose: the four conf-2 hards (Basic Calculator IV, Minimum Time to
 | 18 | [ ] Binary Tree Maximum Path Sum | Trees | 3 | return-one-branch recursion |
 | 19 | [ ] House Robber III | Trees | 3 | pair-return tree DP |
 | 20 | [ ] Insert Delete GetRandom O(1) | Design | 3 | swap-with-last |
+| 21 | [ ] Greatest Common Divisor Traversal | Graphs | 2 | cold re-solve, write the prime-factor helper from memory (added 29/09) |
+| 22 | [ ] Open The Lock, int-encoded variant | Graphs | 4 | same BFS with states as ints 0 to 9999, no strings (added 30/09) |
 
 Next up after these: Kth Largest Element in an Array (quickselect), Time Based Key-Value Store, Implement Trie, Find the Duplicate Number.
