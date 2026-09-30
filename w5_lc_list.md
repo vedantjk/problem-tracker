@@ -24,7 +24,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Open The Lock](https://leetcode.com/problems/open-the-lock/)
 
 ## 5. Dijkstra variants / minimax paths (2)
-- [ ] [Path with Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
+- [x] [Path with Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
 - [ ] [Swim In Rising Water](https://leetcode.com/problems/swim-in-rising-water/) (Hard)
 
 ## 6. Minimum spanning tree (2)
