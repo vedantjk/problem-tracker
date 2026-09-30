@@ -18,7 +18,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Number of Connected Components In An Undirected Graph](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 - [x] [Accounts Merge](https://leetcode.com/problems/accounts-merge/)
 - [x] [Couples Holding Hands](https://leetcode.com/problems/couples-holding-hands/) (Hard)
-- [ ] [Greatest Common Divisor Traversal](https://leetcode.com/problems/greatest-common-divisor-traversal/) (Hard)
+- [x] [Greatest Common Divisor Traversal](https://leetcode.com/problems/greatest-common-divisor-traversal/) (Hard)
 
 ## 4. BFS over states (1)
 - [ ] [Open The Lock](https://leetcode.com/problems/open-the-lock/)
