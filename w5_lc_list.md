@@ -21,7 +21,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Greatest Common Divisor Traversal](https://leetcode.com/problems/greatest-common-divisor-traversal/) (Hard)
 
 ## 4. BFS over states (1)
-- [ ] [Open The Lock](https://leetcode.com/problems/open-the-lock/)
+- [x] [Open The Lock](https://leetcode.com/problems/open-the-lock/)
 
 ## 5. Dijkstra variants / minimax paths (2)
 - [ ] [Path with Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
