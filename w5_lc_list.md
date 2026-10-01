@@ -32,7 +32,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Find Critical and Pseudo Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/) (Hard)
 
 ## 7. Topological sort (6)
-- [ ] [Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)
+- [x] [Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)
 - [ ] [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/)
 - [ ] [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (Hard)
 - [ ] [Parallel Courses III](https://leetcode.com/problems/parallel-courses-iii/) (Hard)
