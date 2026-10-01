@@ -25,7 +25,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## 5. Dijkstra variants / minimax paths (2)
 - [x] [Path with Minimum Effort](https://leetcode.com/problems/path-with-minimum-effort/)
-- [ ] [Swim In Rising Water](https://leetcode.com/problems/swim-in-rising-water/) (Hard)
+- [x] [Swim In Rising Water](https://leetcode.com/problems/swim-in-rising-water/) (Hard)
 
 ## 6. Minimum spanning tree (2)
 - [ ] [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points/)
