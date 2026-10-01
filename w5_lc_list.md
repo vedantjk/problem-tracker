@@ -29,7 +29,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## 6. Minimum spanning tree (2)
 - [x] [Min Cost to Connect All Points](https://leetcode.com/problems/min-cost-to-connect-all-points/)
-- [ ] [Find Critical and Pseudo Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/) (Hard)
+- [x] [Find Critical and Pseudo Critical Edges in Minimum Spanning Tree](https://leetcode.com/problems/find-critical-and-pseudo-critical-edges-in-minimum-spanning-tree/) (Hard)
 
 ## 7. Topological sort (6)
 - [ ] [Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)
