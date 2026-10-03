@@ -37,7 +37,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (Hard)
 - [x] [Parallel Courses III](https://leetcode.com/problems/parallel-courses-iii/) (Hard)
 - [x] [Build a Matrix With Conditions](https://leetcode.com/problems/build-a-matrix-with-conditions/) (Hard)
-- [ ] [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/) (Hard)
+- [x] [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/) (Hard)
 
 ## 8. Remaining Hards (3)
 - [ ] [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/) (Hard)
