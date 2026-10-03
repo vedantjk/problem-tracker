@@ -33,7 +33,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## 7. Topological sort (6)
 - [x] [Course Schedule IV](https://leetcode.com/problems/course-schedule-iv/)
-- [ ] [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/)
+- [x] [Minimum Height Trees](https://leetcode.com/problems/minimum-height-trees/)
 - [ ] [Alien Dictionary](https://leetcode.com/problems/alien-dictionary/) (Hard)
 - [ ] [Parallel Courses III](https://leetcode.com/problems/parallel-courses-iii/) (Hard)
 - [ ] [Build a Matrix With Conditions](https://leetcode.com/problems/build-a-matrix-with-conditions/) (Hard)
