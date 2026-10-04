@@ -17,7 +17,7 @@ Left out on purpose: the four conf-2 hards (Basic Calculator IV, Minimum Time to
 | 9 | [ ] Evaluate Division | Graphs | 2 | weighted graph / union-find |
 | 10 | [ ] Word Search II | Tries | 2 | trie + grid DFS |
 | 11 | [ ] Search Suggestions System | Tries | 2 | trie or sorted + binary search |
-| 12 | [ ] Course Schedule | Graphs | 3 | topological sort |
+| 12 | [x] Course Schedule | Graphs | 3 | topological sort |
 | 13 | [ ] Meeting Rooms II | Intervals | 3 | heap of end times |
 | 14 | [ ] Merge k Sorted Lists | Linked List | 3 | heap over lists |
 | 15 | [ ] Basic Calculator II | Stack | 3 | stack + prev-op parsing |

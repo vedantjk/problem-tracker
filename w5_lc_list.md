@@ -46,9 +46,9 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 
 ## Resolves (REVISE slots, Fri and Sun): graph problems at confidence 3 or below
 - [ ] [Evaluate Division](https://leetcode.com/problems/evaluate-division/) (conf 2, 16/07)
-- [ ] [Course Schedule](https://leetcode.com/problems/course-schedule/) (conf 3, 15/07)
-- [ ] [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) (conf 3, 15/07)
-- [ ] [Number of Provinces](https://leetcode.com/problems/number-of-provinces/) (conf 3, 16/07)
+- [x] [Course Schedule](https://leetcode.com/problems/course-schedule/) (conf 3, 15/07)
+- [x] [Course Schedule II](https://leetcode.com/problems/course-schedule-ii/) (conf 3, 15/07)
+- [x] [Number of Provinces](https://leetcode.com/problems/number-of-provinces/) (conf 3, 16/07)
 
 ## Suggested pacing
 | Day | Problems |
