@@ -40,7 +40,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 - [x] [Sort Items by Groups Respecting Dependencies](https://leetcode.com/problems/sort-items-by-groups-respecting-dependencies/) (Hard)
 
 ## 8. Remaining Hards (3)
-- [ ] [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/) (Hard)
+- [x] [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/) (Hard)
 - [ ] [Word Ladder II](https://leetcode.com/problems/word-ladder-ii/) (Hard)
 - [ ] [Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/) (Hard)
 
