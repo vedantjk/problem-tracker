@@ -29,5 +29,20 @@ Left out on purpose: the four conf-2 hards (Basic Calculator IV, Minimum Time to
 | 21 | [ ] Greatest Common Divisor Traversal | Graphs | 2 | cold re-solve, write the prime-factor helper from memory (added 29/09) |
 | 22 | [ ] Open The Lock, int-encoded variant | Graphs | 4 | same BFS with states as ints 0 to 9999, no strings (added 30/09) |
 | 23 | [ ] Word Ladder II | Graphs | 2 | cold re-solve: all parents per level, erase after the level, DFS back from the end (added 04/10) |
+| 24 | [ ] Optimal Account Balancing | Graphs | 1 | cold re-solve after the backtracking block: net balances, then search (added 04/10) |
+
+## CSES graph set: template check at scale (added 04/10 when the LeetCode graph list closed)
+
+| # | Problem | What it checks |
+|---|---|---|
+| C1 | [ ] Shortest Routes I | plain Dijkstra at 10^5 nodes, long long distances |
+| C2 | [ ] Flight Discount | Dijkstra with a state dimension |
+| C3 | [ ] Flight Routes | k shortest paths |
+| C4 | [ ] Longest Flight Route | DP over a topological order, with path output |
+| C5 | [ ] Game Routes | path counting on a DAG |
+| C6 | [ ] Investigation | Dijkstra plus counting on the shortest-path DAG |
+| C7 | [ ] Message Route | BFS with parent tracking and path output |
+
+Optional: Round Trip, Building Teams.
 
 Next up after these: Kth Largest Element in an Array (quickselect), Time Based Key-Value Store, Implement Trie, Find the Duplicate Number.

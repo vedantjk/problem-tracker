@@ -42,7 +42,7 @@ Order runs pattern by pattern, template first and Hard last, so each bucket teac
 ## 8. Remaining Hards (3)
 - [x] [Reconstruct Itinerary](https://leetcode.com/problems/reconstruct-itinerary/) (Hard)
 - [x] [Word Ladder II](https://leetcode.com/problems/word-ladder-ii/) (Hard)
-- [ ] [Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/) (Hard)
+- [x] [Optimal Account Balancing](https://leetcode.com/problems/optimal-account-balancing/) (Hard)
 
 ## Resolves (REVISE slots, Fri and Sun): graph problems at confidence 3 or below
 - [ ] [Evaluate Division](https://leetcode.com/problems/evaluate-division/) (conf 2, 16/07)
