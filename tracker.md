@@ -2,7 +2,7 @@
 
 **This file is the source of truth** (the Google Sheet was retired 2026-08-26). Rows tagged `NC250` in Notes were merged from the NeetCode 250 list on 2026-08-26 (193 problems not already present; 57 overlapped). Nothing was removed.
 
-**Progress:** 160 Solved · most recent: *Optimal Account Balancing* (04/10/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 26/26 CLOSED 04/10 (three of them from a read solution: GCD Traversal, Word Ladder II, Optimal Account Balancing). The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
+**Progress:** 176 Solved · most recent: *Decode Ways* (19/10/2026). **W2 LC CLOSED 18/18. W3 (Sep 7-13) slipped, 0 solved; list carried into W4 (Sep 14-20), which closed at 6/22; the remaining 16 carried into W5 (Sep 21-27). W5 = graph week: 2 solved from the carried list plus the 24-problem graph list in `w5_lc_list.md`, 26/26 CLOSED 04/10 (three of them from a read solution: GCD Traversal, Word Ladder II, Optimal Account Balancing). The other 14 carried problems (DP, Backtracking, Trees, wildcards) move to W6.**
 
 | Category | Problem | Difficulty | Status | Date Done | Time (min) | Confidence | Notes |
 | :-- | :-- | :-: | :-: | :-: | :-: | :-: | :-- |
@@ -150,19 +150,19 @@
 | Backtracking | Sudoku Solver | Hard | Solved | 18/08/2026 | 30 | 3 | Linear pos 0..80 → i=pos/9, j=pos%9; return true at pos==81. Three [9][10] bool arrays: row, col, box (box=(i/3)*3 + j/3). Preprocess existing digits once. Recurse: if cell filled → backtrack(pos+1); else try 1-9, if unused in row/col/box, mark + place, recurse and RETURN TRUE if it succeeds (propagate up, else you undo a valid solution); on failure unmark and reset to '.'. |
 | Backtracking | Permutation Sequence | Hard | Todo | | | | |
 | Backtracking | Next Permutation | Med | Solved | 14/07/2026 | 20 | 2 | Find largest k with arr[k] < arr[k+1] (suffix after k is non-increasing); if none, array is the last permutation — reverse and return. In the suffix find the greatest l with arr[l] > arr[k] (smallest suffix value still > arr[k]), swap k and l, then reverse arr[k+1..end] to make it ascending → next permutation. |
-| Backtracking | Sum of All Subsets XOR Total | Easy | Todo | | | | NC250 |
-| Backtracking | Subsets | Med | Todo | | | | NC250 |
-| Backtracking | Combination Sum II | Med | Todo | | | | NC250 |
-| Backtracking | Combinations | Med | Todo | | | | NC250 |
-| Backtracking | Subsets II | Med | Todo | | | | NC250 |
-| Backtracking | Permutations II | Med | Todo | | | | NC250 |
-| Backtracking | Generate Parentheses | Med | Todo | | | | NC250 |
-| Backtracking | Palindrome Partitioning | Med | Todo | | | | NC250 |
-| Backtracking | Matchsticks to Square | Med | Todo | | | | NC250 |
-| Backtracking | Partition to K Equal Sum Subsets | Med | Todo | | | | NC250 |
-| Backtracking | N Queens | Hard | Todo | | | | NC250 |
-| Backtracking | N Queens II | Hard | Todo | | | | NC250 |
-| Backtracking | Word Break II | Hard | Todo | | | | NC250 |
+| Backtracking | Sum of All Subsets XOR Total | Easy | Solved | 19/10/2026 | | 4 | NC250. O(n) trick: OR all nums, shift left by n-1. A bit set in any element is set in exactly half of the 2^n subset XORs (pair subsets by toggling one element that has the bit), so each such bit contributes 2^(n-1) times. |
+| Backtracking | Subsets | Med | Solved | 19/10/2026 | | 4 | NC250. Push the current temp at every node (not just leaves), then loop i from index, push nums[i], recurse with i+1, pop. O(n * 2^n). Alt: include/exclude binary recursion or bitmask 0..2^n-1. |
+| Backtracking | Combination Sum II | Med | Solved | 15/10/2026 | 15 | 4 | NC250. Sort, then recurse with i+1 so each element is used at most once. Skip duplicates at the same depth with a `prev` tracker in the loop, so equal values only branch once per level. Since the array is sorted, `candidates[i] > target` can `break` instead of `continue`. |
+| Backtracking | Combinations | Med | Solved | 15/10/2026 | 10 | 4 | NC250. Forward-only loop from index to n, push temp when size hits k. Prune: loop only while i <= n - (k - temp.size()) + 1, so there are enough numbers left to fill temp. |
+| Backtracking | Subsets II | Med | Solved | 15/10/2026 | 10 | 4 | NC250. Sort nums first. Push temp on entry to every call, so each node is a subset. Skip duplicates at the same depth with `i > index && nums[i] == nums[i-1]`. |
+| Backtracking | Permutations II | Med | Solved | 15/10/2026 | 15 | 3 | NC250. Swap-based: fix position index by swapping each candidate into it, with a per-level unordered_set so each value fills that slot once. Sort + adjacent skip does not work here because the swaps break sorted order. Other standard version: sort, used[] array, skip when nums[i]==nums[i-1] and !used[i-1]. |
+| Backtracking | Generate Parentheses | Med | Solved | 15/10/2026 | 5 | 4 | NC250. Track open and close counts. Add ( while open < n, add ) while close < open. Length 2n with both rules held means open == close == n, so it is valid. Count is the nth Catalan number. |
+| Backtracking | Palindrome Partitioning | Med | Solved | 15/10/2026 | 10 | 4 | NC250. From index, try every end i where s[index..i] is a palindrome, recurse from i+1. Worst case "aaaa...": 2^(n-1) partitions, O(n * 2^n) is output-bound, so backtracking is optimal. Improvement: precompute isPal[i][j] in O(n^2) (isPal[i][j] = s[i]==s[j] && (j-i<2 \|\| isPal[i+1][j-1]), i from n-1 down) so each check is O(1). |
+| Backtracking | Matchsticks to Square | Med | Solved | 15/10/2026 | | 4 | NC250. Solved earlier, logged late 15/10; re-solved cold 15/10, conf 4. Same as Partition to K Equal Sum Subsets with k = 4. Fill one side at a time; sort descending, skip equal values after a failed try (prev), stop if an empty side fails (running_sum == 0), done when k-1 sides are full. |
+| Backtracking | Partition to K Equal Sum Subsets | Med | Solved | 15/10/2026 | | 4 | NC250. Solved earlier, logged late 15/10; re-solved cold 15/10, conf 4. Fill one bucket at a time, restart from index 0 when a bucket hits target. Prunes: total % k, largest > target, descending sort, prev skip for equal values, return false when an empty bucket fails, return true at k-1 full buckets. |
+| Backtracking | N Queens | Hard | Solved | 14/10/2026 | 25 | 4 | NC250, W8 backtracking. Row-by-row recursion, flag arrays for column, diagonal (i - j + n - 1) and anti-diagonal (i + j), place/remove helpers mutating the board string in place. First attempt was wrong and corrected mid-solve. Review notes: the row flag array is dead because the recursion already places one queen per row; use assign(n, 0) rather than resize(n, 0) to reset state on reuse; diagonal index range is 0 to 2n - 2 so size 2n - 1 is exact. Bitmask version (three ints, diagonal masks shift each row) is the form to use for N Queens II. |
+| Backtracking | N Queens II | Hard | Solved | 14/10/2026 | 10 | 4 | NC250, W8 backtracking. Same recursion as N Queens with a counter instead of collecting boards. Bitmask version (three ints for columns and both diagonals, diagonal masks shift each row, free = ~(cols | d1 | d2) & ((1 << n) - 1), peel lowest bit with m & -m) deliberately NOT written: too many new bit tricks at once; build bit-manipulation appetite on the Bit Manipulation rows first, then come back and redo this one as a bitmask drill. |
+| Backtracking | Word Break II | Hard | Solved | 17/10/2026 | 20 | 4 | NC250. Backtrack from index, extend the prefix one char at a time, recurse when it is in the dictionary set. Exponential only because the output can be ("aaaa" with a, aa, aaa); follow-up: memoise sentences by start index, or prune with a canBreak-from-i table so dead suffixes like "aaaa...ab" are not re-explored. Cap the prefix at the longest word. |
 | Graphs | Number of Islands | Med | Solved | 14/07/2026 | 10 | 4 | DFS from each unvisited land cell, flooding its component. Use a visited array, or modify the input in place — depends whether mutating input is allowed. |
 | Graphs | Course Schedule | Med | Solved | 15/07/2026 | 15 | 4 | Topological sort. BFS (Kahn): compute in-degrees, queue all 0-in-degree nodes, pop and decrement neighbors; if every node gets processed (valid ordering) → true. DFS: cycle detection with 3 colors (white=unprocessed, gray=processing, black=done); a gray hit = cycle → false. Loop DFS over ALL nodes (graph may be disconnected); push a node once fully processed — topo order comes out reversed. Revised 04/10/2026, confidence 3 to 4. |
 | Graphs | Course Schedule II | Med | Solved | 15/07/2026 | 15 | 4 | Slight modification of Course Schedule — return the actual topological ordering (empty array if a cycle exists). Revised 04/10/2026, confidence 3 to 4. |
@@ -217,9 +217,9 @@
 | 1-D DP | Minimum Costs Using the Train Line | Hard | Todo | | | | |
 | 1-D DP | Min Cost Climbing Stairs | Easy | Todo | | | | NC250 |
 | 1-D DP | N-th Tribonacci Number | Easy | Todo | | | | NC250 |
-| 1-D DP | House Robber | Med | Todo | | | | NC250 |
-| 1-D DP | House Robber II | Med | Todo | | | | NC250 |
-| 1-D DP | Decode Ways | Med | Todo | | | | NC250 |
+| 1-D DP | House Robber | Med | Solved | 19/10/2026 | | 4 | NC250. dp[i] = max(dp[i-1] (skip i), dp[i-2] + nums[i] (rob i)); dp[0] = nums[0], dp[1] = max(nums[0], nums[1]). Answer dp[n-1] (dp is non-decreasing). Space-optimised to two rolling vars pprev/prev. O(n) time, O(1) space. |
+| 1-D DP | House Robber II | Med | Solved | 19/10/2026 | | 4 | NC250. Circle: house 0 and house n-1 cannot both be robbed, so answer = max(linear rob on [0, n-2], linear rob on [1, n-1]); n == 1 guard. Wrote it with two vector copies (O(n) extra); no-copy version passes a range (indices or std::span). |
+| 1-D DP | Decode Ways | Med | Solved | 19/10/2026 | | 4 | NC250. dp[i] = ways to decode first i chars; dp[0] = 1, dp[1] = (s[0] != '0'). Single digit: if s[i-1] != '0' add dp[i-1]. Pair: if 10 <= two-digit <= 26 add dp[i-2] (the >= 10 check rejects a leading zero like 05). Only two back, so two rolling vars suffice. |
 | 1-D DP | Coin Change | Med | Todo | | | | NC250 |
 | 1-D DP | Maximum Product Subarray | Med | Todo | | | | NC250 |
 | 1-D DP | Word Break | Med | Todo | | | | NC250 |
@@ -316,7 +316,7 @@
 | Bit Manipulation | Reverse Integer | Med | Todo | | | | NC250 |
 | Bit Manipulation | Minimum Array End | Med | Todo | | | | NC250 |
 | Design | LRU Cache | Med | Solved | 03/08/2026 | 10 | 4 | std::list<pair<key,val>> + unordered_map<key, list-iterator>. get: move that node to the front (splice), return val. put: update+move to front, or insert at front; if over capacity, evict the back node and erase its map entry. |
-| Design | LFU Cache | Hard | Todo | | | | |
+| Design | LFU Cache | Hard | Solved | 15/10/2026 | 30 | 4 | First time. key -> (freq, list iterator), freq -> list (most recent at front), minFreq; one eviction per put, new entry resets minFreq to 1. Variant lld-08 (per-key sizes, multi-evict) breaks the minFreq trick: needs ordered freq buckets (std::map O(log F), or linked list of buckets for O(1)). |
 | Design | Insert Delete GetRandom O(1) | Med | Solved | 03/08/2026 | 15 | 3 | vector for O(1) random access (rand() % size) + unordered_map value→index for O(1) exists/lookup. O(1) delete: overwrite the target index with the last element, fix that element's index in the map, pop_back the vector, erase the key from the map. |
 | Design | Design Circular Queue | Med | Solved | 03/08/2026 | 20 | 3 | Array ring-buffer: keep head index + size; enqueue writes at (head+size)%cap, dequeue does head=(head+1)%cap, front=buf[head], rear=buf[(head+size−1)%cap], full when size==cap. (Alt: linked list with head/tail pointers.) The array/modulo version is what interviewers want. |
 | Design | Design Front Middle Back Queue | Med | Solved | 03/08/2026 | 20 | 3 | Split into two deques (front half a, back half b). Maintain the invariant via a resize()/rebalance — b.size() at most 1 more than a, a never exceeds b — called after every op. Then push/pop at front/middle/back just read/write the ends and rebalance. |
